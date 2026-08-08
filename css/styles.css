@@ -1,6 +1,6 @@
 /* ==========================================================================
    GRID - O Gestor da Rede Elétrica Nacional
-   Part 1 & Part 2: Pixel Art Retro Title & RPG Cutscene System
+   Part 1, Part 2 & Master HUD UI Design Mockup (16-bit GBA RPG Style)
    ========================================================================== */
 
 :root {
@@ -14,6 +14,13 @@
   --undertale-bg: #000000;
   --font-retro: 'Press Start 2P', cursive, monospace;
   --font-vt: 'VT323', monospace;
+  --font-body: 'Inter', sans-serif;
+
+  --color-economy: #f1c40f;
+  --color-social: #e74c3c;
+  --color-environment: #2ecc71;
+  --color-stability: #3498db;
+  --color-critical: #ff3344;
 }
 
 * {
@@ -21,6 +28,7 @@
   margin: 0;
   padding: 0;
   image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 body {
@@ -35,7 +43,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
+  padding: 0;
   overflow-x: hidden;
 }
 
@@ -43,7 +51,7 @@ body {
   display: none !important;
 }
 
-/* CRT Scanlines Overlay */
+/* CRT Scanlines Screen Effect */
 .crt-overlay {
   position: fixed;
   top: 0;
@@ -57,7 +65,7 @@ body {
   background-size: 100% 4px;
   z-index: 999;
   pointer-events: none;
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 /* ==========================================================================
@@ -71,6 +79,7 @@ body {
   flex-direction: column;
   gap: 1.75rem;
   z-index: 1;
+  padding: 1.5rem;
 }
 
 .retro-header {
@@ -481,97 +490,363 @@ body {
 }
 
 /* ==========================================================================
-   VIEW 3: TELA DE ESPERA APÓS A INTRODUÇÃO
+   VIEW 3: MASTER HUD UI DESIGN MOCKUP (16-BIT GBA RPG STYLE)
    ========================================================================== */
 
-.end-intro-container {
+.hud-dashboard-container {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 650px;
-  z-index: 10;
+  flex-direction: column;
+  padding: 1.25rem;
+  background: #000000;
 }
 
-.end-intro-card {
-  background: #0f111a;
-  border: 4px solid var(--neon-green);
-  box-shadow: 0 0 30px var(--neon-green-glow);
-  padding: 2.25rem 2rem;
-  border-radius: 12px;
-  text-align: center;
+/* Room background (Stable vs Critical Mode) */
+.hud-bg-room {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+  transition: all 0.5s ease;
+}
+
+.hud-bg-room.stable {
+  background-image: url('../assets/game_ui_stable.jpg');
+  filter: brightness(0.85) contrast(1.1);
+}
+
+.hud-bg-room.critical {
+  background-image: url('../assets/game_ui_critical.jpg');
+  filter: brightness(0.9) contrast(1.2);
+  animation: hudRedPulse 1.2s infinite alternate;
+}
+
+@keyframes hudRedPulse {
+  0% { filter: brightness(0.8) contrast(1.2) sepia(0.2) hue-rotate(-20deg); }
+  100% { filter: brightness(1.0) contrast(1.3) sepia(0.4) hue-rotate(-40deg); }
+}
+
+/* MARGEM LATERAL ESQUERDA: ROBÔ VOLTA FLUTUANTE */
+.left-floating-robot {
+  position: absolute;
+  left: 1.5rem;
+  top: 18%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.robot-bobbing-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
+  gap: 0.5rem;
+  animation: robotFloat 3s infinite ease-in-out;
 }
 
-.status-indicator-dot {
-  width: 16px;
-  height: 16px;
-  background: var(--neon-green);
-  border-radius: 50%;
-  box-shadow: 0 0 12px var(--neon-green);
-  animation: dotPulse 1s infinite alternate;
+@keyframes robotFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
 }
 
-@keyframes dotPulse {
-  0% { transform: scale(0.9); opacity: 0.5; }
-  100% { transform: scale(1.2); opacity: 1; }
-}
-
-.end-intro-card h2 {
-  font-size: 1.2rem;
-  color: var(--neon-green);
-  letter-spacing: 0.08em;
-}
-
-.end-intro-subtitle {
-  font-size: 0.85rem;
-  color: #cbd5e1;
-}
-
-.waiting-box {
-  background: #1e293b;
-  border: 2px dashed #475569;
-  padding: 1.2rem;
+.robot-pixel-avatar {
+  width: 85px;
+  height: 85px;
+  border: 3px solid #00e5ff;
   border-radius: 8px;
-  color: #94a3b8;
+  background: rgba(0, 0, 0, 0.85);
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
+}
+
+.robot-status-tag {
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid #00e5ff;
+  color: #00e5ff;
+  font-size: 0.55rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+}
+
+/* LAYOUT CONTAINER */
+.hud-panel-layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  gap: 1rem;
+}
+
+/* TOPO (HEADER): 4 BARRAS DE PROGRESSO COM ÍCONES COLORIDOS */
+.hud-top-bars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  background: rgba(0, 0, 0, 0.85);
+  border: 3px solid #1e293b;
+  padding: 0.85rem 1.25rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8);
+}
+
+.hud-bar-card {
+  background: #0f111a;
+  border: 2px solid #334155;
+  padding: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.hud-bar-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.65rem;
+}
+
+.pixel-icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.pixel-icon.eco { background: var(--color-economy); color: #000; }
+.pixel-icon.soc { background: var(--color-social); color: #fff; }
+.pixel-icon.env { background: var(--color-environment); color: #000; }
+.pixel-icon.sta { background: var(--color-stability); color: #fff; }
+
+.bar-name {
+  color: var(--text-gray);
+  flex: 1;
+}
+
+.bar-percent {
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.hud-bar-track {
+  height: 10px;
+  background: #1e293b;
+  border: 1px solid #475569;
+  overflow: hidden;
+}
+
+.hud-bar-fill {
+  height: 100%;
+  transition: width 0.4s ease;
+}
+
+.hud-bar-fill.eco { background: var(--color-economy); }
+.hud-bar-fill.soc { background: var(--color-social); }
+.hud-bar-fill.env { background: var(--color-environment); }
+.hud-bar-fill.sta { background: var(--color-stability); }
+
+/* CENTRO (O FOCO): CARTA DE DILEMA GRANDE */
+.hud-center-dilemma {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pixel-dilemma-card {
+  background: rgba(10, 14, 23, 0.94);
+  border: 4px solid #ffffff;
+  outline: 4px solid #000000;
+  box-shadow: 
+    0 0 0 4px #000000,
+    0 0 30px rgba(0, 255, 102, 0.3);
+  padding: 1.5rem 1.75rem;
+  max-width: 720px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.dilemma-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px dashed #334155;
+  padding-bottom: 0.5rem;
+}
+
+.dilemma-tag {
+  font-size: 0.65rem;
+  color: #00e5ff;
+}
+
+.dilemma-year {
   font-size: 0.75rem;
-  line-height: 1.6;
+  color: var(--neon-green);
+}
+
+.dilemma-title-row {
   display: flex;
   align-items: center;
   gap: 0.85rem;
 }
 
-.waiting-box i {
-  font-size: 1.4rem;
-  color: #00e5ff;
+.dilemma-icon {
+  font-size: 1.8rem;
+  color: #38bdf8;
 }
 
-.pixel-btn-restart {
+.dilemma-title-row h2 {
+  font-size: 1rem;
+  line-height: 1.4;
+  color: #ffffff;
+}
+
+.dilemma-desc-text {
+  font-size: 0.72rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+.dilemma-choice-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.pixel-choice-btn {
   background: #1e293b;
-  border: 2px solid #64748b;
+  border: 3px solid #475569;
+  box-shadow: 3px 3px 0px #000000;
+  padding: 0.85rem;
   color: #ffffff;
   font-family: var(--font-retro);
-  font-size: 0.75rem;
-  padding: 0.85rem 1.5rem;
   cursor: pointer;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 0.3rem;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.pixel-choice-btn.left:hover {
+  background: #1d4ed8;
+  border-color: #60a5fa;
+  transform: translate(-2px, -2px);
+}
+
+.pixel-choice-btn.right:hover {
+  background: #047857;
+  border-color: #34d399;
+  transform: translate(2px, -2px);
+}
+
+.choice-tag { font-size: 0.55rem; color: #94a3b8; }
+.choice-title { font-size: 0.78rem; font-weight: bold; color: #fff; }
+.choice-sub { font-size: 0.6rem; color: #cbd5e1; }
+
+/* RODAPÉ (CANTO INFERIOR ESQUERDO E DIREITO) */
+.hud-bottom-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr 280px;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.hud-widget-box {
+  background: rgba(0, 0, 0, 0.9);
+  border: 3px solid #1e293b;
+  box-shadow: 4px 4px 0px #000000;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
-  margin-top: 0.5rem;
+  height: 170px;
+}
+
+.widget-header {
+  font-size: 0.6rem;
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 0.3rem;
+}
+
+/* MINIMAPA BRASIL (CANTO ESQUERDO) */
+.brazil-map-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pixel-brazil-svg {
+  width: 100%;
+  height: 110px;
+}
+
+.map-pulse-node {
+  animation: mapNodePulse 1.2s infinite alternate;
+}
+
+.map-pulse-node.active { fill: var(--neon-green); }
+.map-pulse-node.warning { fill: #facc15; }
+
+@keyframes mapNodePulse {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  100% { transform: scale(1.3); opacity: 1; }
+}
+
+/* BOTÃO DE ALTERNÂNCIA DE MOCKUP */
+.hud-mockup-toggle-box {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.pixel-toggle-btn {
+  background: #0f172a;
+  border: 2px solid #00e5ff;
+  color: #00e5ff;
+  font-family: var(--font-retro);
+  font-size: 0.65rem;
+  padding: 0.75rem 1.25rem;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
   transition: all 0.2s ease;
 }
 
-.pixel-btn-restart:hover {
-  background: #334155;
-  border-color: #94a3b8;
+.pixel-toggle-btn:hover {
+  background: #00e5ff;
+  color: #000000;
+}
+
+/* GRÁFICO MATRIZ (CANTO DIREITO) */
+.hud-chart-wrapper {
+  position: relative;
+  width: 100%;
+  height: 120px;
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-  .pixel-title { font-size: 2.3rem; }
-  .undertale-dialogue-box { flex-direction: column; text-align: center; }
-  .rpg-dialogue-frame { flex-direction: column; }
+@media (max-width: 1024px) {
+  .hud-top-bars { grid-template-columns: repeat(2, 1fr); }
+  .hud-bottom-grid { grid-template-columns: 1fr; }
+  .left-floating-robot { display: none; }
 }

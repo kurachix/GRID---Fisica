@@ -5,13 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GRID - O Gestor da Rede Elétrica Nacional</title>
 
-  <!-- Google Fonts: Retro Pixel Fonts -->
+  <!-- Google Fonts: Retro 8-bit & 16-bit Pixel Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- Retro Stylesheet -->
   <link rel="stylesheet" href="css/styles.css">
@@ -21,7 +24,9 @@
   <!-- CRT Retro Screen Overlay -->
   <div class="crt-overlay"></div>
 
-  <!-- VIEW 1: TELA DE TÍTULO (PARTE 1) -->
+  <!-- ==========================================
+       VIEW 1: TELA DE TÍTULO (PARTE 1)
+       ========================================== -->
   <div id="title-screen" class="retro-container">
 
     <header class="retro-header">
@@ -31,7 +36,6 @@
 
     <main class="retro-main">
 
-      <!-- CAIXA DE DIÁLOGO INICIAL (ESTILO UNDERTALE) -->
       <section class="undertale-dialogue-box">
         <div class="avatar-container">
           <img src="assets/robot_avatar.jpg" alt="Mascote Robô Volta" class="pixel-avatar" />
@@ -42,7 +46,6 @@
         </div>
       </section>
 
-      <!-- FORMULÁRIO E IDENTIFICAÇÃO DO JOGADOR -->
       <section class="player-id-section">
         <div class="pixel-input-box">
           <label for="player-name" class="input-label">Digite seu nome:</label>
@@ -55,7 +58,6 @@
         </div>
       </section>
 
-      <!-- PAINEL DE INSTRUÇÕES E CONSIDERAÇÕES -->
       <section class="retro-instructions-panel">
         <div class="panel-header">
           <i class="fa-solid fa-gamepad"></i> INSTRUÇÕES &amp; REGRAS
@@ -83,7 +85,6 @@
         </div>
       </section>
 
-      <!-- BOTÃO DE AÇÃO -->
       <section class="action-section">
         <button id="btn-start" class="pixel-btn-start">
           <span class="btn-glow"></span>
@@ -96,10 +97,11 @@
   </div>
 
 
-  <!-- VIEW 2: CINEMÁTICA / ROTEIRO DE DIÁLOGO RPG -->
+  <!-- ==========================================
+       VIEW 2: ROTEIRO CINEMÁTICO RPG (PARTE 2)
+       ========================================== -->
   <div id="cutscene-screen" class="cutscene-container hidden">
     
-    <!-- Background do Cenário: Sala de Controle do Governo em Crise -->
     <div class="control-room-bg" id="cutscene-bg"></div>
 
     <div class="scene-header">
@@ -107,7 +109,6 @@
       <span class="scene-year">ANO 2026</span>
     </div>
 
-    <!-- Caixa de Diálogo RPG estilo Pokémon / Undertale -->
     <div class="rpg-dialogue-frame" id="cutscene-dialogue-box">
       <div class="rpg-avatar-box">
         <img id="cutscene-avatar" src="assets/dra_elena_avatar.jpg" alt="Persona Avatar" class="pixel-portrait" />
@@ -128,22 +129,160 @@
   </div>
 
 
-  <!-- VIEW 3: TELA DE ESPERA APÓS A INTRODUÇÃO (AGUARDANDO NOVAS ORDENS) -->
-  <div id="end-intro-screen" class="end-intro-container hidden">
-    <div class="end-intro-card">
-      <div class="status-indicator-dot"></div>
-      <h2>[SISTEMA ELÉTRICO CONECTADO]</h2>
-      <p class="end-intro-subtitle">
-        Autenticação concluída para o Ministro <strong id="end-player-name">GESTOR</strong>.
-      </p>
-      <div class="waiting-box">
-        <i class="fa-solid fa-terminal"></i>
-        <span>Aguardando instruções e diretrizes para o início das rodadas...</span>
+  <!-- ==========================================
+       VIEW 3: MOCKUP INTERATIVO DA INTERFACE DE PAINEL (16-BIT HUD)
+       ========================================== -->
+  <div id="hud-dashboard-screen" class="hud-dashboard-container hidden">
+    
+    <!-- Fundo dinâmico da Sala de Controle (Alternável entre Estável e Emergência) -->
+    <div id="hud-bg-room" class="hud-bg-room stable"></div>
+
+    <!-- MARGEM LATERAL ESQUERDA: ROBÔ VOLTA FLUTUANTE DE SUPERVISÃO -->
+    <aside class="left-floating-robot">
+      <div class="robot-bobbing-wrapper">
+        <img src="assets/robo_volta_avatar.jpg" alt="Robô Volta Assistente" class="robot-pixel-avatar" />
+        <div class="robot-status-tag">&lt;ROBÔ VOLTA ONLINE&gt;</div>
       </div>
-      <button id="btn-replay-intro" class="pixel-btn-restart">
-        <i class="fa-solid fa-rotate-left"></i> REVER INTRODUÇÃO
-      </button>
+    </aside>
+
+    <!-- CONTAINER PRINCIPAL DO PAINEL -->
+    <div class="hud-panel-layout">
+
+      <!-- TOPO (HEADER): 4 BARRAS DE PROGRESSO COM ÍCONES PIXELADOS -->
+      <header class="hud-top-bars">
+        
+        <!-- Bar 1: Economia ($) -->
+        <div class="hud-bar-card eco">
+          <div class="hud-bar-label">
+            <span class="pixel-icon eco">$</span>
+            <span class="bar-name">ECONOMIA</span>
+            <span class="bar-percent" id="hud-val-eco">70%</span>
+          </div>
+          <div class="hud-bar-track">
+            <div class="hud-bar-fill eco" id="hud-fill-eco" style="width: 70%;"></div>
+          </div>
+        </div>
+
+        <!-- Bar 2: Sociedade (♥) -->
+        <div class="hud-bar-card soc">
+          <div class="hud-bar-label">
+            <span class="pixel-icon soc">&hearts;</span>
+            <span class="bar-name">SOCIEDADE</span>
+            <span class="bar-percent" id="hud-val-soc">75%</span>
+          </div>
+          <div class="hud-bar-track">
+            <div class="hud-bar-fill soc" id="hud-fill-soc" style="width: 75%;"></div>
+          </div>
+        </div>
+
+        <!-- Bar 3: Meio Ambiente (🌲) -->
+        <div class="hud-bar-card env">
+          <div class="hud-bar-label">
+            <span class="pixel-icon env">&#127794;</span>
+            <span class="bar-name">MEIO AMBIENTE</span>
+            <span class="bar-percent" id="hud-val-env">60%</span>
+          </div>
+          <div class="hud-bar-track">
+            <div class="hud-bar-fill env" id="hud-fill-env" style="width: 60%;"></div>
+          </div>
+        </div>
+
+        <!-- Bar 4: Estabilidade da Rede (⚡) -->
+        <div class="hud-bar-card sta">
+          <div class="hud-bar-label">
+            <span class="pixel-icon sta">&#9889;</span>
+            <span class="bar-name">ESTABILIDADE REDE</span>
+            <span class="bar-percent" id="hud-val-sta">80%</span>
+          </div>
+          <div class="hud-bar-track">
+            <div class="hud-bar-fill sta" id="hud-fill-sta" style="width: 80%;"></div>
+          </div>
+        </div>
+
+      </header>
+
+      <!-- CENTRO (O FOCO): CARTA DE DILEMA GRANDE SOBREPONDO O CENÁRIO -->
+      <main class="hud-center-dilemma">
+        
+        <div class="pixel-dilemma-card">
+          <div class="dilemma-card-header">
+            <span class="dilemma-tag">&lt;DILEMA CLIMÁTICO &amp; ENGENHARIA&gt;</span>
+            <span class="dilemma-year">ANO 2026</span>
+          </div>
+
+          <div class="dilemma-title-row">
+            <i class="fa-solid fa-water dilemma-icon"></i>
+            <h2>Licenciamento da Usina Hidrelétrica na Bacia Amazônica</h2>
+          </div>
+
+          <p class="dilemma-desc-text">
+            Proposta de construção de usina de grande porte em rio de planície para conversão de energia potencial gravítica em elétrica (Ep = m·g·h). Causa alagamento florestal, emissão de metano (CH₄) e deslocamento de populações ribeirinhas.
+          </p>
+
+          <!-- 2 BOTÕES VISUAIS ESTÁTICOS DE ESCOLHA -->
+          <div class="dilemma-choice-buttons">
+            <button class="pixel-choice-btn left">
+              <span class="choice-tag">OPÇÃO A (ESQUERDA)</span>
+              <span class="choice-title">Aprovar Construção</span>
+              <span class="choice-sub">+Estabilidade, -Meio Ambiente</span>
+            </button>
+
+            <button class="pixel-choice-btn right">
+              <span class="choice-tag">OPÇÃO B (DIREITA)</span>
+              <span class="choice-title">Rejeitar Projeto</span>
+              <span class="choice-sub">+Meio Ambiente, -Estabilidade</span>
+            </button>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- RODAPÉ: CANTO INFERIOR ESQUERDO (MINIMAPA BRASIL) & CANTO INFERIOR DIREITO (GRÁFICO PIZZA MATRIZ) -->
+      <footer class="hud-bottom-grid">
+        
+        <!-- CANTO INFERIOR ESQUERDO: MINIMAPA HOLOGRÁFICO E PIXELADO DO BRASIL -->
+        <div class="hud-widget-box bottom-left-map">
+          <div class="widget-header">
+            <i class="fa-solid fa-earth-americas"></i> HOLOGRAFO REGIONAL (BRASIL)
+          </div>
+          <div class="brazil-map-container">
+            <!-- Minimapa Vetorial Pixelado do Brasil -->
+            <svg class="pixel-brazil-svg" viewBox="0 0 200 200">
+              <path d="M 60,30 L 140,25 L 175,65 L 160,115 L 125,175 L 85,160 L 65,130 L 40,90 Z" fill="rgba(0, 229, 255, 0.15)" stroke="#00e5ff" stroke-width="2" stroke-dasharray="3,3" />
+              <!-- Ponto Pulsante 1: Bacia Amazônica (Norte) -->
+              <circle cx="80" cy="60" r="6" class="map-pulse-node active" />
+              <text x="90" y="64" fill="#00ff66" font-size="8" font-family="'Press Start 2P'">BACIA AMAZÔNICA</text>
+              <!-- Ponto Pulsante 2: Sudeste (Reservatórios) -->
+              <circle cx="120" cy="125" r="5" class="map-pulse-node warning" />
+              <text x="130" y="129" fill="#facc15" font-size="7" font-family="'Press Start 2P'">SUDESTE (SECA)</text>
+              <!-- Ponto Pulsante 3: Nordeste (Eólicas) -->
+              <circle cx="145" cy="75" r="5" class="map-pulse-node" />
+              <text x="152" y="79" fill="#38bdf8" font-size="7" font-family="'Press Start 2P'">EÓLICAS NE</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- CONTROLE DE ALTERNÂNCIA DE MOCKUPS (ESTÁVEL / EMERGÊNCIA) -->
+        <div class="hud-mockup-toggle-box">
+          <button id="btn-toggle-hud-mode" class="pixel-toggle-btn">
+            <i class="fa-solid fa-arrows-rotate"></i> Alternar Mockup (Estável / Emergência)
+          </button>
+        </div>
+
+        <!-- CANTO INFERIOR DIREITO: GRÁFICO PIZZA DA MATRIZ ENERGÉTICA EM TEMPO REAL -->
+        <div class="hud-widget-box bottom-right-chart">
+          <div class="widget-header">
+            <i class="fa-solid fa-chart-pie"></i> MATRIZ ENERGÉTICA (MONITORAMENTO)
+          </div>
+          <div class="hud-chart-wrapper">
+            <canvas id="hudMatrixChart"></canvas>
+          </div>
+        </div>
+
+      </footer>
+
     </div>
+
   </div>
 
   <!-- Scripts -->

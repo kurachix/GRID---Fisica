@@ -1,6 +1,6 @@
 /**
  * GRID - O Gestor da Rede Elétrica Nacional
- * Interatividade da Tela de Título e Sistema Cinematográfico de Diálogo RPG (Roteiro Completo)
+ * Master 16-Bit HUD UI Design Mockup & RPG Cutscene System
  */
 
 const CUTSCENE_SCRIPT = [
@@ -137,9 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const titleScreen = document.getElementById('title-screen');
   const cutsceneScreen = document.getElementById('cutscene-screen');
-  const endIntroScreen = document.getElementById('end-intro-screen');
-  const endPlayerName = document.getElementById('end-player-name');
-  const btnReplayIntro = document.getElementById('btn-replay-intro');
+  const hudDashboardScreen = document.getElementById('hud-dashboard-screen');
+  const hudBgRoom = document.getElementById('hud-bg-room');
+  const btnToggleHud = document.getElementById('btn-toggle-hud-mode');
 
   const cutsceneAvatar = document.getElementById('cutscene-avatar');
   const cutsceneSpeakerName = document.getElementById('cutscene-speaker-name');
@@ -152,9 +152,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let cutsceneTypeIndex = 0;
   let cutsceneTimer = null;
   let isTyping = false;
+  let isStableMode = true;
   let audioCtx = null;
+  let hudChart = null;
 
-  // Typewriter inicial
   function typeInitialWriter() {
     if (initialTypeIndex < initialText.length) {
       initialDialogueElem.textContent += initialText.charAt(initialTypeIndex);
@@ -208,7 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   btnStart.addEventListener('click', () => {
     playerName = inputElem.value.trim() || 'GESTOR';
-    endPlayerName.textContent = playerName;
     playChime();
 
     titleScreen.classList.add('hidden');
@@ -220,9 +220,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderCutsceneLine() {
     if (cutsceneIndex >= CUTSCENE_SCRIPT.length) {
-      // Fim da cinematográfica -> Exibe a tela de espera limpa
+      // Transiciona para a Interface do Painel Mestre
       cutsceneScreen.classList.add('hidden');
-      endIntroScreen.classList.remove('hidden');
+      hudDashboardScreen.classList.remove('hidden');
+      initHudChart();
       return;
     }
 
@@ -279,10 +280,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  btnReplayIntro.addEventListener('click', () => {
-    endIntroScreen.classList.add('hidden');
-    cutsceneScreen.classList.remove('hidden');
-    cutsceneIndex = 0;
-    renderCutsceneLine();
-  });
+  // Alternância de estado do Mockup (Estável / Emergência)
+  if (btnToggleHud) {
+    btnToggleHud.addEventListener('click', () => {
+      isStableMode = !isStableMode;
+
+      if (isStableMode) {
+        hudBgRoom.className = 'hud-bg-room stable';
+        btnToggleHud.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Modo Estável (Clique para Emergência)';
+      } else {
+        hudBgRoom.className = 'hud-bg-room critical';
+        btnToggleHud.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Modo Emergência Red (Clique para Estável)';
+        playRetroBeep(880);
+      }
+    });
+  }
+
+  // Gráfico Pizza da Matriz Energética no Canto Inferior Direito
+  function initHudChart() {
+    const ctx = document.getElementById('hudMatrixChart');
+    if (!ctx || hudChart) return;
+
+    hudChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Hidrelétrica', 'Solar', 'Eólica', 'Termelétrica', 'Nuclear', 'Biomassa'],
+        datasets: [{
+          data: [60, 8, 12, 15, 3, 2],
+          backgroundColor: ['#2980b9', '#f39c12', '#1abc9c', '#e67e22', '#9b59b6', '#27ae60'],
+          borderColor: '#000',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: { label: (ctx) => ` ${ctx.label}: ${ctx.raw}%` }
+          }
+        },
+        cutout: '60%'
+      }
+    });
+  }
 });
