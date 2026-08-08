@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GRID - O Gestor da Rede Elétrica Nacional</title>
+
+  <!-- Google Fonts: Retro Pixel Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Retro Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- CRT Retro Screen Overlay -->
+  <div class="crt-overlay"></div>
+
+  <!-- VIEW 1: TELA DE TÍTULO (PARTE 1) -->
+  <div id="title-screen" class="retro-container">
+
+    <header class="retro-header">
+      <h1 class="pixel-title">GRID</h1>
+      <p class="pixel-subtitle">O Gestor da Rede Elétrica</p>
+    </header>
+
+    <main class="retro-main">
+
+      <!-- CAIXA DE DIÁLOGO INICIAL (ESTILO UNDERTALE) -->
+      <section class="undertale-dialogue-box">
+        <div class="avatar-container">
+          <img src="assets/robot_avatar.jpg" alt="Mascote Robô Volta" class="pixel-avatar" />
+        </div>
+        <div class="dialogue-content">
+          <span class="character-name">&lt;ROBÔ VOLTA&gt;</span>
+          <p id="initial-dialogue-text" class="dialogue-text"></p>
+        </div>
+      </section>
+
+      <!-- FORMULÁRIO E IDENTIFICAÇÃO DO JOGADOR -->
+      <section class="player-id-section">
+        <div class="pixel-input-box">
+          <label for="player-name" class="input-label">Digite seu nome:</label>
+          <div class="input-wrapper">
+            <span class="bracket">[</span>
+            <input type="text" id="player-name" class="pixel-input" placeholder="________" maxlength="15" autocomplete="off" spellcheck="false" />
+            <span class="bracket">]</span>
+            <span class="blinking-cursor"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- PAINEL DE INSTRUÇÕES E CONSIDERAÇÕES -->
+      <section class="retro-instructions-panel">
+        <div class="panel-header">
+          <i class="fa-solid fa-gamepad"></i> INSTRUÇÕES &amp; REGRAS
+        </div>
+        <div class="panel-body">
+          <div class="rule-item">
+            <div class="rule-icon bars"><i class="fa-solid fa-chart-simple"></i></div>
+            <div class="rule-text">Controle Economia, Sociedade, Meio Ambiente e Rede Elétrica. Não deixe nenhum indicador chegar a 0%.</div>
+          </div>
+          <div class="rule-item">
+            <div class="rule-icon cards"><i class="fa-solid fa-repeat"></i></div>
+            <div class="rule-text">Deslize para a esquerda ou direita para tomar decisões estratégicas a cada rodada.</div>
+          </div>
+          <div class="rule-item warning">
+            <div class="rule-icon warning"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div class="rule-text">Abaixo de 20%, a rede entra em Modo Crítico com eventos imprevisíveis.</div>
+          </div>
+        </div>
+
+        <div class="pedagogical-footer">
+          <div class="pedagogical-tag"><i class="fa-solid fa-graduation-cap"></i> CONSIDERAÇÕES PEDAGÓGICAS:</div>
+          <p class="pedagogical-text">
+            Jogo educativo de simulação unindo conceitos de Física (transformações e conservação de energia) e Geografia (matrizes energéticas e impactos socioambientais).
+          </p>
+        </div>
+      </section>
+
+      <!-- BOTÃO DE AÇÃO -->
+      <section class="action-section">
+        <button id="btn-start" class="pixel-btn-start">
+          <span class="btn-glow"></span>
+          <span class="btn-text">INICIAR MISSÃO [START]</span>
+        </button>
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- VIEW 2: CINEMÁTICA / ROTEIRO DE DIÁLOGO RPG -->
+  <div id="cutscene-screen" class="cutscene-container hidden">
+    
+    <!-- Background do Cenário: Sala de Controle do Governo em Crise -->
+    <div class="control-room-bg" id="cutscene-bg"></div>
+
+    <div class="scene-header">
+      <span class="scene-tag"><i class="fa-solid fa-triangle-exclamation pulse-red"></i> CENTRO NACIONAL DE OPERAÇÕES DO SISTEMA (CNOS)</span>
+      <span class="scene-year">ANO 2026</span>
+    </div>
+
+    <!-- Caixa de Diálogo RPG estilo Pokémon / Undertale -->
+    <div class="rpg-dialogue-frame" id="cutscene-dialogue-box">
+      <div class="rpg-avatar-box">
+        <img id="cutscene-avatar" src="assets/dra_elena_avatar.jpg" alt="Persona Avatar" class="pixel-portrait" />
+      </div>
+      <div class="rpg-dialogue-content">
+        <div class="rpg-speaker-header">
+          <span id="cutscene-speaker-name" class="speaker-name">Dra. Elena</span>
+          <span id="cutscene-speaker-title" class="speaker-title">Membro Sênior / Física Teórica</span>
+        </div>
+        <p id="cutscene-text" class="rpg-text"></p>
+        
+        <div class="rpg-prompt-advance">
+          <span class="blink-arrow">Clique ou Pressione ESPAÇO para avançar ▶</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- VIEW 3: TELA DE ESPERA APÓS A INTRODUÇÃO (AGUARDANDO NOVAS ORDENS) -->
+  <div id="end-intro-screen" class="end-intro-container hidden">
+    <div class="end-intro-card">
+      <div class="status-indicator-dot"></div>
+      <h2>[SISTEMA ELÉTRICO CONECTADO]</h2>
+      <p class="end-intro-subtitle">
+        Autenticação concluída para o Ministro <strong id="end-player-name">GESTOR</strong>.
+      </p>
+      <div class="waiting-box">
+        <i class="fa-solid fa-terminal"></i>
+        <span>Aguardando instruções e diretrizes para o início das rodadas...</span>
+      </div>
+      <button id="btn-replay-intro" class="pixel-btn-restart">
+        <i class="fa-solid fa-rotate-left"></i> REVER INTRODUÇÃO
+      </button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+</body>
+</html>

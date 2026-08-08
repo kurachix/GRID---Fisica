@@ -1,0 +1,577 @@
+/* ==========================================================================
+   GRID - O Gestor da Rede Elétrica Nacional
+   Part 1 & Part 2: Pixel Art Retro Title & RPG Cutscene System
+   ========================================================================== */
+
+:root {
+  --bg-dark: #0d0e15;
+  --neon-green: #00ff66;
+  --neon-green-glow: rgba(0, 255, 102, 0.4);
+  --btn-green: #00aa44;
+  --btn-yellow-border: #ffee00;
+  --text-gray: #a0aab5;
+  --undertale-border: #ffffff;
+  --undertale-bg: #000000;
+  --font-retro: 'Press Start 2P', cursive, monospace;
+  --font-vt: 'VT323', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  image-rendering: pixelated;
+}
+
+body {
+  background-color: var(--bg-dark);
+  background-image: 
+    linear-gradient(rgba(13, 14, 21, 0.95), rgba(13, 14, 21, 0.95)),
+    radial-gradient(#00ff66 0.5px, transparent 0.5px);
+  background-size: 100% 100%, 16px 16px;
+  color: #ffffff;
+  font-family: var(--font-retro);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  overflow-x: hidden;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* CRT Scanlines Overlay */
+.crt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* ==========================================================================
+   VIEW 1: RETRO TITLE SCREEN
+   ========================================================================== */
+
+.retro-container {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  z-index: 1;
+}
+
+.retro-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pixel-title {
+  font-size: 3.5rem;
+  color: var(--neon-green);
+  letter-spacing: 0.1em;
+  text-shadow: 
+    4px 4px 0px #005522,
+    8px 8px 0px #000000,
+    0 0 20px var(--neon-green-glow);
+  animation: titlePulse 2s infinite alternate;
+}
+
+@keyframes titlePulse {
+  0% { text-shadow: 4px 4px 0px #005522, 8px 8px 0px #000000, 0 0 10px var(--neon-green-glow); }
+  100% { text-shadow: 4px 4px 0px #005522, 8px 8px 0px #000000, 0 0 25px var(--neon-green); }
+}
+
+.pixel-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-gray);
+  letter-spacing: 0.05em;
+}
+
+.undertale-dialogue-box {
+  background: var(--undertale-bg);
+  border: 4px solid var(--undertale-border);
+  box-shadow: 
+    0 0 0 4px #000000,
+    0 0 0 8px var(--undertale-border),
+    0 10px 20px rgba(0, 0, 0, 0.8);
+  padding: 1.25rem;
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.avatar-container {
+  width: 90px;
+  height: 90px;
+  flex-shrink: 0;
+  border: 2px solid var(--neon-green);
+  background: #000000;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
+}
+
+.pixel-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dialogue-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex: 1;
+}
+
+.character-name {
+  font-size: 0.75rem;
+  color: #00e5ff;
+  letter-spacing: 0.05em;
+}
+
+.dialogue-text {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #ffffff;
+  min-height: 2.8em;
+}
+
+.player-id-section {
+  display: flex;
+  justify-content: center;
+}
+
+.pixel-input-box {
+  background: #121420;
+  border: 3px solid #334155;
+  box-shadow: 4px 4px 0px #000000;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  align-items: center;
+}
+
+.input-label {
+  font-size: 0.8rem;
+  color: #e2e8f0;
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.1rem;
+  color: var(--neon-green);
+}
+
+.bracket {
+  color: #64748b;
+  font-weight: bold;
+}
+
+.pixel-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--font-retro);
+  font-size: 1rem;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  width: 220px;
+  text-align: center;
+}
+
+.blinking-cursor {
+  display: inline-block;
+  width: 10px;
+  height: 1.1rem;
+  background-color: var(--neon-green);
+  animation: cursorBlink 0.8s infinite;
+}
+
+@keyframes cursorBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.retro-instructions-panel {
+  background: #0f111a;
+  border: 3px solid #1e293b;
+  box-shadow: 6px 6px 0px #000000;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-header {
+  background: #1e293b;
+  color: #f1f5f9;
+  padding: 0.65rem 1rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-bottom: 2px solid #334155;
+}
+
+.panel-body {
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.rule-icon {
+  width: 28px;
+  height: 28px;
+  background: #1e293b;
+  border: 2px solid #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.rule-icon.bars { color: #38bdf8; }
+.rule-icon.cards { color: #a78bfa; }
+.rule-icon.warning { color: #facc15; border-color: #facc15; }
+
+.rule-text {
+  font-size: 0.72rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+.pedagogical-footer {
+  background: rgba(15, 23, 42, 0.8);
+  border-top: 2px dashed #334155;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pedagogical-tag {
+  font-size: 0.7rem;
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.pedagogical-text {
+  font-size: 0.68rem;
+  line-height: 1.5;
+  color: #94a3b8;
+}
+
+.action-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.pixel-btn-start {
+  background: var(--btn-green);
+  border: 4px solid var(--btn-yellow-border);
+  box-shadow: 
+    inset -4px -4px 0px #006622,
+    inset 4px 4px 0px #33cc66,
+    6px 6px 0px #000000;
+  color: #ffffff;
+  font-family: var(--font-retro);
+  font-size: 1rem;
+  padding: 1.25rem 2.25rem;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.1s ease;
+  text-shadow: 2px 2px 0px #003311;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pixel-btn-start:hover {
+  background: #00c853;
+  transform: translate(-2px, -2px);
+  box-shadow: 
+    inset -4px -4px 0px #007728,
+    inset 4px 4px 0px #55ff88,
+    8px 8px 0px #000000,
+    0 0 15px rgba(0, 255, 102, 0.5);
+}
+
+/* ==========================================================================
+   VIEW 2: RPG CUTSCENE / DIALOGUE SYSTEM
+   ========================================================================== */
+
+.cutscene-container {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 2rem;
+  background: #000000;
+  cursor: pointer;
+}
+
+.control-room-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../assets/control_room_bg.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.65) contrast(1.2);
+  z-index: -1;
+  animation: roomGlow 4s infinite alternate;
+}
+
+@keyframes roomGlow {
+  0% { filter: brightness(0.6) contrast(1.2); }
+  100% { filter: brightness(0.75) contrast(1.3); }
+}
+
+.scene-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.85);
+  border: 2px solid #ef4444;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+}
+
+.scene-tag {
+  color: #f87171;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.pulse-red {
+  animation: pulseRed 1s infinite alternate;
+}
+
+@keyframes pulseRed {
+  0% { opacity: 0.4; }
+  100% { opacity: 1; color: #ff0000; }
+}
+
+.scene-year {
+  color: var(--neon-green);
+  font-size: 0.9rem;
+}
+
+.rpg-dialogue-frame {
+  background: rgba(0, 0, 0, 0.92);
+  border: 4px solid #ffffff;
+  outline: 4px solid #000000;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.9);
+  padding: 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+  min-height: 180px;
+}
+
+.rpg-avatar-box {
+  width: 120px;
+  height: 120px;
+  border: 3px solid var(--neon-green);
+  background: #000000;
+  flex-shrink: 0;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+}
+
+.pixel-portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rpg-dialogue-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.rpg-speaker-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.speaker-name {
+  font-size: 1.1rem;
+  color: #60a5fa;
+  letter-spacing: 0.05em;
+  text-shadow: 2px 2px #000;
+}
+
+.speaker-title {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.rpg-text {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #ffffff;
+  min-height: 4em;
+  letter-spacing: 0.02em;
+}
+
+.rpg-prompt-advance {
+  align-self: flex-end;
+  margin-top: 0.5rem;
+}
+
+.blink-arrow {
+  font-size: 0.65rem;
+  color: var(--neon-green);
+  animation: arrowBlink 0.9s infinite alternate;
+}
+
+@keyframes arrowBlink {
+  0% { opacity: 0.3; transform: translateX(0); }
+  100% { opacity: 1; transform: translateX(4px); }
+}
+
+/* ==========================================================================
+   VIEW 3: TELA DE ESPERA APÓS A INTRODUÇÃO
+   ========================================================================== */
+
+.end-intro-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 650px;
+  z-index: 10;
+}
+
+.end-intro-card {
+  background: #0f111a;
+  border: 4px solid var(--neon-green);
+  box-shadow: 0 0 30px var(--neon-green-glow);
+  padding: 2.25rem 2rem;
+  border-radius: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.status-indicator-dot {
+  width: 16px;
+  height: 16px;
+  background: var(--neon-green);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--neon-green);
+  animation: dotPulse 1s infinite alternate;
+}
+
+@keyframes dotPulse {
+  0% { transform: scale(0.9); opacity: 0.5; }
+  100% { transform: scale(1.2); opacity: 1; }
+}
+
+.end-intro-card h2 {
+  font-size: 1.2rem;
+  color: var(--neon-green);
+  letter-spacing: 0.08em;
+}
+
+.end-intro-subtitle {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+}
+
+.waiting-box {
+  background: #1e293b;
+  border: 2px dashed #475569;
+  padding: 1.2rem;
+  border-radius: 8px;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.waiting-box i {
+  font-size: 1.4rem;
+  color: #00e5ff;
+}
+
+.pixel-btn-restart {
+  background: #1e293b;
+  border: 2px solid #64748b;
+  color: #ffffff;
+  font-family: var(--font-retro);
+  font-size: 0.75rem;
+  padding: 0.85rem 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.pixel-btn-restart:hover {
+  background: #334155;
+  border-color: #94a3b8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pixel-title { font-size: 2.3rem; }
+  .undertale-dialogue-box { flex-direction: column; text-align: center; }
+  .rpg-dialogue-frame { flex-direction: column; }
+}
