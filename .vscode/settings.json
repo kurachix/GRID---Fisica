@@ -1,0 +1,8 @@
+{
+  "liveServer.settings.ignoreFiles": [
+    "**/.git/**",
+    "**/.agents/**",
+    "**/*.log"
+  ],
+  "livePreview.customFileWatchers": []
+}

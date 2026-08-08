@@ -156,6 +156,23 @@ document.addEventListener('DOMContentLoaded', () => {
   let audioCtx = null;
   let hudChart = null;
 
+  function initAudioOnUserGesture() {
+    try {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+          audioCtx = new AudioContextClass();
+        }
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    } catch (e) {}
+  }
+
+  window.addEventListener('click', initAudioOnUserGesture, { once: true });
+  window.addEventListener('keydown', initAudioOnUserGesture, { once: true });
+
   function typeInitialWriter() {
     if (initialTypeIndex < initialText.length) {
       initialDialogueElem.textContent += initialText.charAt(initialTypeIndex);
@@ -166,9 +183,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function playRetroBeep(freq = 480) {
+    if (!audioCtx || audioCtx.state !== 'running') return;
     try {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
       osc.type = 'square';
@@ -183,9 +199,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function playChime() {
+    initAudioOnUserGesture();
+    if (!audioCtx || audioCtx.state !== 'running') return;
     try {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
       [261, 329, 392, 523].forEach((f, i) => {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
@@ -220,7 +236,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderCutsceneLine() {
     if (cutsceneIndex >= CUTSCENE_SCRIPT.length) {
-      // Transiciona para a Interface do Painel Mestre
       cutsceneScreen.classList.add('hidden');
       hudDashboardScreen.classList.remove('hidden');
       initHudChart();
@@ -280,7 +295,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Alternância de estado do Mockup (Estável / Emergência)
   if (btnToggleHud) {
     btnToggleHud.addEventListener('click', () => {
       isStableMode = !isStableMode;
@@ -296,7 +310,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Gráfico Pizza da Matriz Energética no Canto Inferior Direito
   function initHudChart() {
     const ctx = document.getElementById('hudMatrixChart');
     if (!ctx || hudChart) return;
