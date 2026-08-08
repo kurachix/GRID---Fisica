@@ -30,7 +30,6 @@
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 
-  /* Desativa seleção e cópia de texto em toda a interface do jogo */
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -38,7 +37,6 @@
   -webkit-user-drag: none;
 }
 
-/* Permite digitação apenas no campo de entrada do nome do jogador */
 input, textarea {
   -webkit-user-select: auto;
   -moz-user-select: auto;
@@ -721,6 +719,7 @@ body {
 .choice-title { font-size: 0.78rem; font-weight: bold; color: #fff; }
 .choice-sub { font-size: 0.6rem; color: #cbd5e1; }
 
+/* RODAPÉ EXPANDIDO (CANTO ESQUERDO E DIREITO) */
 .hud-bottom-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -749,18 +748,27 @@ body {
   padding-bottom: 0.4rem;
 }
 
-.brazil-map-wrapper {
-  width: 100%;
+/* HOLÓGRAFO REGIONAL BRASIL (MONITORAMENTO ESQUERDA) */
+.hud-map-flex-layout {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 1rem;
+  align-items: center;
   height: 100%;
+}
+
+.brazil-map-wrapper {
+  position: relative;
+  width: 140px;
+  height: 140px;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
 }
 
 .pixel-brazil-svg {
   width: 100%;
-  height: 180px;
+  height: 100%;
 }
 
 .map-pulse-node { animation: mapNodePulse 1.2s infinite alternate; }
@@ -772,6 +780,57 @@ body {
   100% { transform: scale(1.3); opacity: 1; }
 }
 
+.hud-map-legend-panel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.35rem;
+  font-family: var(--font-body);
+}
+
+.map-node-color {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.map-node-color.north { background: var(--neon-green); box-shadow: 0 0 6px var(--neon-green); }
+.map-node-color.northeast { background: #38bdf8; box-shadow: 0 0 6px #38bdf8; }
+.map-node-color.southeast { background: #facc15; box-shadow: 0 0 6px #facc15; }
+.map-node-color.south { background: #a78bfa; box-shadow: 0 0 6px #a78bfa; }
+
+.legend-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.legend-sub {
+  font-size: 0.63rem;
+  color: #94a3b8;
+}
+
+.legend-status {
+  font-size: 0.65rem;
+  font-family: var(--font-retro);
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  margin-left: auto;
+}
+
+.legend-status.active {
+  background: rgba(0, 255, 102, 0.15);
+  color: var(--neon-green);
+  border: 1px solid var(--neon-green);
+}
+
+.legend-status.warning {
+  background: rgba(250, 204, 21, 0.15);
+  color: #facc15;
+  border: 1px solid #facc15;
+}
+
+/* MATRIZ ENERGÉTICA NACIONAL (MONITORAMENTO DIREITA) */
 .hud-chart-flex-layout {
   display: grid;
   grid-template-columns: 140px 1fr;
@@ -812,7 +871,7 @@ body {
 .legend-color.nuclear { background: #9b59b6; }
 .legend-color.biomass { background: #27ae60; }
 
-.legend-name { color: #94a3b8; font-size: 0.7rem; }
+.legend-name { color: #ffffff; font-weight: 600; font-size: 0.7rem; }
 .legend-val { color: #ffffff; font-weight: 700; margin-left: auto; font-size: 0.72rem; }
 
 /* ==========================================================================
@@ -971,13 +1030,6 @@ body {
   color: #ffffff;
 }
 
-.tut-btn.skip {
-  background: transparent;
-  border: none;
-  color: #94a3b8;
-  text-decoration: underline;
-}
-
 .tut-btn.pri {
   background: var(--btn-green);
   border: 2px solid var(--btn-yellow-border);
@@ -994,5 +1046,6 @@ body {
   .hud-top-bars { grid-template-columns: repeat(2, 1fr); }
   .hud-bottom-grid { grid-template-columns: 1fr; }
   .hud-chart-flex-layout { grid-template-columns: 1fr; }
+  .hud-map-flex-layout { grid-template-columns: 1fr; }
   .tutorial-dialogue-card { max-width: 100%; }
 }

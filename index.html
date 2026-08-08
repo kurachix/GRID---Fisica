@@ -16,8 +16,8 @@
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Retro Stylesheet -->
-  <link rel="stylesheet" href="css/styles.css">
+  <!-- Retro Stylesheet (Cache-Busted) -->
+  <link rel="stylesheet" href="css/styles.css?v=1837">
 </head>
 <body>
 
@@ -232,61 +232,102 @@
       <!-- RODAPÉ EXPANDIDO: MINIMAPA BRASIL (ESQUERDA) & MATRIZ ENERGÉTICA COM LEGENDAS (DIREITA) -->
       <footer class="hud-bottom-grid">
         
-        <!-- CANTO INFERIOR ESQUERDO: MINIMAPA HOLOGRÁFICO AMPLIADO E DETALHADO DO BRASIL -->
+        <!-- CANTO INFERIOR ESQUERDO: HOLÓGRAFO REGIONAL BRASIL (MONITORAMENTO) -->
         <div class="hud-widget-box bottom-left-map" id="tut-target-map">
           <div class="widget-header">
-            <i class="fa-solid fa-earth-americas"></i> HOLÓGRAFO REGIONAL (BRASIL)
+            <i class="fa-solid fa-earth-americas"></i> HOLÓGRAFO REGIONAL BRASIL (MONITORAMENTO)
           </div>
 
-          <div class="brazil-map-wrapper">
-            <svg class="pixel-brazil-svg" viewBox="0 0 320 280">
-              <path d="M 100 20 
-                       L 230 15 
-                       L 290 60 
-                       L 295 120 
-                       L 240 180 
-                       L 210 260 
-                       L 150 270 
-                       L 130 220 
-                       L 90 200 
-                       L 50 140 
-                       L 40 80 Z" 
-                    fill="rgba(0, 229, 255, 0.12)" 
-                    stroke="#00e5ff" 
-                    stroke-width="2.5" 
-                    stroke-dasharray="4,4" />
+          <div class="hud-map-flex-layout">
+            <!-- Lado Esquerdo: Mapa SVG Nitidamente Iluminado -->
+            <div class="brazil-map-wrapper">
+              <svg class="pixel-brazil-svg" viewBox="0 0 320 280">
+                <!-- Contorno do Brasil -->
+                <path d="M 100 20 
+                         L 230 15 
+                         L 290 60 
+                         L 295 120 
+                         L 240 180 
+                         L 210 260 
+                         L 150 270 
+                         L 130 220 
+                         L 90 200 
+                         L 50 140 
+                         L 40 80 Z" 
+                      fill="rgba(0, 229, 255, 0.15)" 
+                      stroke="#00e5ff" 
+                      stroke-width="2.5" 
+                      stroke-dasharray="4,4" />
 
-              <path d="M 40 80 L 160 120 L 290 60" fill="none" stroke="rgba(0,229,255,0.25)" stroke-width="1.5" />
-              <path d="M 160 120 L 210 260" fill="none" stroke="rgba(0,229,255,0.25)" stroke-width="1.5" />
+                <!-- Linhas Divisórias Regionais -->
+                <path d="M 40 80 L 160 120 L 290 60" fill="none" stroke="rgba(0,229,255,0.3)" stroke-width="1.5" />
+                <path d="M 160 120 L 210 260" fill="none" stroke="rgba(0,229,255,0.3)" stroke-width="1.5" />
 
-              <g class="map-node-group">
-                <circle cx="110" cy="70" r="8" class="map-pulse-node active" />
-                <text x="124" y="74" fill="#00ff66" font-size="10" font-weight="bold" font-family="'Press Start 2P'">NORTE / AMAZÔNIA</text>
-                <text x="124" y="86" fill="#a0aab5" font-size="8" font-family="'VT323'">(Bacias Hidrográficas)</text>
-              </g>
+                <!-- Nó 1: Norte -->
+                <g class="map-node-group">
+                  <circle cx="110" cy="70" r="8" class="map-pulse-node active" />
+                </g>
 
-              <g class="map-node-group">
-                <circle cx="235" cy="85" r="7" class="map-pulse-node active" />
-                <text x="247" y="89" fill="#38bdf8" font-size="9" font-weight="bold" font-family="'Press Start 2P'">NORDESTE</text>
-                <text x="247" y="100" fill="#a0aab5" font-size="8" font-family="'VT323'">(Eólica &amp; Solar)</text>
-              </g>
+                <!-- Nó 2: Nordeste -->
+                <g class="map-node-group">
+                  <circle cx="235" cy="85" r="7" class="map-pulse-node active" />
+                </g>
 
-              <g class="map-node-group">
-                <circle cx="170" cy="165" r="8" class="map-pulse-node warning" />
-                <text x="184" y="169" fill="#facc15" font-size="10" font-weight="bold" font-family="'Press Start 2P'">SUDESTE / CO</text>
-                <text x="184" y="181" fill="#fca5a5" font-size="8" font-family="'VT323'">(Crítico: Reservatórios)</text>
-              </g>
+                <!-- Nó 3: Sudeste/CO -->
+                <g class="map-node-group">
+                  <circle cx="170" cy="165" r="8" class="map-pulse-node warning" />
+                </g>
 
-              <g class="map-node-group">
-                <circle cx="150" cy="230" r="7" class="map-pulse-node" />
-                <text x="162" y="234" fill="#a78bfa" font-size="9" font-weight="bold" font-family="'Press Start 2P'">SUL</text>
-                <text x="162" y="245" fill="#a0aab5" font-size="8" font-family="'VT323'">(Térmica &amp; Eólica)</text>
-              </g>
-            </svg>
+                <!-- Nó 4: Sul -->
+                <g class="map-node-group">
+                  <circle cx="150" cy="230" r="7" class="map-pulse-node active" />
+                </g>
+              </svg>
+            </div>
+
+            <!-- Lado Direito: Painel de Legendas Regionais Estruturadas -->
+            <div class="hud-map-legend-panel">
+              <div class="legend-item map-north">
+                <span class="legend-color map-node-color north"></span>
+                <div class="legend-details">
+                  <span class="legend-name">Norte / Amazônia</span>
+                  <span class="legend-sub">Bacias Hidrográficas</span>
+                </div>
+                <strong class="legend-status active">NORMAIS</strong>
+              </div>
+
+              <div class="legend-item map-northeast">
+                <span class="legend-color map-node-color northeast"></span>
+                <div class="legend-details">
+                  <span class="legend-name">Nordeste</span>
+                  <span class="legend-sub">Eólica &amp; Solar</span>
+                </div>
+                <strong class="legend-status active">ALTOS VENTOS</strong>
+              </div>
+
+              <div class="legend-item map-southeast">
+                <span class="legend-color map-node-color southeast"></span>
+                <div class="legend-details">
+                  <span class="legend-name">Sudeste / CO</span>
+                  <span class="legend-sub">Reservatórios Principais</span>
+                </div>
+                <strong class="legend-status warning">CRÍTICO 14%</strong>
+              </div>
+
+              <div class="legend-item map-south">
+                <span class="legend-color map-node-color south"></span>
+                <div class="legend-details">
+                  <span class="legend-name">Sul</span>
+                  <span class="legend-sub">Térmicas &amp; Eólicas</span>
+                </div>
+                <strong class="legend-status active">ESTÁVEL</strong>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        <!-- CANTO INFERIOR DIREITO: MATRIZ ENERGÉTICA AMPLIADA COM LEGENDAS E FUNCIONALIDADE -->
+        <!-- CANTO INFERIOR DIREITO: MATRIZ ENERGÉTICA NACIONAL (MONITORAMENTO) -->
         <div class="hud-widget-box bottom-right-chart" id="tut-target-chart">
           <div class="widget-header">
             <i class="fa-solid fa-chart-pie"></i> MATRIZ ENERGÉTICA NACIONAL (MONITORAMENTO)
@@ -368,14 +409,13 @@
 
       <div class="tutorial-card-footer">
         <button id="btn-tut-prev" class="tut-btn sec"><i class="fa-solid fa-arrow-left"></i> ANTERIOR</button>
-        <button id="btn-tut-skip" class="tut-btn skip">PULAR</button>
         <button id="btn-tut-next" class="tut-btn pri">PRÓXIMO ▶</button>
       </div>
     </div>
 
   </div>
 
-  <!-- Scripts -->
-  <script src="js/app.js"></script>
+  <!-- Scripts (Cache-Busted) -->
+  <script src="js/app.js?v=1837"></script>
 </body>
 </html>

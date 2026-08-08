@@ -180,7 +180,6 @@ const energyMatrix = { hydro: 60.0, solar: 8.0, wind: 12.0, thermal: 15.0, nucle
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // Impede a seleção acidental de texto ou arrasto de imagem pela interface do jogo
   document.addEventListener('selectstart', (e) => {
     if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
       e.preventDefault();
@@ -210,7 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const tutArrow = document.getElementById('tutorial-arrow');
   const btnTutPrev = document.getElementById('btn-tut-prev');
   const btnTutNext = document.getElementById('btn-tut-next');
-  const btnTutSkip = document.getElementById('btn-tut-skip');
 
   const cutsceneAvatar = document.getElementById('cutscene-avatar');
   const cutsceneSpeakerName = document.getElementById('cutscene-speaker-name');
@@ -225,7 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentFullText = "";
   let hudChart = null;
 
-  // HELPER REUTILIZÁVEL: Animação de Escrita em Tempo Real (Typewriter)
   function typeTextEffect(targetElem, text, speed = 22, onComplete) {
     if (activeTypingTimer) clearInterval(activeTypingTimer);
     targetElem.textContent = "";
@@ -246,7 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, speed);
   }
 
-  // Completa instantaneamente o texto se o usuário clicar durante a digitação
   function completeTypingInstantly(targetElem) {
     if (isCurrentlyTyping && activeTypingTimer) {
       clearInterval(activeTypingTimer);
@@ -327,7 +323,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // TUTORIAL GUIADO COM EXIBIÇÃO ELEMENTO A ELEMENTO
   function startTutorial() {
     tutorialStepIndex = 0;
     if (tutorialOverlay) tutorialOverlay.classList.remove('hidden');
@@ -428,8 +423,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-
-  if (btnTutSkip) btnTutSkip.addEventListener('click', closeTutorial);
 
   function updateHUD() {
     let isAnyCritical = false;
