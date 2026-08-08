@@ -1,6 +1,6 @@
 /**
  * GRID - O Gestor da Rede Elétrica Nacional
- * Master 16-Bit HUD UI Design System & RPG Cutscene Engine
+ * Master 16-Bit HUD UI Design System & Ex-Minister Tutorial Engine
  */
 
 const CUTSCENE_SCRIPT = [
@@ -129,23 +129,55 @@ const CUTSCENE_SCRIPT = [
   }
 ];
 
-// Valores correntes dos indicadores do sistema
-const systemIndicators = {
-  economy: 70,
-  social: 75,
-  environment: 60,
-  stability: 80
-};
+// Roteiro do Tutorial Guiado pelo Ex-Ministro Mendes
+const TUTORIAL_STEPS = [
+  {
+    stepBadge: "PASSO 1 DE 6",
+    title: "MENSAGEM DO EX-MINISTRO MENDES",
+    targetId: null,
+    arrowDirection: "none",
+    text: "Ministro {NAME}... Antes de eu entregar minhas credenciais e sair da sala de controle, escute com atenção. O sistema elétrico do Brasil é complexo. Vou te mostrar como funciona cada elemento desta mesa para você não cometer os mesmos erros que eu cometi."
+  },
+  {
+    stepBadge: "PASSO 2 DE 6",
+    title: "1. BARRAS DE INDICADORES (TOPO)",
+    targetId: "tut-target-indicators",
+    arrowDirection: "top",
+    text: "Ali no topo estão os seus 4 pilares de sobrevivência: Economia ($), Sociedade (♥), Meio Ambiente (🌲) e Estabilidade da Rede (⚡). Se QUALQUER um deles chegar a 0%, o país entra em colapso total na hora!"
+  },
+  {
+    stepBadge: "PASSO 3 DE 6",
+    title: "2. CARTA DE DILEMA (CENTRO)",
+    targetId: "tut-target-dilemma",
+    arrowDirection: "center",
+    text: "No centro da mesa está o seu dilema da rodada. Cada carta é uma decisão real de Física ou Geografia. Escolha entre a OPÇÃO A (Esquerda) ou OPÇÃO B (Direita). Lembre-se: não existe escolha perfeita, toda decisão ganha em uma área e perde em outra."
+  },
+  {
+    stepBadge: "PASSO 4 DE 6",
+    title: "3. HOLÓGRAFO REGIONAL (CANTO ESQUERDO)",
+    targetId: "tut-target-map",
+    arrowDirection: "bottom-left",
+    text: "Neste mapa holográfico do Brasil, você acompanha o impacto nas regiões. Veja a seca nos reservatórios do Sudeste, a vazão das usinas na Amazônia e os ventos do Nordeste. Clima e geografia afetam a geração!"
+  },
+  {
+    stepBadge: "PASSO 5 DE 6",
+    title: "4. MATRIZ ENERGÉTICA (CANTO DIREITO)",
+    targetId: "tut-target-chart",
+    arrowDirection: "bottom-right",
+    text: "Este gráfico circular mede a divisão da nossa matriz elétrica (Hidrelétrica, Solar, Eólica, Termelétrica, Nuclear e Biomassa). As legendas ao lado mostram a porcentagem exata em tempo real. Sua missão é fazer a transição para fontes limpas!"
+  },
+  {
+    stepBadge: "PASSO 6 DE 6",
+    title: "5. MODO CRÍTICO DE EMERGÊNCIA (< 20%)",
+    targetId: null,
+    arrowDirection: "none",
+    text: "CUIDADO! Se qualquer barra cair abaixo de 20%, o sistema entrará automaticamente em Modo Crítico de Emergência com luzes vermelhas piscantes. Agora as chaves do Sistema Elétrico Nacional são suas. Boa sorte, Ministro {NAME}!"
+  }
+];
 
-// Valores correntes da matriz energética (%)
-const energyMatrix = {
-  hydro: 60.0,
-  solar: 8.0,
-  wind: 12.0,
-  thermal: 15.0,
-  nuclear: 3.0,
-  biomass: 2.0
-};
+// Valores dos indicadores e matriz energética
+const systemIndicators = { economy: 70, social: 75, environment: 60, stability: 80 };
+const energyMatrix = { hydro: 60.0, solar: 8.0, wind: 12.0, thermal: 15.0, nuclear: 3.0, biomass: 2.0 };
 
 document.addEventListener('DOMContentLoaded', () => {
   const initialDialogueElem = document.getElementById('initial-dialogue-text');
@@ -158,6 +190,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const hudDashboardScreen = document.getElementById('hud-dashboard-screen');
   const hudBgRoom = document.getElementById('hud-bg-room');
 
+  const tutorialOverlay = document.getElementById('tutorial-overlay');
+  const tutStepBadge = document.getElementById('tut-step-badge');
+  const tutStepTitle = document.getElementById('tut-step-title');
+  const tutStepText = document.getElementById('tut-step-text');
+  const tutArrow = document.getElementById('tutorial-arrow');
+  const btnTutPrev = document.getElementById('btn-tut-prev');
+  const btnTutNext = document.getElementById('btn-tut-next');
+  const btnTutSkip = document.getElementById('btn-tut-skip');
+  const btnReplayTutorial = document.getElementById('btn-replay-tutorial');
+
   const cutsceneAvatar = document.getElementById('cutscene-avatar');
   const cutsceneSpeakerName = document.getElementById('cutscene-speaker-name');
   const cutsceneSpeakerTitle = document.getElementById('cutscene-speaker-title');
@@ -165,6 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let playerName = "GESTOR";
   let cutsceneIndex = 0;
+  let tutorialStepIndex = 0;
   let audioCtx = null;
   let hudChart = null;
 
@@ -174,9 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
         if (AudioContextClass) audioCtx = new AudioContextClass();
       }
-      if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
     } catch (e) {}
   }
 
@@ -209,6 +250,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (cutsceneScreen) cutsceneScreen.classList.add('hidden');
       if (hudDashboardScreen) hudDashboardScreen.classList.remove('hidden');
       updateHUD();
+      // Inicia automaticamente o Tutorial Guiado pelo Ex-Ministro Mendes ao fim da introdução
+      startTutorial();
       return;
     }
 
@@ -230,9 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderCutsceneLine();
   }
 
-  if (cutsceneScreen) {
-    cutsceneScreen.addEventListener('click', advanceCutscene);
-  }
+  if (cutsceneScreen) cutsceneScreen.addEventListener('click', advanceCutscene);
 
   document.addEventListener('keydown', (e) => {
     if (cutsceneScreen && !cutsceneScreen.classList.contains('hidden')) {
@@ -243,11 +284,111 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Atualiza os indicadores e a troca AUTOMÁTICA do cenário de fundo da sala de controle
+  // SISTEMA DO TUTORIAL GUIADO PELO EX-MINISTRO MENDES
+  function startTutorial() {
+    tutorialStepIndex = 0;
+    if (tutorialOverlay) tutorialOverlay.classList.remove('hidden');
+    renderTutorialStep();
+  }
+
+  function renderTutorialStep() {
+    // Remove destaques anteriores
+    document.querySelectorAll('.tutorial-target-highlight').forEach(el => {
+      el.classList.remove('tutorial-target-highlight');
+    });
+
+    if (tutorialStepIndex >= TUTORIAL_STEPS.length) {
+      closeTutorial();
+      return;
+    }
+
+    const step = TUTORIAL_STEPS[tutorialStepIndex];
+
+    if (tutStepBadge) tutStepBadge.textContent = step.stepBadge;
+    if (tutStepTitle) tutStepTitle.textContent = step.title;
+    if (tutStepText) tutStepText.textContent = step.text.replace(/{NAME}/g, playerName);
+
+    // Botão Anterior
+    if (btnTutPrev) {
+      btnTutPrev.style.visibility = tutorialStepIndex === 0 ? 'hidden' : 'visible';
+    }
+
+    // Botão Próximo / Concluir
+    if (btnTutNext) {
+      btnTutNext.textContent = tutorialStepIndex === TUTORIAL_STEPS.length - 1 ? 'CONCLUIR ▶' : 'PRÓXIMO ▶';
+    }
+
+    // Destaque e Seta Indicadora
+    if (step.targetId) {
+      const targetElem = document.getElementById(step.targetId);
+      if (targetElem) {
+        targetElem.classList.add('tutorial-target-highlight');
+        positionTutorialArrow(targetElem, step.arrowDirection);
+      }
+    } else {
+      if (tutArrow) tutArrow.style.display = 'none';
+    }
+  }
+
+  function positionTutorialArrow(targetElem, direction) {
+    if (!tutArrow || !targetElem) return;
+    const rect = targetElem.getBoundingClientRect();
+    tutArrow.style.display = 'block';
+
+    if (direction === 'top') {
+      tutArrow.className = 'tutorial-pixel-arrow top';
+      tutArrow.innerHTML = '<div class="arrow-shape">▼</div>';
+      tutArrow.style.top = `${Math.max(10, rect.top - 45)}px`;
+      tutArrow.style.left = `${rect.left + rect.width / 2 - 15}px`;
+    } else if (direction === 'bottom-left') {
+      tutArrow.className = 'tutorial-pixel-arrow bottom';
+      tutArrow.innerHTML = '<div class="arrow-shape">▲</div>';
+      tutArrow.style.top = `${rect.top - 40}px`;
+      tutArrow.style.left = `${rect.left + 40}px`;
+    } else if (direction === 'bottom-right') {
+      tutArrow.className = 'tutorial-pixel-arrow bottom';
+      tutArrow.innerHTML = '<div class="arrow-shape">▲</div>';
+      tutArrow.style.top = `${rect.top - 40}px`;
+      tutArrow.style.left = `${rect.right - 50}px`;
+    } else if (direction === 'center') {
+      tutArrow.className = 'tutorial-pixel-arrow top';
+      tutArrow.innerHTML = '<div class="arrow-shape">▼</div>';
+      tutArrow.style.top = `${rect.top - 40}px`;
+      tutArrow.style.left = `${rect.left + rect.width / 2 - 15}px`;
+    }
+  }
+
+  function closeTutorial() {
+    document.querySelectorAll('.tutorial-target-highlight').forEach(el => {
+      el.classList.remove('tutorial-target-highlight');
+    });
+    if (tutArrow) tutArrow.style.display = 'none';
+    if (tutorialOverlay) tutorialOverlay.classList.add('hidden');
+  }
+
+  if (btnTutNext) {
+    btnTutNext.addEventListener('click', () => {
+      tutorialStepIndex++;
+      renderTutorialStep();
+    });
+  }
+
+  if (btnTutPrev) {
+    btnTutPrev.addEventListener('click', () => {
+      if (tutorialStepIndex > 0) {
+        tutorialStepIndex--;
+        renderTutorialStep();
+      }
+    });
+  }
+
+  if (btnTutSkip) btnTutSkip.addEventListener('click', closeTutorial);
+  if (btnReplayTutorial) btnReplayTutorial.addEventListener('click', startTutorial);
+
+  // Atualiza indicadores e cenário de fundo automático
   function updateHUD() {
     let isAnyCritical = false;
 
-    // Atualiza barras de progresso
     const map = [
       { key: 'economy', idVal: 'hud-val-eco', idFill: 'hud-fill-eco', idCard: 'hud-card-eco' },
       { key: 'social', idVal: 'hud-val-soc', idFill: 'hud-fill-soc', idCard: 'hud-card-soc' },
@@ -272,25 +413,17 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // TROCA AUTOMÁTICA DO CENÁRIO DA SALA DE CONTROLE DE ACORDO COM O ESTADO
     if (hudBgRoom) {
-      if (isAnyCritical) {
-        hudBgRoom.className = 'hud-bg-room critical';
-      } else {
-        hudBgRoom.className = 'hud-bg-room stable';
-      }
+      hudBgRoom.className = isAnyCritical ? 'hud-bg-room critical' : 'hud-bg-room stable';
     }
 
-    // Inicializa/Atualiza o Gráfico de Pizza da Matriz
     initHudChart();
   }
 
-  // Gráfico Pizza da Matriz Energética Ampliada com Legendas Funcionais
   function initHudChart() {
     const ctx = document.getElementById('hudMatrixChart');
     if (!ctx || typeof Chart === 'undefined') return;
 
-    // Atualiza os textos da legenda no painel lateral
     document.getElementById('leg-val-hydro').textContent = `${energyMatrix.hydro.toFixed(1)}%`;
     document.getElementById('leg-val-solar').textContent = `${energyMatrix.solar.toFixed(1)}%`;
     document.getElementById('leg-val-wind').textContent = `${energyMatrix.wind.toFixed(1)}%`;
@@ -300,12 +433,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (hudChart) {
       hudChart.data.datasets[0].data = [
-        energyMatrix.hydro,
-        energyMatrix.solar,
-        energyMatrix.wind,
-        energyMatrix.thermal,
-        energyMatrix.nuclear,
-        energyMatrix.biomass
+        energyMatrix.hydro, energyMatrix.solar, energyMatrix.wind,
+        energyMatrix.thermal, energyMatrix.nuclear, energyMatrix.biomass
       ];
       hudChart.update();
       return;
@@ -318,12 +447,8 @@ document.addEventListener('DOMContentLoaded', () => {
           labels: ['Hidrelétrica', 'Solar', 'Eólica', 'Termelétrica', 'Nuclear', 'Biomassa'],
           datasets: [{
             data: [
-              energyMatrix.hydro,
-              energyMatrix.solar,
-              energyMatrix.wind,
-              energyMatrix.thermal,
-              energyMatrix.nuclear,
-              energyMatrix.biomass
+              energyMatrix.hydro, energyMatrix.solar, energyMatrix.wind,
+              energyMatrix.thermal, energyMatrix.nuclear, energyMatrix.biomass
             ],
             backgroundColor: ['#2980b9', '#f39c12', '#1abc9c', '#e67e22', '#9b59b6', '#27ae60'],
             borderColor: '#000',
@@ -335,20 +460,13 @@ document.addEventListener('DOMContentLoaded', () => {
           maintainAspectRatio: false,
           plugins: {
             legend: { display: false },
-            tooltip: {
-              callbacks: { label: (c) => ` ${c.label}: ${c.raw}%` }
-            }
+            tooltip: { callbacks: { label: (c) => ` ${c.label}: ${c.raw}%` } }
           },
           cutout: '55%'
         }
       });
-    } catch (err) {
-      console.warn("Chart initialization skipped:", err);
-    }
+    } catch (err) {}
   }
 
-  // Exporta função global para testes/mudanças de estado
   window.updateHUD = updateHUD;
-  window.systemIndicators = systemIndicators;
-  window.energyMatrix = energyMatrix;
 });

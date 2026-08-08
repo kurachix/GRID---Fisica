@@ -1,6 +1,6 @@
 /* ==========================================================================
    GRID - O Gestor da Rede Elétrica Nacional
-   Part 1, Part 2 & Master HUD UI Design System
+   Part 1, Part 2, Master HUD & Ex-Minister Tutorial System
    ========================================================================== */
 
 :root {
@@ -506,7 +506,6 @@ body {
   background: #000000;
 }
 
-/* Room Background (Troca Automática: Estável vs Crítico) */
 .hud-bg-room {
   position: absolute;
   top: 0;
@@ -535,7 +534,6 @@ body {
   100% { filter: brightness(1.0) contrast(1.35) sepia(0.5) hue-rotate(-40deg); }
 }
 
-/* LAYOUT CONTAINER */
 .hud-panel-layout {
   display: flex;
   flex-direction: column;
@@ -547,7 +545,6 @@ body {
   gap: 1rem;
 }
 
-/* TOPO (HEADER): 4 BARRAS DE PROGRESSO COM ÍCONES COLORIDOS PIXELADOS */
 .hud-top-bars {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -556,6 +553,7 @@ body {
   border: 3px solid #1e293b;
   padding: 0.85rem 1.25rem;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8);
+  transition: all 0.3s ease;
 }
 
 .hud-bar-card {
@@ -601,15 +599,8 @@ body {
 .pixel-icon.env { background: var(--color-environment); color: #000; }
 .pixel-icon.sta { background: var(--color-stability); color: #fff; }
 
-.bar-name {
-  color: var(--text-gray);
-  flex: 1;
-}
-
-.bar-percent {
-  color: #ffffff;
-  font-weight: bold;
-}
+.bar-name { color: var(--text-gray); flex: 1; }
+.bar-percent { color: #ffffff; font-weight: bold; }
 
 .hud-bar-track {
   height: 10px;
@@ -618,17 +609,12 @@ body {
   overflow: hidden;
 }
 
-.hud-bar-fill {
-  height: 100%;
-  transition: width 0.4s ease;
-}
-
+.hud-bar-fill { height: 100%; transition: width 0.4s ease; }
 .hud-bar-fill.eco { background: var(--color-economy); }
 .hud-bar-fill.soc { background: var(--color-social); }
 .hud-bar-fill.env { background: var(--color-environment); }
 .hud-bar-fill.sta { background: var(--color-stability); }
 
-/* CENTRO (O FOCO): CARTA DE DILEMA GRANDE */
 .hud-center-dilemma {
   flex: 1;
   display: flex;
@@ -659,15 +645,8 @@ body {
   padding-bottom: 0.5rem;
 }
 
-.dilemma-tag {
-  font-size: 0.65rem;
-  color: #00e5ff;
-}
-
-.dilemma-year {
-  font-size: 0.75rem;
-  color: var(--neon-green);
-}
+.dilemma-tag { font-size: 0.65rem; color: #00e5ff; }
+.dilemma-year { font-size: 0.75rem; color: var(--neon-green); }
 
 .dilemma-title-row {
   display: flex;
@@ -675,10 +654,7 @@ body {
   gap: 0.85rem;
 }
 
-.dilemma-icon {
-  font-size: 1.8rem;
-  color: #38bdf8;
-}
+.dilemma-icon { font-size: 1.8rem; color: #38bdf8; }
 
 .dilemma-title-row h2 {
   font-size: 1.05rem;
@@ -730,7 +706,6 @@ body {
 .choice-title { font-size: 0.78rem; font-weight: bold; color: #fff; }
 .choice-sub { font-size: 0.6rem; color: #cbd5e1; }
 
-/* RODAPÉ EXPANDIDO (CANTO ESQUERDO E DIREITO) */
 .hud-bottom-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -759,7 +734,6 @@ body {
   padding-bottom: 0.4rem;
 }
 
-/* MINIMAPA BRASIL AMPLIADO (CANTO ESQUERDO) */
 .brazil-map-wrapper {
   width: 100%;
   height: 100%;
@@ -774,10 +748,7 @@ body {
   height: 180px;
 }
 
-.map-pulse-node {
-  animation: mapNodePulse 1.2s infinite alternate;
-}
-
+.map-pulse-node { animation: mapNodePulse 1.2s infinite alternate; }
 .map-pulse-node.active { fill: var(--neon-green); }
 .map-pulse-node.warning { fill: #facc15; }
 
@@ -786,7 +757,6 @@ body {
   100% { transform: scale(1.3); opacity: 1; }
 }
 
-/* MATRIZ ENERGÉTICA AMPLIADA COM LEGENDAS (CANTO DIREITO) */
 .hud-chart-flex-layout {
   display: grid;
   grid-template-columns: 140px 1fr;
@@ -819,13 +789,7 @@ body {
   border-radius: 6px;
 }
 
-.legend-color {
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-
+.legend-color { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
 .legend-color.hydro { background: #2980b9; }
 .legend-color.solar { background: #f39c12; }
 .legend-color.wind { background: #1abc9c; }
@@ -833,16 +797,211 @@ body {
 .legend-color.nuclear { background: #9b59b6; }
 .legend-color.biomass { background: #27ae60; }
 
-.legend-name {
-  color: #94a3b8;
-  font-size: 0.7rem;
+.legend-name { color: #94a3b8; font-size: 0.7rem; }
+.legend-val { color: #ffffff; font-weight: 700; margin-left: auto; font-size: 0.72rem; }
+
+/* Botão de Ajuda do Tutorial no HUD */
+.btn-help-tutorial {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 250;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border: 3px solid #ffee00;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.5);
+  color: #000000;
+  font-family: var(--font-retro);
+  font-size: 0.65rem;
+  font-weight: bold;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
 }
 
-.legend-val {
+.btn-help-tutorial:hover {
+  background: #fbbf24;
+  transform: scale(1.05);
+}
+
+/* ==========================================================================
+   VIEW 4: TUTORIAL OVERLAY GUIADO PELO EX-MINISTRO MENDES
+   ========================================================================== */
+
+.tutorial-overlay-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(3, 7, 18, 0.75);
+  z-index: 500;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 2rem;
+  pointer-events: auto;
+}
+
+/* Destaque do elemento alvo no Tutorial */
+.tutorial-target-highlight {
+  position: relative;
+  z-index: 501 !important;
+  box-shadow: 
+    0 0 0 6px #ffee00,
+    0 0 35px var(--neon-green) !important;
+  transition: all 0.3s ease;
+}
+
+/* Seta Pixelada Animada de Indicação */
+.tutorial-pixel-arrow {
+  position: fixed;
+  z-index: 502;
+  font-size: 2.2rem;
+  color: #ffee00;
+  text-shadow: 0 0 10px #ffee00;
+  pointer-events: none;
+  transition: all 0.4s ease;
+}
+
+.tutorial-pixel-arrow.top {
+  animation: bounceDown 0.8s infinite alternate;
+}
+
+.tutorial-pixel-arrow.bottom {
+  animation: bounceUp 0.8s infinite alternate;
+}
+
+@keyframes bounceDown {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(12px); }
+}
+
+@keyframes bounceUp {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-12px); }
+}
+
+/* Caixa de Diálogo do Ex-Ministro Mendes no Tutorial */
+.tutorial-dialogue-card {
+  background: rgba(10, 14, 23, 0.96);
+  border: 4px solid var(--btn-yellow-border);
+  outline: 4px solid #000000;
+  box-shadow: 
+    0 0 0 4px #000000,
+    0 0 35px rgba(245, 158, 11, 0.4);
+  padding: 1.25rem 1.5rem;
+  max-width: 850px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  z-index: 502;
+}
+
+.tutorial-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 2px dashed #334155;
+  padding-bottom: 0.4rem;
+}
+
+.tut-badge {
+  background: #f59e0b;
+  color: #000000;
+  font-size: 0.65rem;
+  font-weight: bold;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+}
+
+.tutorial-card-header h3 {
+  font-size: 0.85rem;
   color: #ffffff;
-  font-weight: 700;
-  margin-left: auto;
-  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+}
+
+.tutorial-card-body {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.tut-avatar-box {
+  width: 90px;
+  height: 90px;
+  border: 3px solid #f59e0b;
+  background: #000000;
+  flex-shrink: 0;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+
+.tut-speech-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.tut-speaker-name {
+  font-size: 0.8rem;
+  color: #fbbf24;
+  letter-spacing: 0.05em;
+}
+
+.tut-description {
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+.tutorial-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 2px dashed #334155;
+  padding-top: 0.6rem;
+}
+
+.tut-btn {
+  font-family: var(--font-retro);
+  font-size: 0.7rem;
+  padding: 0.6rem 1.1rem;
+  cursor: pointer;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.15s ease;
+}
+
+.tut-btn.sec {
+  background: #1e293b;
+  border: 2px solid #475569;
+  color: #ffffff;
+}
+
+.tut-btn.skip {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  text-decoration: underline;
+}
+
+.tut-btn.pri {
+  background: var(--btn-green);
+  border: 2px solid var(--btn-yellow-border);
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.tut-btn.pri:hover {
+  background: #00c853;
 }
 
 /* Responsive */
@@ -850,5 +1009,5 @@ body {
   .hud-top-bars { grid-template-columns: repeat(2, 1fr); }
   .hud-bottom-grid { grid-template-columns: 1fr; }
   .hud-chart-flex-layout { grid-template-columns: 1fr; }
-  .hud-chart-canvas-container { margin: 0 auto; }
+  .tutorial-dialogue-card { max-width: 100%; }
 }
