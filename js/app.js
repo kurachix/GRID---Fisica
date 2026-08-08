@@ -1,6 +1,6 @@
 /**
  * GRID - O Gestor da Rede Elétrica Nacional
- * Master 16-Bit HUD UI Design System & Ex-Minister Tutorial Engine
+ * Master 16-Bit HUD UI Design System, Typewriter Animation & Ex-Minister Tutorial Engine
  */
 
 const CUTSCENE_SCRIPT = [
@@ -161,7 +161,7 @@ const TUTORIAL_STEPS = [
   },
   {
     stepBadge: "PASSO 5 DE 6",
-    title: "4. MATRIZ ENERGÉTICA (CANTO DIREITO)",
+    title: "5. MATRIZ ENERGÉTICA (CANTO DIREITO)",
     targetId: "tut-target-chart",
     arrowDirection: "bottom-right",
     text: "Este gráfico circular mede a divisão da nossa matriz elétrica (Hidrelétrica, Solar, Eólica, Termelétrica, Nuclear e Biomassa). As legendas ao lado mostram a porcentagem exata em tempo real. Sua missão é fazer a transição para fontes limpas!"
@@ -175,7 +175,6 @@ const TUTORIAL_STEPS = [
   }
 ];
 
-// Valores dos indicadores e matriz energética
 const systemIndicators = { economy: 70, social: 75, environment: 60, stability: 80 };
 const energyMatrix = { hydro: 60.0, solar: 8.0, wind: 12.0, thermal: 15.0, nuclear: 3.0, biomass: 2.0 };
 
@@ -208,23 +207,47 @@ document.addEventListener('DOMContentLoaded', () => {
   let playerName = "GESTOR";
   let cutsceneIndex = 0;
   let tutorialStepIndex = 0;
-  let audioCtx = null;
-  let hudChart = null;
+  let activeTypingTimer = null;
+  let isCurrentlyTyping = false;
+  let currentFullText = "";
 
-  function initAudioOnUserGesture() {
-    try {
-      if (!audioCtx) {
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (AudioContextClass) audioCtx = new AudioContextClass();
+  // HELPER REUTILIZÁVEL: Animação de Escrita em Tempo Real (Typewriter)
+  function typeTextEffect(targetElem, text, speed = 22, onComplete) {
+    if (activeTypingTimer) clearInterval(activeTypingTimer);
+    targetElem.textContent = "";
+    currentFullText = text;
+    isCurrentlyTyping = true;
+    let charIndex = 0;
+
+    activeTypingTimer = setInterval(() => {
+      if (charIndex < text.length) {
+        targetElem.textContent += text.charAt(charIndex);
+        charIndex++;
+      } else {
+        clearInterval(activeTypingTimer);
+        activeTypingTimer = null;
+        isCurrentlyTyping = false;
+        if (onComplete) onComplete();
       }
-      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    } catch (e) {}
+    }, speed);
   }
 
-  window.addEventListener('click', initAudioOnUserGesture, { once: true });
-  window.addEventListener('keydown', initAudioOnUserGesture, { once: true });
+  // Completa instantaneamente o texto se o usuário clicar durante a digitação
+  function completeTypingInstantly(targetElem) {
+    if (isCurrentlyTyping && activeTypingTimer) {
+      clearInterval(activeTypingTimer);
+      activeTypingTimer = null;
+      targetElem.textContent = currentFullText;
+      isCurrentlyTyping = false;
+      return true;
+    }
+    return false;
+  }
 
-  if (initialDialogueElem) initialDialogueElem.textContent = initialText;
+  // Inicia Typewriter inicial da tela de título
+  if (initialDialogueElem) {
+    typeTextEffect(initialDialogueElem, initialText, 25);
+  }
 
   if (inputElem) {
     inputElem.addEventListener('input', (e) => {
@@ -250,7 +273,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (cutsceneScreen) cutsceneScreen.classList.add('hidden');
       if (hudDashboardScreen) hudDashboardScreen.classList.remove('hidden');
       updateHUD();
-      // Inicia automaticamente o Tutorial Guiado pelo Ex-Ministro Mendes ao fim da introdução
       startTutorial();
       return;
     }
@@ -264,11 +286,22 @@ document.addEventListener('DOMContentLoaded', () => {
       cutsceneSpeakerName.style.color = currentLine.color || '#60a5fa';
     }
     if (cutsceneSpeakerTitle) cutsceneSpeakerTitle.textContent = currentLine.title;
-    if (cutsceneTextElem) cutsceneTextElem.textContent = textToDisplay;
+
+    // Escrita em Tempo Real na Cinemática
+    if (cutsceneTextElem) {
+      typeTextEffect(cutsceneTextElem, textToDisplay, 22);
+    }
   }
 
   function advanceCutscene() {
     if (cutsceneScreen && cutsceneScreen.classList.contains('hidden')) return;
+
+    // Se estiver digitando no momento, completa a linha de texto imediatamente
+    if (completeTypingInstantly(cutsceneTextElem)) {
+      return;
+    }
+
+    // Caso contrário, avança para a próxima fala
     cutsceneIndex++;
     renderCutsceneLine();
   }
@@ -284,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // SISTEMA DO TUTORIAL GUIADO PELO EX-MINISTRO MENDES
+  // TUTORIAL GUIADO COM ESCRITA EM TEMPO REAL
   function startTutorial() {
     tutorialStepIndex = 0;
     if (tutorialOverlay) tutorialOverlay.classList.remove('hidden');
@@ -292,7 +325,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderTutorialStep() {
-    // Remove destaques anteriores
     document.querySelectorAll('.tutorial-target-highlight').forEach(el => {
       el.classList.remove('tutorial-target-highlight');
     });
@@ -306,19 +338,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (tutStepBadge) tutStepBadge.textContent = step.stepBadge;
     if (tutStepTitle) tutStepTitle.textContent = step.title;
-    if (tutStepText) tutStepText.textContent = step.text.replace(/{NAME}/g, playerName);
 
-    // Botão Anterior
+    // Escrita em Tempo Real na fala do Ex-Ministro Mendes
+    if (tutStepText) {
+      typeTextEffect(tutStepText, step.text.replace(/{NAME}/g, playerName), 20);
+    }
+
     if (btnTutPrev) {
       btnTutPrev.style.visibility = tutorialStepIndex === 0 ? 'hidden' : 'visible';
     }
 
-    // Botão Próximo / Concluir
     if (btnTutNext) {
       btnTutNext.textContent = tutorialStepIndex === TUTORIAL_STEPS.length - 1 ? 'CONCLUIR ▶' : 'PRÓXIMO ▶';
     }
 
-    // Destaque e Seta Indicadora
     if (step.targetId) {
       const targetElem = document.getElementById(step.targetId);
       if (targetElem) {
@@ -359,6 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function closeTutorial() {
+    if (activeTypingTimer) clearInterval(activeTypingTimer);
     document.querySelectorAll('.tutorial-target-highlight').forEach(el => {
       el.classList.remove('tutorial-target-highlight');
     });
@@ -368,6 +402,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (btnTutNext) {
     btnTutNext.addEventListener('click', () => {
+      if (isCurrentlyTyping && tutStepText) {
+        completeTypingInstantly(tutStepText);
+        return;
+      }
       tutorialStepIndex++;
       renderTutorialStep();
     });
@@ -385,7 +423,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnTutSkip) btnTutSkip.addEventListener('click', closeTutorial);
   if (btnReplayTutorial) btnReplayTutorial.addEventListener('click', startTutorial);
 
-  // Atualiza indicadores e cenário de fundo automático
   function updateHUD() {
     let isAnyCritical = false;
 
