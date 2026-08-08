@@ -1,6 +1,6 @@
 /**
  * GRID - O Gestor da Rede Elétrica Nacional
- * Master 16-Bit HUD UI Design System, Typewriter Animation & Ex-Minister Tutorial Engine
+ * Master 16-Bit HUD UI Design System, Typewriter Animation & Immediate Ex-Minister Tutorial Engine
  */
 
 const CUTSCENE_SCRIPT = [
@@ -161,7 +161,7 @@ const TUTORIAL_STEPS = [
   },
   {
     stepBadge: "PASSO 5 DE 6",
-    title: "5. MATRIZ ENERGÉTICA (CANTO DIREITO)",
+    title: "4. MATRIZ ENERGÉTICA (CANTO DIREITO)",
     targetId: "tut-target-chart",
     arrowDirection: "bottom-right",
     text: "Este gráfico circular mede a divisão da nossa matriz elétrica (Hidrelétrica, Solar, Eólica, Termelétrica, Nuclear e Biomassa). As legendas ao lado mostram a porcentagem exata em tempo real. Sua missão é fazer a transição para fontes limpas!"
@@ -179,6 +179,20 @@ const systemIndicators = { economy: 70, social: 75, environment: 60, stability: 
 const energyMatrix = { hydro: 60.0, solar: 8.0, wind: 12.0, thermal: 15.0, nuclear: 3.0, biomass: 2.0 };
 
 document.addEventListener('DOMContentLoaded', () => {
+
+  // Impede a seleção acidental de texto ou arrasto de imagem pela interface do jogo
+  document.addEventListener('selectstart', (e) => {
+    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+    }
+  });
+
+  document.addEventListener('dragstart', (e) => {
+    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+    }
+  });
+
   const initialDialogueElem = document.getElementById('initial-dialogue-text');
   const initialText = "Bem-vindo, Gestor! Identifique-se para assumir o controle do sistema elétrico nacional.";
   const inputElem = document.getElementById('player-name');
@@ -197,7 +211,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnTutPrev = document.getElementById('btn-tut-prev');
   const btnTutNext = document.getElementById('btn-tut-next');
   const btnTutSkip = document.getElementById('btn-tut-skip');
-  const btnReplayTutorial = document.getElementById('btn-replay-tutorial');
 
   const cutsceneAvatar = document.getElementById('cutscene-avatar');
   const cutsceneSpeakerName = document.getElementById('cutscene-speaker-name');
@@ -210,6 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeTypingTimer = null;
   let isCurrentlyTyping = false;
   let currentFullText = "";
+  let hudChart = null;
 
   // HELPER REUTILIZÁVEL: Animação de Escrita em Tempo Real (Typewriter)
   function typeTextEffect(targetElem, text, speed = 22, onComplete) {
@@ -244,7 +258,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return false;
   }
 
-  // Inicia Typewriter inicial da tela de título
   if (initialDialogueElem) {
     typeTextEffect(initialDialogueElem, initialText, 25);
   }
@@ -287,7 +300,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (cutsceneSpeakerTitle) cutsceneSpeakerTitle.textContent = currentLine.title;
 
-    // Escrita em Tempo Real na Cinemática
     if (cutsceneTextElem) {
       typeTextEffect(cutsceneTextElem, textToDisplay, 22);
     }
@@ -296,12 +308,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function advanceCutscene() {
     if (cutsceneScreen && cutsceneScreen.classList.contains('hidden')) return;
 
-    // Se estiver digitando no momento, completa a linha de texto imediatamente
     if (completeTypingInstantly(cutsceneTextElem)) {
       return;
     }
 
-    // Caso contrário, avança para a próxima fala
     cutsceneIndex++;
     renderCutsceneLine();
   }
@@ -317,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // TUTORIAL GUIADO COM ESCRITA EM TEMPO REAL
+  // TUTORIAL GUIADO COM EXIBIÇÃO ELEMENTO A ELEMENTO
   function startTutorial() {
     tutorialStepIndex = 0;
     if (tutorialOverlay) tutorialOverlay.classList.remove('hidden');
@@ -339,7 +349,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (tutStepBadge) tutStepBadge.textContent = step.stepBadge;
     if (tutStepTitle) tutStepTitle.textContent = step.title;
 
-    // Escrita em Tempo Real na fala do Ex-Ministro Mendes
     if (tutStepText) {
       typeTextEffect(tutStepText, step.text.replace(/{NAME}/g, playerName), 20);
     }
@@ -421,7 +430,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (btnTutSkip) btnTutSkip.addEventListener('click', closeTutorial);
-  if (btnReplayTutorial) btnReplayTutorial.addEventListener('click', startTutorial);
 
   function updateHUD() {
     let isAnyCritical = false;

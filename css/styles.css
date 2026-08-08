@@ -29,6 +29,21 @@
   padding: 0;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
+
+  /* Desativa seleção e cópia de texto em toda a interface do jogo */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Permite digitação apenas no campo de entrada do nome do jogador */
+input, textarea {
+  -webkit-user-select: auto;
+  -moz-user-select: auto;
+  -ms-user-select: auto;
+  user-select: auto;
 }
 
 body {
@@ -800,33 +815,6 @@ body {
 .legend-name { color: #94a3b8; font-size: 0.7rem; }
 .legend-val { color: #ffffff; font-weight: 700; margin-left: auto; font-size: 0.72rem; }
 
-/* Botão de Ajuda do Tutorial no HUD */
-.btn-help-tutorial {
-  position: absolute;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  z-index: 250;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  border: 3px solid #ffee00;
-  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.5);
-  color: #000000;
-  font-family: var(--font-retro);
-  font-size: 0.65rem;
-  font-weight: bold;
-  padding: 0.65rem 1rem;
-  cursor: pointer;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.2s ease;
-}
-
-.btn-help-tutorial:hover {
-  background: #fbbf24;
-  transform: scale(1.05);
-}
-
 /* ==========================================================================
    VIEW 4: TUTORIAL OVERLAY GUIADO PELO EX-MINISTRO MENDES
    ========================================================================== */
@@ -846,7 +834,6 @@ body {
   pointer-events: auto;
 }
 
-/* Destaque do elemento alvo no Tutorial */
 .tutorial-target-highlight {
   position: relative;
   z-index: 501 !important;
@@ -856,7 +843,6 @@ body {
   transition: all 0.3s ease;
 }
 
-/* Seta Pixelada Animada de Indicação */
 .tutorial-pixel-arrow {
   position: fixed;
   z-index: 502;
@@ -885,7 +871,6 @@ body {
   100% { transform: translateY(-12px); }
 }
 
-/* Caixa de Diálogo do Ex-Ministro Mendes no Tutorial */
 .tutorial-dialogue-card {
   background: rgba(10, 14, 23, 0.96);
   border: 4px solid var(--btn-yellow-border);
