@@ -1,6 +1,6 @@
 /**
  * GRID - O Gestor da Rede Elétrica Nacional
- * Master 16-Bit HUD UI Design Mockup & RPG Cutscene System
+ * Master 16-Bit HUD UI Design System & RPG Cutscene Engine
  */
 
 const CUTSCENE_SCRIPT = [
@@ -129,6 +129,24 @@ const CUTSCENE_SCRIPT = [
   }
 ];
 
+// Valores correntes dos indicadores do sistema
+const systemIndicators = {
+  economy: 70,
+  social: 75,
+  environment: 60,
+  stability: 80
+};
+
+// Valores correntes da matriz energética (%)
+const energyMatrix = {
+  hydro: 60.0,
+  solar: 8.0,
+  wind: 12.0,
+  thermal: 15.0,
+  nuclear: 3.0,
+  biomass: 2.0
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   const initialDialogueElem = document.getElementById('initial-dialogue-text');
   const initialText = "Bem-vindo, Gestor! Identifique-se para assumir o controle do sistema elétrico nacional.";
@@ -139,7 +157,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const cutsceneScreen = document.getElementById('cutscene-screen');
   const hudDashboardScreen = document.getElementById('hud-dashboard-screen');
   const hudBgRoom = document.getElementById('hud-bg-room');
-  const btnToggleHud = document.getElementById('btn-toggle-hud-mode');
 
   const cutsceneAvatar = document.getElementById('cutscene-avatar');
   const cutsceneSpeakerName = document.getElementById('cutscene-speaker-name');
@@ -147,12 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const cutsceneTextElem = document.getElementById('cutscene-text');
 
   let playerName = "GESTOR";
-  let initialTypeIndex = 0;
   let cutsceneIndex = 0;
-  let cutsceneTypeIndex = 0;
-  let cutsceneTimer = null;
-  let isTyping = false;
-  let isStableMode = true;
   let audioCtx = null;
   let hudChart = null;
 
@@ -160,9 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       if (!audioCtx) {
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (AudioContextClass) {
-          audioCtx = new AudioContextClass();
-        }
+        if (AudioContextClass) audioCtx = new AudioContextClass();
       }
       if (audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume();
@@ -173,121 +183,59 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('click', initAudioOnUserGesture, { once: true });
   window.addEventListener('keydown', initAudioOnUserGesture, { once: true });
 
-  function typeInitialWriter() {
-    if (initialTypeIndex < initialText.length) {
-      initialDialogueElem.textContent += initialText.charAt(initialTypeIndex);
-      initialTypeIndex++;
-      playRetroBeep(480);
-      setTimeout(typeInitialWriter, 35);
-    }
+  if (initialDialogueElem) initialDialogueElem.textContent = initialText;
+
+  if (inputElem) {
+    inputElem.addEventListener('input', (e) => {
+      e.target.value = e.target.value.toUpperCase();
+    });
   }
 
-  function playRetroBeep(freq = 480) {
-    if (!audioCtx || audioCtx.state !== 'running') return;
-    try {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-      gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.04);
-    } catch (e) {}
+  if (btnStart) {
+    btnStart.addEventListener('click', (e) => {
+      e.preventDefault();
+      playerName = (inputElem && inputElem.value.trim()) ? inputElem.value.trim() : 'GESTOR';
+
+      if (titleScreen) titleScreen.classList.add('hidden');
+      if (cutsceneScreen) cutsceneScreen.classList.remove('hidden');
+
+      cutsceneIndex = 0;
+      renderCutsceneLine();
+    });
   }
-
-  function playChime() {
-    initAudioOnUserGesture();
-    if (!audioCtx || audioCtx.state !== 'running') return;
-    try {
-      [261, 329, 392, 523].forEach((f, i) => {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(f, audioCtx.currentTime + i * 0.07);
-        gain.gain.setValueAtTime(0.04, audioCtx.currentTime + i * 0.07);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.07 + 0.12);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start(audioCtx.currentTime + i * 0.07);
-        osc.stop(audioCtx.currentTime + i * 0.07 + 0.12);
-      });
-    } catch (e) {}
-  }
-
-  setTimeout(typeInitialWriter, 300);
-
-  inputElem.addEventListener('input', (e) => {
-    e.target.value = e.target.value.toUpperCase();
-  });
-
-  btnStart.addEventListener('click', () => {
-    playerName = inputElem.value.trim() || 'GESTOR';
-    playChime();
-
-    titleScreen.classList.add('hidden');
-    cutsceneScreen.classList.remove('hidden');
-
-    cutsceneIndex = 0;
-    renderCutsceneLine();
-  });
 
   function renderCutsceneLine() {
     if (cutsceneIndex >= CUTSCENE_SCRIPT.length) {
-      cutsceneScreen.classList.add('hidden');
-      hudDashboardScreen.classList.remove('hidden');
-      initHudChart();
+      if (cutsceneScreen) cutsceneScreen.classList.add('hidden');
+      if (hudDashboardScreen) hudDashboardScreen.classList.remove('hidden');
+      updateHUD();
       return;
     }
 
     const currentLine = CUTSCENE_SCRIPT[cutsceneIndex];
-    const textToType = currentLine.text.replace(/{NAME}/g, playerName);
+    const textToDisplay = currentLine.text.replace(/{NAME}/g, playerName);
 
-    cutsceneAvatar.src = currentLine.avatar;
-    cutsceneSpeakerName.textContent = currentLine.speaker;
-    cutsceneSpeakerName.style.color = currentLine.color || '#60a5fa';
-    cutsceneSpeakerTitle.textContent = currentLine.title;
-
-    cutsceneTextElem.textContent = '';
-    cutsceneTypeIndex = 0;
-    isTyping = true;
-
-    if (cutsceneTimer) clearInterval(cutsceneTimer);
-
-    const beepFreq = currentLine.speaker.includes('Robô') ? 640 : 420;
-
-    cutsceneTimer = setInterval(() => {
-      if (cutsceneTypeIndex < textToType.length) {
-        cutsceneTextElem.textContent += textToType.charAt(cutsceneTypeIndex);
-        if (cutsceneTypeIndex % 2 === 0) playRetroBeep(beepFreq);
-        cutsceneTypeIndex++;
-      } else {
-        clearInterval(cutsceneTimer);
-        isTyping = false;
-      }
-    }, 28);
+    if (cutsceneAvatar) cutsceneAvatar.src = currentLine.avatar;
+    if (cutsceneSpeakerName) {
+      cutsceneSpeakerName.textContent = currentLine.speaker;
+      cutsceneSpeakerName.style.color = currentLine.color || '#60a5fa';
+    }
+    if (cutsceneSpeakerTitle) cutsceneSpeakerTitle.textContent = currentLine.title;
+    if (cutsceneTextElem) cutsceneTextElem.textContent = textToDisplay;
   }
 
   function advanceCutscene() {
-    if (cutsceneScreen.classList.contains('hidden')) return;
-
-    if (isTyping) {
-      clearInterval(cutsceneTimer);
-      const currentLine = CUTSCENE_SCRIPT[cutsceneIndex];
-      cutsceneTextElem.textContent = currentLine.text.replace(/{NAME}/g, playerName);
-      isTyping = false;
-    } else {
-      cutsceneIndex++;
-      renderCutsceneLine();
-    }
+    if (cutsceneScreen && cutsceneScreen.classList.contains('hidden')) return;
+    cutsceneIndex++;
+    renderCutsceneLine();
   }
 
-  cutsceneScreen.addEventListener('click', advanceCutscene);
+  if (cutsceneScreen) {
+    cutsceneScreen.addEventListener('click', advanceCutscene);
+  }
 
   document.addEventListener('keydown', (e) => {
-    if (!cutsceneScreen.classList.contains('hidden')) {
+    if (cutsceneScreen && !cutsceneScreen.classList.contains('hidden')) {
       if (e.key === ' ' || e.key === 'Enter' || e.key === 'ArrowRight') {
         e.preventDefault();
         advanceCutscene();
@@ -295,47 +243,112 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  if (btnToggleHud) {
-    btnToggleHud.addEventListener('click', () => {
-      isStableMode = !isStableMode;
+  // Atualiza os indicadores e a troca AUTOMÁTICA do cenário de fundo da sala de controle
+  function updateHUD() {
+    let isAnyCritical = false;
 
-      if (isStableMode) {
-        hudBgRoom.className = 'hud-bg-room stable';
-        btnToggleHud.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i> Modo Estável (Clique para Emergência)';
+    // Atualiza barras de progresso
+    const map = [
+      { key: 'economy', idVal: 'hud-val-eco', idFill: 'hud-fill-eco', idCard: 'hud-card-eco' },
+      { key: 'social', idVal: 'hud-val-soc', idFill: 'hud-fill-soc', idCard: 'hud-card-soc' },
+      { key: 'environment', idVal: 'hud-val-env', idFill: 'hud-fill-env', idCard: 'hud-card-env' },
+      { key: 'stability', idVal: 'hud-val-sta', idFill: 'hud-fill-sta', idCard: 'hud-card-sta' }
+    ];
+
+    map.forEach(item => {
+      const val = Math.round(systemIndicators[item.key]);
+      const valElem = document.getElementById(item.idVal);
+      const fillElem = document.getElementById(item.idFill);
+      const cardElem = document.getElementById(item.idCard);
+
+      if (valElem) valElem.textContent = `${val}%`;
+      if (fillElem) fillElem.style.width = `${val}%`;
+
+      if (val < 20) {
+        isAnyCritical = true;
+        if (cardElem) cardElem.classList.add('critical');
       } else {
-        hudBgRoom.className = 'hud-bg-room critical';
-        btnToggleHud.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Modo Emergência Red (Clique para Estável)';
-        playRetroBeep(880);
+        if (cardElem) cardElem.classList.remove('critical');
       }
     });
+
+    // TROCA AUTOMÁTICA DO CENÁRIO DA SALA DE CONTROLE DE ACORDO COM O ESTADO
+    if (hudBgRoom) {
+      if (isAnyCritical) {
+        hudBgRoom.className = 'hud-bg-room critical';
+      } else {
+        hudBgRoom.className = 'hud-bg-room stable';
+      }
+    }
+
+    // Inicializa/Atualiza o Gráfico de Pizza da Matriz
+    initHudChart();
   }
 
+  // Gráfico Pizza da Matriz Energética Ampliada com Legendas Funcionais
   function initHudChart() {
     const ctx = document.getElementById('hudMatrixChart');
-    if (!ctx || hudChart) return;
+    if (!ctx || typeof Chart === 'undefined') return;
 
-    hudChart = new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Hidrelétrica', 'Solar', 'Eólica', 'Termelétrica', 'Nuclear', 'Biomassa'],
-        datasets: [{
-          data: [60, 8, 12, 15, 3, 2],
-          backgroundColor: ['#2980b9', '#f39c12', '#1abc9c', '#e67e22', '#9b59b6', '#27ae60'],
-          borderColor: '#000',
-          borderWidth: 2
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: { label: (ctx) => ` ${ctx.label}: ${ctx.raw}%` }
-          }
+    // Atualiza os textos da legenda no painel lateral
+    document.getElementById('leg-val-hydro').textContent = `${energyMatrix.hydro.toFixed(1)}%`;
+    document.getElementById('leg-val-solar').textContent = `${energyMatrix.solar.toFixed(1)}%`;
+    document.getElementById('leg-val-wind').textContent = `${energyMatrix.wind.toFixed(1)}%`;
+    document.getElementById('leg-val-thermal').textContent = `${energyMatrix.thermal.toFixed(1)}%`;
+    document.getElementById('leg-val-nuclear').textContent = `${energyMatrix.nuclear.toFixed(1)}%`;
+    document.getElementById('leg-val-biomass').textContent = `${energyMatrix.biomass.toFixed(1)}%`;
+
+    if (hudChart) {
+      hudChart.data.datasets[0].data = [
+        energyMatrix.hydro,
+        energyMatrix.solar,
+        energyMatrix.wind,
+        energyMatrix.thermal,
+        energyMatrix.nuclear,
+        energyMatrix.biomass
+      ];
+      hudChart.update();
+      return;
+    }
+
+    try {
+      hudChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Hidrelétrica', 'Solar', 'Eólica', 'Termelétrica', 'Nuclear', 'Biomassa'],
+          datasets: [{
+            data: [
+              energyMatrix.hydro,
+              energyMatrix.solar,
+              energyMatrix.wind,
+              energyMatrix.thermal,
+              energyMatrix.nuclear,
+              energyMatrix.biomass
+            ],
+            backgroundColor: ['#2980b9', '#f39c12', '#1abc9c', '#e67e22', '#9b59b6', '#27ae60'],
+            borderColor: '#000',
+            borderWidth: 2
+          }]
         },
-        cutout: '60%'
-      }
-    });
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: { label: (c) => ` ${c.label}: ${c.raw}%` }
+            }
+          },
+          cutout: '55%'
+        }
+      });
+    } catch (err) {
+      console.warn("Chart initialization skipped:", err);
+    }
   }
+
+  // Exporta função global para testes/mudanças de estado
+  window.updateHUD = updateHUD;
+  window.systemIndicators = systemIndicators;
+  window.energyMatrix = energyMatrix;
 });

@@ -130,29 +130,21 @@
 
 
   <!-- ==========================================
-       VIEW 3: MOCKUP INTERATIVO DA INTERFACE DE PAINEL (16-BIT HUD)
+       VIEW 3: PAINEL DE CONTROLE DE ENERGIA (HUD PRINCIPAL)
        ========================================== -->
   <div id="hud-dashboard-screen" class="hud-dashboard-container hidden">
     
-    <!-- Fundo dinâmico da Sala de Controle (Alternável entre Estável e Emergência) -->
+    <!-- Fundo da Sala de Controle (Troca Automática: Estável ou Emergência) -->
     <div id="hud-bg-room" class="hud-bg-room stable"></div>
-
-    <!-- MARGEM LATERAL ESQUERDA: ROBÔ VOLTA FLUTUANTE DE SUPERVISÃO -->
-    <aside class="left-floating-robot">
-      <div class="robot-bobbing-wrapper">
-        <img src="assets/robo_volta_avatar.jpg" alt="Robô Volta Assistente" class="robot-pixel-avatar" />
-        <div class="robot-status-tag">&lt;ROBÔ VOLTA ONLINE&gt;</div>
-      </div>
-    </aside>
 
     <!-- CONTAINER PRINCIPAL DO PAINEL -->
     <div class="hud-panel-layout">
 
-      <!-- TOPO (HEADER): 4 BARRAS DE PROGRESSO COM ÍCONES PIXELADOS -->
+      <!-- TOPO (HEADER): 4 BARRAS DE PROGRESSO ALINHADAS HORIZONTALMENTE -->
       <header class="hud-top-bars">
         
         <!-- Bar 1: Economia ($) -->
-        <div class="hud-bar-card eco">
+        <div class="hud-bar-card eco" id="hud-card-eco">
           <div class="hud-bar-label">
             <span class="pixel-icon eco">$</span>
             <span class="bar-name">ECONOMIA</span>
@@ -164,7 +156,7 @@
         </div>
 
         <!-- Bar 2: Sociedade (♥) -->
-        <div class="hud-bar-card soc">
+        <div class="hud-bar-card soc" id="hud-card-soc">
           <div class="hud-bar-label">
             <span class="pixel-icon soc">&hearts;</span>
             <span class="bar-name">SOCIEDADE</span>
@@ -176,7 +168,7 @@
         </div>
 
         <!-- Bar 3: Meio Ambiente (🌲) -->
-        <div class="hud-bar-card env">
+        <div class="hud-bar-card env" id="hud-card-env">
           <div class="hud-bar-label">
             <span class="pixel-icon env">&#127794;</span>
             <span class="bar-name">MEIO AMBIENTE</span>
@@ -188,7 +180,7 @@
         </div>
 
         <!-- Bar 4: Estabilidade da Rede (⚡) -->
-        <div class="hud-bar-card sta">
+        <div class="hud-bar-card sta" id="hud-card-sta">
           <div class="hud-bar-label">
             <span class="pixel-icon sta">&#9889;</span>
             <span class="bar-name">ESTABILIDADE REDE</span>
@@ -201,7 +193,7 @@
 
       </header>
 
-      <!-- CENTRO (O FOCO): CARTA DE DILEMA GRANDE SOBREPONDO O CENÁRIO -->
+      <!-- CENTRO (O FOCO): CARTA DE DILEMA GRANDE -->
       <main class="hud-center-dilemma">
         
         <div class="pixel-dilemma-card">
@@ -216,7 +208,7 @@
           </div>
 
           <p class="dilemma-desc-text">
-            Proposta de construção de usina de grande porte em rio de planície para conversão de energia potencial gravítica em elétrica (Ep = m·g·h). Causa alagamento florestal, emissão de metano (CH₄) e deslocamento de populações ribeirinhas.
+            Proposta de construção de usina de grande porte em rio de planície para conversão de energia potencial gravítica em elétrica (Ep = m·g·h). Causa alagamento florestal, emissão de metano (CH₄) e deslocamento de comunidades ribeirinhas.
           </p>
 
           <!-- 2 BOTÕES VISUAIS ESTÁTICOS DE ESCOLHA -->
@@ -237,45 +229,117 @@
 
       </main>
 
-      <!-- RODAPÉ: CANTO INFERIOR ESQUERDO (MINIMAPA BRASIL) & CANTO INFERIOR DIREITO (GRÁFICO PIZZA MATRIZ) -->
+      <!-- RODAPÉ EXPANDIDO: MINIMAPA BRASIL (ESQUERDA) & MATRIZ ENERGÉTICA COM LEGENDAS (DIREITA) -->
       <footer class="hud-bottom-grid">
         
-        <!-- CANTO INFERIOR ESQUERDO: MINIMAPA HOLOGRÁFICO E PIXELADO DO BRASIL -->
+        <!-- CANTO INFERIOR ESQUERDO: MINIMAPA HOLOGRÁFICO AMPLIADO E DETALHADO DO BRASIL -->
         <div class="hud-widget-box bottom-left-map">
           <div class="widget-header">
-            <i class="fa-solid fa-earth-americas"></i> HOLOGRAFO REGIONAL (BRASIL)
+            <i class="fa-solid fa-earth-americas"></i> HOLÓGRAFO REGIONAL (BRASIL)
           </div>
-          <div class="brazil-map-container">
-            <!-- Minimapa Vetorial Pixelado do Brasil -->
-            <svg class="pixel-brazil-svg" viewBox="0 0 200 200">
-              <path d="M 60,30 L 140,25 L 175,65 L 160,115 L 125,175 L 85,160 L 65,130 L 40,90 Z" fill="rgba(0, 229, 255, 0.15)" stroke="#00e5ff" stroke-width="2" stroke-dasharray="3,3" />
-              <!-- Ponto Pulsante 1: Bacia Amazônica (Norte) -->
-              <circle cx="80" cy="60" r="6" class="map-pulse-node active" />
-              <text x="90" y="64" fill="#00ff66" font-size="8" font-family="'Press Start 2P'">BACIA AMAZÔNICA</text>
-              <!-- Ponto Pulsante 2: Sudeste (Reservatórios) -->
-              <circle cx="120" cy="125" r="5" class="map-pulse-node warning" />
-              <text x="130" y="129" fill="#facc15" font-size="7" font-family="'Press Start 2P'">SUDESTE (SECA)</text>
-              <!-- Ponto Pulsante 3: Nordeste (Eólicas) -->
-              <circle cx="145" cy="75" r="5" class="map-pulse-node" />
-              <text x="152" y="79" fill="#38bdf8" font-size="7" font-family="'Press Start 2P'">EÓLICAS NE</text>
+
+          <div class="brazil-map-wrapper">
+            <!-- Minimapa Vetorial Nítido do Brasil com Regiões Detalhadas -->
+            <svg class="pixel-brazil-svg" viewBox="0 0 320 280">
+              <!-- Contorno do Território Brasileiro -->
+              <path d="M 100 20 
+                       L 230 15 
+                       L 290 60 
+                       L 295 120 
+                       L 240 180 
+                       L 210 260 
+                       L 150 270 
+                       L 130 220 
+                       L 90 200 
+                       L 50 140 
+                       L 40 80 Z" 
+                    fill="rgba(0, 229, 255, 0.12)" 
+                    stroke="#00e5ff" 
+                    stroke-width="2.5" 
+                    stroke-dasharray="4,4" />
+
+              <!-- Linhas de Divisão Regional Internas -->
+              <path d="M 40 80 L 160 120 L 290 60" fill="none" stroke="rgba(0,229,255,0.25)" stroke-width="1.5" />
+              <path d="M 160 120 L 210 260" fill="none" stroke="rgba(0,229,255,0.25)" stroke-width="1.5" />
+
+              <!-- Nó 1: Região Norte / Amazônia (Bacias Hidrográficas) -->
+              <g class="map-node-group">
+                <circle cx="110" cy="70" r="8" class="map-pulse-node active" />
+                <text x="124" y="74" fill="#00ff66" font-size="10" font-weight="bold" font-family="'Press Start 2P'">NORTE / AMAZÔNIA</text>
+                <text x="124" y="86" fill="#a0aab5" font-size="8" font-family="'VT323'">(Bacias Hidrográficas)</text>
+              </g>
+
+              <!-- Nó 2: Região Nordeste (Geração Eólica/Solar) -->
+              <g class="map-node-group">
+                <circle cx="235" cy="85" r="7" class="map-pulse-node active" />
+                <text x="247" y="89" fill="#38bdf8" font-size="9" font-weight="bold" font-family="'Press Start 2P'">NORDESTE</text>
+                <text x="247" y="100" fill="#a0aab5" font-size="8" font-family="'VT323'">(Eólica &amp; Solar)</text>
+              </g>
+
+              <!-- Nó 3: Região Sudeste / Centro-Oeste (Reservatórios & Carga) -->
+              <g class="map-node-group">
+                <circle cx="170" cy="165" r="8" class="map-pulse-node warning" />
+                <text x="184" y="169" fill="#facc15" font-size="10" font-weight="bold" font-family="'Press Start 2P'">SUDESTE / CO</text>
+                <text x="184" y="181" fill="#fca5a5" font-size="8" font-family="'VT323'">(Crítico: Reservatórios)</text>
+              </g>
+
+              <!-- Nó 4: Região Sul (Geração Biomassa/Eólica) -->
+              <g class="map-node-group">
+                <circle cx="150" cy="230" r="7" class="map-pulse-node" />
+                <text x="162" y="234" fill="#a78bfa" font-size="9" font-weight="bold" font-family="'Press Start 2P'">SUL</text>
+                <text x="162" y="245" fill="#a0aab5" font-size="8" font-family="'VT323'">(Térmica &amp; Eólica)</text>
+              </g>
             </svg>
           </div>
         </div>
 
-        <!-- CONTROLE DE ALTERNÂNCIA DE MOCKUPS (ESTÁVEL / EMERGÊNCIA) -->
-        <div class="hud-mockup-toggle-box">
-          <button id="btn-toggle-hud-mode" class="pixel-toggle-btn">
-            <i class="fa-solid fa-arrows-rotate"></i> Alternar Mockup (Estável / Emergência)
-          </button>
-        </div>
-
-        <!-- CANTO INFERIOR DIREITO: GRÁFICO PIZZA DA MATRIZ ENERGÉTICA EM TEMPO REAL -->
+        <!-- CANTO INFERIOR DIREITO: MATRIZ ENERGÉTICA AMPLIADA COM LEGENDAS E FUNCIONALIDADE -->
         <div class="hud-widget-box bottom-right-chart">
           <div class="widget-header">
-            <i class="fa-solid fa-chart-pie"></i> MATRIZ ENERGÉTICA (MONITORAMENTO)
+            <i class="fa-solid fa-chart-pie"></i> MATRIZ ENERGÉTICA NACIONAL (MONITORAMENTO)
           </div>
-          <div class="hud-chart-wrapper">
-            <canvas id="hudMatrixChart"></canvas>
+
+          <div class="hud-chart-flex-layout">
+            
+            <!-- Donut Chart Canvas Enlarget -->
+            <div class="hud-chart-canvas-container">
+              <canvas id="hudMatrixChart"></canvas>
+            </div>
+
+            <!-- Legendas da Matriz com Porcentagens Claras -->
+            <div class="hud-chart-legend-panel">
+              <div class="legend-item">
+                <span class="legend-color hydro"></span>
+                <span class="legend-name">Hidrelétrica:</span>
+                <strong class="legend-val" id="leg-val-hydro">60.0%</strong>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color solar"></span>
+                <span class="legend-name">Solar:</span>
+                <strong class="legend-val" id="leg-val-solar">8.0%</strong>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color wind"></span>
+                <span class="legend-name">Eólica:</span>
+                <strong class="legend-val" id="leg-val-wind">12.0%</strong>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color thermal"></span>
+                <span class="legend-name">Termelétrica:</span>
+                <strong class="legend-val" id="leg-val-thermal">15.0%</strong>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color nuclear"></span>
+                <span class="legend-name">Nuclear:</span>
+                <strong class="legend-val" id="leg-val-nuclear">3.0%</strong>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color biomass"></span>
+                <span class="legend-name">Biomassa:</span>
+                <strong class="legend-val" id="leg-val-biomass">2.0%</strong>
+              </div>
+            </div>
+
           </div>
         </div>
 
