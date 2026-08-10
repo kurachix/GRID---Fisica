@@ -714,7 +714,7 @@ body {
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.4rem;
   text-align: left;
   transition: all 0.15s ease;
 }
@@ -732,8 +732,47 @@ body {
 }
 
 .choice-tag { font-size: 0.55rem; color: #94a3b8; }
-.choice-title { font-size: 0.78rem; font-weight: bold; color: #fff; }
-.choice-sub { font-size: 0.6rem; color: #cbd5e1; }
+.choice-title { font-size: 0.8rem; font-weight: bold; color: #fff; line-height: 1.3; }
+
+/* BADGES DE IMPACTO ALTAMENTE VISÍVEIS E LEGÍVEIS */
+.choice-impact-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+
+.impact-pill {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.25rem 0.55rem;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.impact-pill.pos {
+  background: rgba(0, 255, 102, 0.2);
+  border: 1.5px solid #00ff66;
+  color: #00ff66;
+  text-shadow: 0 0 6px rgba(0, 255, 102, 0.4);
+}
+
+.impact-pill.neg {
+  background: rgba(255, 51, 68, 0.25);
+  border: 1.5px solid #ff4455;
+  color: #ff5566;
+  text-shadow: 0 0 6px rgba(255, 51, 68, 0.5);
+}
+
+.choice-sub {
+  font-size: 0.6rem;
+  color: #cbd5e1;
+  display: none;
+}
 
 /* RODAPÉ EXPANDIDO (CANTO ESQUERDO E DIREITO) */
 .hud-bottom-grid {

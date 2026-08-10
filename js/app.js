@@ -1,222 +1,221 @@
 /**
  * GRID - O Gestor da Rede Elétrica Nacional
- * Core Game Engine: 110 Dilema Deck, Unbiased Fisher-Yates & Perde-Perde Mechanics
+ * Core Game Engine: 110 Dilema Deck, High-Entropy Randomness, Balanced Rules & High-Visibility Impact Pills
  */
 
-// 1. BARALHO COMPLETO DE 110 DILEMAS (1 A 110)
+// 1. BARALHO COMPLETO DE 110 DILEMAS COM PERDAS MAXIMIZADAS EM NO MÁXIMO -10 PONTOS POR COMPONENTE
 const RAW_QUESTIONS = [
   // 1-20: Eventos Aleatórios
   {
     id: 1, category: "<HIDRELÉTRICA & AMAZÔNIA>", icon: "fa-water",
     title: "Licenciamento da Usina Hidrelétrica na Bacia Amazônica",
-    desc: "Proposta de construção de usina de grande porte para conversão de energia potencial gravítica em elétrica (Ep = m·g·h). Causa alagamento florestal, emissão de metano (CH₄) e deslocamento de ribeirinhos.",
-    optionA: { title: "Aprovar Construção", sub: "+Estabilidade (+20%), -Ambiente (-18%), -Sociedade (-12%)", indicators: { economy: -10, social: -12, environment: -18, stability: 20 }, matrix: { hydro: 5.0, thermal: -3.0, solar: -1.0, wind: -1.0 }, regions: { north: 'active', southeast: 'warning' } },
-    optionB: { title: "Rejeitar Projeto", sub: "+Ambiente (+15%), -Estabilidade (-15%), +Sociedade (+10%)", indicators: { economy: 5, social: 10, environment: 15, stability: -15 }, matrix: { hydro: -2.0, thermal: 2.0 }, regions: { north: 'stable', southeast: 'warning' } }
+    desc: "Proposta de construção de usina de grande porte em rio de planície para conversão de energia potencial gravítica em elétrica (Ep = m·g·h). Aumenta a estabilidade firme da rede nacional.",
+    optionA: { title: "Aprovar Construção", sub: "+Estabilidade (+15%), -Ambiente (-10%), -Sociedade (-8%)", indicators: { economy: -8, social: -8, environment: -10, stability: 15 }, matrix: { hydro: 5.0, thermal: -3.0, solar: -1.0, wind: -1.0 }, regions: { north: 'active', southeast: 'warning' } },
+    optionB: { title: "Rejeitar Projeto", sub: "+Ambiente (+12%), +Sociedade (+8%), -Estabilidade (-10%)", indicators: { economy: 5, social: 8, environment: 12, stability: -10 }, matrix: { hydro: -2.0, thermal: 2.0 }, regions: { north: 'stable', southeast: 'warning' } }
   },
   {
     id: 2, category: "<EÓLICA & NORDESTE>", icon: "fa-wind",
     title: "Expansão Eólica no Litoral do Rio Grande do Norte",
-    desc: "O Nordeste possui alta viabilidade eólica. A instalação de aerogeradores (cinética para elétrica) exige pesados investimentos federais para conectar os parques ao SIN.",
-    optionA: { title: "Subsidiar Novos Parques", sub: "+Ambiente (+14%), +Estabilidade (+8%), -Economia (-15%)", indicators: { economy: -15, social: 8, environment: 14, stability: 8 }, matrix: { wind: 6.0, thermal: -4.0, hydro: -2.0 }, regions: { northeast: 'active' } },
-    optionB: { title: "Ignorar o Potencial", sub: "+Economia (+10%), -Estabilidade (-10%), -Ambiente (-8%)", indicators: { economy: 10, social: -4, environment: -8, stability: -10 }, matrix: { thermal: 3.0 }, regions: { northeast: 'stable' } }
+    desc: "O Nordeste possui excelente viabilidade eólica. A instalação de novos aerogeradores expande a matriz limpa e conecta os parques ao SIN.",
+    optionA: { title: "Subsidiar Novos Parques", sub: "+Ambiente (+14%), +Estabilidade (+10%), -Economia (-10%)", indicators: { economy: -10, social: 8, environment: 14, stability: 10 }, matrix: { wind: 6.0, thermal: -4.0, hydro: -2.0 }, regions: { northeast: 'active' } },
+    optionB: { title: "Usar Gás Natural", sub: "+Economia (+8%), +Estabilidade (+8%), -Ambiente (-8%)", indicators: { economy: 8, social: -4, environment: -8, stability: 8 }, matrix: { thermal: 3.0 }, regions: { northeast: 'stable' } }
   },
   {
     id: 3, category: "<SECA & TERMELÉTRICA>", icon: "fa-fire",
     title: "Seca Severa e Acionamento de Termelétricas em São Paulo",
-    desc: "A escassez hídrica reduziu as represas a 14%. Ligar termelétricas a gás converte energia química em térmica com alto custo e muita poluição.",
-    optionA: { title: "Acionar Termelétricas", sub: "+Estabilidade (+18%), -Ambiente (-20%), -Economia (-12%)", indicators: { economy: -12, social: -10, environment: -20, stability: 18 }, matrix: { thermal: 7.0, hydro: -4.0 }, regions: { southeast: 'warning' } },
-    optionB: { title: "Decretar Racionamento", sub: "+Ambiente (+10%), -Sociedade (-16%), -Economia (-14%)", indicators: { economy: -14, social: -16, environment: 10, stability: -12 }, matrix: { thermal: -2.0 }, regions: { southeast: 'warning' } }
+    desc: "A escassez hídrica reduziu o nível dos reservatórios no Sudeste. Acionar termelétricas a gás garante o abastecimento imediato das metrópoles.",
+    optionA: { title: "Acionar Termelétricas", sub: "+Estabilidade (+15%), -Ambiente (-10%), -Economia (-8%)", indicators: { economy: -8, social: -6, environment: -10, stability: 15 }, matrix: { thermal: 6.0, hydro: -4.0 }, regions: { southeast: 'warning' } },
+    optionB: { title: "Decretar Racionamento", sub: "+Ambiente (+10%), +Economia (+5%), -Sociedade (-10%)", indicators: { economy: 5, social: -10, environment: 10, stability: -8 }, matrix: { thermal: -2.0 }, regions: { southeast: 'warning' } }
   },
   {
     id: 4, category: "<TRANSMISSÃO & EFEITO JOULE>", icon: "fa-bolt",
     title: "Dissipação Térmica nas Linhas de Belo Monte (PA)",
-    desc: "A transmissão de energia sofre alta perda na forma de calor devido à resistência dos cabos (Efeito Joule: P = R·I²).",
-    optionA: { title: "Construir Ultra Alta Tensão", sub: "+Estabilidade (+16%), +Ambiente (+8%), -Economia (-14%)", indicators: { economy: -14, social: 6, environment: 8, stability: 16 }, matrix: { hydro: 1.0, solar: 1.0 }, regions: { north: 'active', southeast: 'active' } },
-    optionB: { title: "Reparos Paliativos", sub: "+Economia (+10%), -Estabilidade (-10%)", indicators: { economy: 10, social: -4, environment: -4, stability: -10 }, matrix: { hydro: -1.0 }, regions: { southeast: 'warning' } }
+    desc: "A transmissão de energia sofre perda na forma de calor devido à resistência dos condutores (Efeito Joule: P = R·I²). Investir em HVDC reduz essas perdas.",
+    optionA: { title: "Construir Ultra Alta Tensão", sub: "+Estabilidade (+16%), +Ambiente (+8%), -Economia (-10%)", indicators: { economy: -10, social: 6, environment: 8, stability: 16 }, matrix: { hydro: 1.0, solar: 1.0 }, regions: { north: 'active', southeast: 'active' } },
+    optionB: { title: "Reparos Paliativos", sub: "+Economia (+8%), -Estabilidade (-8%)", indicators: { economy: 8, social: -4, environment: -4, stability: -8 }, matrix: { hydro: -1.0 }, regions: { southeast: 'warning' } }
   },
   {
     id: 5, category: "<NUCLEAR & RIO DE JANEIRO>", icon: "fa-atom",
     title: "Finalização da Usina Nuclear Angra 3 (RJ)",
-    desc: "A termodinâmica nuclear tem alto rendimento, mas as obras estão superfaturadas há décadas e a população teme a falta de plano para rejeitos radioativos.",
-    optionA: { title: "Concluir Obras", sub: "+Estabilidade (+15%), +Ambiente (+10%), -Economia (-18%)", indicators: { economy: -18, social: -6, environment: 10, stability: 15 }, matrix: { nuclear: 4.0, thermal: -2.0 }, regions: { southeast: 'active' } },
-    optionB: { title: "Cancelar Definitivamente", sub: "+Economia (+12%), +Sociedade (+8%), -Estabilidade (-10%)", indicators: { economy: 12, social: 8, environment: -5, stability: -10 }, matrix: { nuclear: -1.0 }, regions: { southeast: 'stable' } }
+    desc: "A geração termonuclear possui alto rendimento de base sem emissão de gases estufa, reforçando a segurança energética do Sudeste.",
+    optionA: { title: "Concluir Obras", sub: "+Estabilidade (+15%), +Ambiente (+10%), -Economia (-10%)", indicators: { economy: -10, social: -5, environment: 10, stability: 15 }, matrix: { nuclear: 4.0, thermal: -2.0 }, regions: { southeast: 'active' } },
+    optionB: { title: "Cancelar Definitivamente", sub: "+Economia (+10%), +Sociedade (+8%), -Estabilidade (-8%)", indicators: { economy: 10, social: 8, environment: -4, stability: -8 }, matrix: { nuclear: -1.0 }, regions: { southeast: 'stable' } }
   },
   {
     id: 6, category: "<SOLAR & MINAS GERAIS>", icon: "fa-sun",
     title: "Subsídio para Geração Solar Distribuída (MG)",
-    desc: "Usinas fotovoltaicas transformam energia luminosa em elétrica. Isentar impostos dessas placas incentiva matrizes limpas, mas reduz a arrecadação do Estado.",
-    optionA: { title: "Ampliar Isenções", sub: "+Ambiente (+16%), +Sociedade (+12%), -Economia (-12%)", indicators: { economy: -12, social: 12, environment: 16, stability: 6 }, matrix: { solar: 5.0, thermal: -3.0 }, regions: { southeast: 'active' } },
-    optionB: { title: "Cortar Incentivos", sub: "+Economia (+14%), -Sociedade (-15%), -Ambiente (-8%)", indicators: { economy: 14, social: -15, environment: -8, stability: -4 }, matrix: { solar: -1.0 }, regions: { southeast: 'stable' } }
+    desc: "Usinas fotovoltaicas transformam energia luminosa em elétrica. Isentar impostos incentiva painéis residenciais e alivia linhas de transmissão.",
+    optionA: { title: "Ampliar Isenções", sub: "+Ambiente (+15%), +Sociedade (+12%), -Economia (-8%)", indicators: { economy: -8, social: 12, environment: 15, stability: 6 }, matrix: { solar: 5.0, thermal: -3.0 }, regions: { southeast: 'active' } },
+    optionB: { title: "Cortar Incentivos", sub: "+Economia (+12%), -Sociedade (-10%), -Ambiente (-6%)", indicators: { economy: 12, social: -10, environment: -6, stability: -4 }, matrix: { solar: -1.0 }, regions: { southeast: 'stable' } }
   },
   {
     id: 7, category: "<PETRÓLEO & AMAPÁ>", icon: "fa-droplet",
     title: "Exploração de Petróleo na Margem Equatorial (AP)",
-    desc: "A descoberta de petróleo (fonte não renovável) promete alta arrecadação e energia térmica firme. Ambientalistas alertam sobre o risco de vazamentos em corais.",
-    optionA: { title: "Liberar Exploração", sub: "+Economia (+18%), +Estabilidade (+10%), -Ambiente (-20%)", indicators: { economy: 18, social: -8, environment: -20, stability: 10 }, matrix: { thermal: 5.0, hydro: -2.0 }, regions: { north: 'warning' } },
-    optionB: { title: "Proibir Exploração", sub: "+Ambiente (+18%), -Economia (-12%)", indicators: { economy: -12, social: 8, environment: 18, stability: -5 }, matrix: { thermal: -2.0 }, regions: { north: 'stable' } }
+    desc: "A descoberta de jazidas de petróleo garante recursos volumosos para o tesouro e energia térmica firme para a indústria.",
+    optionA: { title: "Liberar Exploração", sub: "+Economia (+16%), +Estabilidade (+10%), -Ambiente (-10%)", indicators: { economy: 16, social: -5, environment: -10, stability: 10 }, matrix: { thermal: 5.0, hydro: -2.0 }, regions: { north: 'warning' } },
+    optionB: { title: "Proibir Exploração", sub: "+Ambiente (+15%), +Sociedade (+6%), -Economia (-8%)", indicators: { economy: -8, social: 6, environment: 15, stability: -4 }, matrix: { thermal: -2.0 }, regions: { north: 'stable' } }
   },
   {
     id: 8, category: "<BIOMASSA & SÃO PAULO>", icon: "fa-leaf",
     title: "Cogeração por Biomassa Sucroalcooleira (SP)",
-    desc: "Usinas querem expandir a queima do bagaço da cana (energia química). É renovável e ajuda a manter a rede estável sem precisar de altos investimentos do governo.",
-    optionA: { title: "Autorizar Expansão", sub: "+Estabilidade (+10%), +Ambiente (+12%), -Economia (-8%)", indicators: { economy: -8, social: 6, environment: 12, stability: 10 }, matrix: { biomass: 4.0, thermal: -3.0 }, regions: { southeast: 'active' } },
-    optionB: { title: "Restringir Queima", sub: "+Ambiente (+6%), -Estabilidade (-6%)", indicators: { economy: 5, social: -2, environment: 6, stability: -6 }, matrix: {}, regions: { southeast: 'stable' } }
+    desc: "Aproveitamento do bagaço da cana em usinas paulistas durante o período da seca para gerar vapor e eletricidade limpa.",
+    optionA: { title: "Autorizar Expansão", sub: "+Ambiente (+12%), +Estabilidade (+10%), -Economia (-6%)", indicators: { economy: -6, social: 6, environment: 12, stability: 10 }, matrix: { biomass: 4.0, thermal: -3.0 }, regions: { southeast: 'active' } },
+    optionB: { title: "Restringir Queima", sub: "+Ambiente (+5%), +Economia (+4%), -Estabilidade (-6%)", indicators: { economy: 4, social: -2, environment: 5, stability: -6 }, matrix: {}, regions: { southeast: 'stable' } }
   },
   {
     id: 9, category: "<GASODUTO & BOLÍVIA>", icon: "fa-gas-pump",
     title: "Crise Geopolítica no Gasoduto Bolívia-Brasil (Gasbol)",
-    desc: "Conflitos diplomáticos elevaram o preço do gás natural importado da Bolívia. As termelétricas precisam dele para os horários de pico.",
-    optionA: { title: "Estado Absorve o Custo", sub: "+Estabilidade (+12%), -Economia (-16%)", indicators: { economy: -16, social: 4, environment: -8, stability: 12 }, matrix: { thermal: 3.0 }, regions: { southeast: 'active' } },
-    optionB: { title: "Repassar Aumento na Tarifa", sub: "+Economia (+10%), -Sociedade (-18%)", indicators: { economy: 10, social: -18, environment: -4, stability: -6 }, matrix: { thermal: -2.0 }, regions: { southeast: 'warning' } }
+    desc: "Reajuste internacional no preço do gás natural importado da Bolívia exige definição sobre quem absorverá a diferença tarifária.",
+    optionA: { title: "Estado Absorve o Custo", sub: "+Estabilidade (+12%), +Sociedade (+5%), -Economia (-10%)", indicators: { economy: -10, social: 5, environment: -5, stability: 12 }, matrix: { thermal: 3.0 }, regions: { southeast: 'active' } },
+    optionB: { title: "Repassar Aumento na Tarifa", sub: "+Economia (+10%), -Sociedade (-10%), -Estabilidade (-4%)", indicators: { economy: 10, social: -10, environment: -2, stability: -4 }, matrix: { thermal: -2.0 }, regions: { southeast: 'warning' } }
   },
   {
     id: 10, category: "<OFFSHORE & CEARÁ>", icon: "fa-wind",
     title: "Parques Eólicos Offshore no Ceará",
-    desc: "Turbinas no mar captam energia dos ventos com maior eficiência, sem ocupar solo produtivo. Apenas a zona de pesca local seria bloqueada.",
-    optionA: { title: "Leiloar Áreas Marítimas", sub: "+Estabilidade (+14%), +Ambiente (+15%), -Economia (-14%)", indicators: { economy: -14, social: -6, environment: 15, stability: 14 }, matrix: { wind: 5.0, thermal: -3.0 }, regions: { northeast: 'active' } },
-    optionB: { title: "Proteger Áreas de Pesca", sub: "+Sociedade (+10%), -Estabilidade (-8%)", indicators: { economy: 6, social: 10, environment: -4, stability: -8 }, matrix: {}, regions: { northeast: 'stable' } }
+    desc: "Turbinas eólicas no mar captam ventos marítimos com altíssimo rendimento, expandindo a geração limpa sem ocupar solo agrícola.",
+    optionA: { title: "Leiloar Áreas Marítimas", sub: "+Ambiente (+15%), +Estabilidade (+14%), -Economia (-10%)", indicators: { economy: -10, social: -4, environment: 15, stability: 14 }, matrix: { wind: 5.0, thermal: -3.0 }, regions: { northeast: 'active' } },
+    optionB: { title: "Proteger Áreas de Pesca", sub: "+Sociedade (+10%), +Economia (+5%), -Estabilidade (-6%)", indicators: { economy: 5, social: 10, environment: -2, stability: -6 }, matrix: {}, regions: { northeast: 'stable' } }
   },
-  // 11-20: Continuação Dilemas
   {
     id: 11, category: "<CARVÃO & RIO GRANDE DO SUL>", icon: "fa-smog",
     title: "Renovação das Termelétricas a Carvão (RS)",
-    desc: "O carvão mineral de Candiota (RS) é a fonte com maior emissão de CO₂. Desativá-las cumpre metas climáticas, mas causa apagões e falência local.",
-    optionA: { title: "Desativar Imediatamente", sub: "+Ambiente (+22%), -Estabilidade (-16%), -Sociedade (-14%)", indicators: { economy: -10, social: -14, environment: 22, stability: -16 }, matrix: { thermal: -6.0, wind: 3.0 }, regions: { south: 'warning' } },
-    optionB: { title: "Renovar Contratos", sub: "+Estabilidade (+15%), -Ambiente (-20%)", indicators: { economy: 8, social: -6, environment: -20, stability: 15 }, matrix: { thermal: 4.0 }, regions: { south: 'active' } }
+    desc: "Substituir usinas antigas a carvão por parques eólicos no Sul reduz emissões de carbono e avança nas metas ecológicas.",
+    optionA: { title: "Desativar Imediatamente", sub: "+Ambiente (+18%), +Sociedade (+6%), -Estabilidade (-10%)", indicators: { economy: -8, social: 6, environment: 18, stability: -10 }, matrix: { thermal: -5.0, wind: 3.0 }, regions: { south: 'warning' } },
+    optionB: { title: "Renovar Contratos", sub: "+Estabilidade (+14%), +Economia (+6%), -Ambiente (-10%)", indicators: { economy: 6, social: -4, environment: -10, stability: 14 }, matrix: { thermal: 4.0 }, regions: { south: 'active' } }
   },
   {
     id: 12, category: "<PCH & RIO URUGUAI>", icon: "fa-water",
     title: "Pequenas Centrais Hidrelétricas (PCH) no Rio Uruguai",
-    desc: "PCHs convertem energia mecânica com menor alagamento, mas dezenas delas em cascata impedem a reprodução dos peixes.",
-    optionA: { title: "Aprovar Cascata", sub: "+Estabilidade (+12%), -Ambiente (-12%)", indicators: { economy: -6, social: 4, environment: -12, stability: 12 }, matrix: { hydro: 3.0 }, regions: { south: 'active' } },
-    optionB: { title: "Exigir Redesenho", sub: "+Ambiente (+8%), -Economia (-8%)", indicators: { economy: -8, social: -2, environment: 8, stability: -6 }, matrix: {}, regions: { south: 'stable' } }
+    desc: "Construção de PCHs de baixo impacto na Região Sul para gerar energia mecânica sem grandes alagamentos.",
+    optionA: { title: "Aprovar PCHs", sub: "+Estabilidade (+12%), +Economia (+5%), -Ambiente (-8%)", indicators: { economy: 5, social: 4, environment: -8, stability: 12 }, matrix: { hydro: 3.0 }, regions: { south: 'active' } },
+    optionB: { title: "Exigir Redesenho", sub: "+Ambiente (+8%), -Economia (-6%)", indicators: { economy: -6, social: -2, environment: 8, stability: -4 }, matrix: {}, regions: { south: 'stable' } }
   },
   {
     id: 13, category: "<HIDROGÊNIO VERDE & PECÉM>", icon: "fa-flask",
     title: "Pólo de Hidrogênio Verde no Porto do Pecém (CE)",
-    desc: "Uso de eólica para eletrólise da água, gerando combustível químico limpo. Exige aporte financeiro colossal que o governo precisa financiar.",
-    optionA: { title: "Financiar Planta Piloto", sub: "+Ambiente (+15%), +Estabilidade (+8%), -Economia (-16%)", indicators: { economy: -16, social: 8, environment: 15, stability: 8 }, matrix: { wind: 4.0, solar: 2.0 }, regions: { northeast: 'active' } },
-    optionB: { title: "Abandonar a Vanguarda", sub: "+Economia (+8%), -Ambiente (-6%)", indicators: { economy: 8, social: -4, environment: -6, stability: 2 }, matrix: {}, regions: { northeast: 'stable' } }
+    desc: "Projeto inovador de eletrólise da água impulsionada por energia eólica para produção de combustível de Hidrogênio Verde.",
+    optionA: { title: "Financiar Planta Piloto", sub: "+Ambiente (+15%), +Estabilidade (+8%), -Economia (-10%)", indicators: { economy: -10, social: 8, environment: 15, stability: 8 }, matrix: { wind: 4.0, solar: 2.0 }, regions: { northeast: 'active' } },
+    optionB: { title: "Focar Consumo Interno", sub: "+Economia (+8%), -Ambiente (-4%)", indicators: { economy: 8, social: -2, environment: -4, stability: 2 }, matrix: {}, regions: { northeast: 'stable' } }
   },
   {
     id: 14, category: "<BIOGÁS & ATERROS>", icon: "fa-trash-can",
     title: "Captação de Biogás em Aterros Sanitários",
-    desc: "Converter metano (CH₄) do lixo urbano em eletricidade diminui o efeito estufa. O impasse é quem pagará pelas pesadas obras civis.",
-    optionA: { title: "Prefeituras Pagam (Aumenta IPTU)", sub: "+Ambiente (+14%), -Sociedade (-14%)", indicators: { economy: 4, social: -14, environment: 14, stability: 6 }, matrix: { biomass: 3.0 }, regions: { southeast: 'active' } },
-    optionB: { title: "Governo Federal Subsidia", sub: "+Ambiente (+14%), -Economia (-14%)", indicators: { economy: -14, social: 8, environment: 14, stability: 6 }, matrix: { biomass: 3.0 }, regions: { southeast: 'active' } }
+    desc: "Capturar o gás metano (CH₄) gerado no lixo urbano para queima limpa em turbinas elétricas, reduzindo o efeito estufa.",
+    optionA: { title: "Parceria com Prefeituras", sub: "+Ambiente (+14%), +Sociedade (+6%), -Economia (-8%)", indicators: { economy: -8, social: 6, environment: 14, stability: 6 }, matrix: { biomass: 3.0 }, regions: { southeast: 'active' } },
+    optionB: { title: "Incentivo Privado", sub: "+Economia (+6%), +Ambiente (+8%), -Sociedade (-6%)", indicators: { economy: 6, social: -6, environment: 8, stability: 4 }, matrix: { biomass: 2.0 }, regions: { southeast: 'active' } }
   },
   {
     id: 15, category: "<BATERIAS & ARMAZENAMENTO>", icon: "fa-battery-full",
     title: "Baterias de Lítio em Larga Escala (Armazenamento)",
-    desc: "Para resolver a intermitência de fontes solares e eólicas, importa-se mega-baterias industriais caríssimas para armazenamento químico.",
-    optionA: { title: "Comprar Lote Internacional", sub: "+Estabilidade (+18%), +Ambiente (+8%), -Economia (-16%)", indicators: { economy: -16, social: 6, environment: 8, stability: 18 }, matrix: { solar: 2.0, wind: 2.0 }, regions: { southeast: 'active' } },
-    optionB: { title: "Confiar na Rede Atual", sub: "+Economia (+10%), -Estabilidade (-10%)", indicators: { economy: 10, social: -4, environment: -4, stability: -10 }, matrix: {}, regions: { southeast: 'stable' } }
+    desc: "Importação de parques industriais de baterias de Lítio para armazenar excedente solar e eólico nas subestações do Sudeste.",
+    optionA: { title: "Comprar Lote de Baterias", sub: "+Estabilidade (+16%), +Ambiente (+8%), -Economia (-10%)", indicators: { economy: -10, social: 6, environment: 8, stability: 16 }, matrix: { solar: 2.0, wind: 2.0 }, regions: { southeast: 'active' } },
+    optionB: { title: "Manter Rede Atual", sub: "+Economia (+8%), -Estabilidade (-8%)", indicators: { economy: 8, social: -2, environment: -2, stability: -8 }, matrix: {}, regions: { southeast: 'stable' } }
   },
   {
     id: 16, category: "<TARIFA SOCIAL & CRISE>", icon: "fa-heart",
     title: "Expansão da Tarifa Social (Crise Inflacionária)",
-    desc: "Após aumentos na tarifa, a população exige isenção de conta de luz para famílias de baixa renda inscritas no Cadastro Único.",
-    optionA: { title: "Conceder Isenção Ampla", sub: "+Sociedade (+20%), -Economia (-14%)", indicators: { economy: -14, social: 20, environment: 0, stability: -2 }, matrix: {}, regions: { northeast: 'active', north: 'active' } },
-    optionB: { title: "Manter Cobrança Rígida", sub: "+Economia (+12%), -Sociedade (-18%)", indicators: { economy: 12, social: -18, environment: 0, stability: 0 }, matrix: {}, regions: { northeast: 'warning' } }
+    desc: "Isenção parcial na conta de luz para famílias vulneráveis inscritas no CadÚnico para conter a pobreza energética.",
+    optionA: { title: "Conceder Isenção Ampla", sub: "+Sociedade (+18%), +Estabilidade (+4%), -Economia (-10%)", indicators: { economy: -10, social: 18, environment: 0, stability: 4 }, matrix: {}, regions: { northeast: 'active', north: 'active' } },
+    optionB: { title: "Restringir Benefício", sub: "+Economia (+10%), -Sociedade (-10%)", indicators: { economy: 10, social: -10, environment: 0, stability: 0 }, matrix: {}, regions: { northeast: 'warning' } }
   },
   {
     id: 17, category: "<ITAIPU & ASSOREAMENTO>", icon: "fa-water",
     title: "Desassoreamento do Reservatório de Itaipu",
-    desc: "O acúmulo de terra reduziu a massa de água (Ep = mgh). Obras de dragagem retiram o sedimento mas custam bilhões.",
-    optionA: { title: "Autorizar Dragagem Bilionária", sub: "+Estabilidade (+15%), -Economia (-16%)", indicators: { economy: -16, social: 6, environment: 10, stability: 15 }, matrix: { hydro: 3.0 }, regions: { south: 'active' } },
-    optionB: { title: "Ignorar Assoreamento", sub: "+Economia (+8%), -Estabilidade (-12%)", indicators: { economy: 8, social: -4, environment: -8, stability: -12 }, matrix: { hydro: -2.0 }, regions: { south: 'warning' } }
+    desc: "Retirada de sedimentos acumulados no fundo da represa para recuperar o volume útil de água e manter a potência hidrelétrica.",
+    optionA: { title: "Autorizar Dragagem", sub: "+Estabilidade (+14%), +Ambiente (+8%), -Economia (-10%)", indicators: { economy: -10, social: 6, environment: 8, stability: 14 }, matrix: { hydro: 3.0 }, regions: { south: 'active' } },
+    optionB: { title: "Ignorar Assoreamento", sub: "+Economia (+6%), -Estabilidade (-8%)", indicators: { economy: 6, social: -4, environment: -6, stability: -8 }, matrix: { hydro: -2.0 }, regions: { south: 'warning' } }
   },
   {
     id: 18, category: "<MAREMOTRIZ & MARANHÃO>", icon: "fa-water",
     title: "Usina Maremotriz na Baía de São Marcos (MA)",
-    desc: "Aproveitar o desnível de 7m das marés maranhenses (energia mecânica). O projeto piloto é caro e biólogos alertam sobre impacto em manguezais.",
-    optionA: { title: "Construir Usina Piloto", sub: "+Estabilidade (+10%), -Ambiente (-12%), -Economia (-14%)", indicators: { economy: -14, social: 4, environment: -12, stability: 10 }, matrix: { hydro: 2.0 }, regions: { northeast: 'active' } },
-    optionB: { title: "Proibir o Projeto", sub: "+Economia (+6%), -Estabilidade (-6%)", indicators: { economy: 6, social: -2, environment: 4, stability: -6 }, matrix: {}, regions: { northeast: 'stable' } }
+    desc: "Aproveitamento do potencial de marés de 7m no Maranhão para gerar eletricidade com previsibilidade astronômica perfeita.",
+    optionA: { title: "Construir Usina de Marés", sub: "+Ambiente (+12%), +Estabilidade (+10%), -Economia (-10%)", indicators: { economy: -10, social: 5, environment: 12, stability: 10 }, matrix: { hydro: 2.0 }, regions: { northeast: 'active' } },
+    optionB: { title: "Proibir Projeto", sub: "+Economia (+6%), -Estabilidade (-4%)", indicators: { economy: 6, social: -2, environment: 2, stability: -4 }, matrix: {}, regions: { northeast: 'stable' } }
   },
   {
     id: 19, category: "<AUTOMAÇÃO & SMART GRIDS>", icon: "fa-microchip",
     title: "Automação e Medição Inteligente do SIN",
-    desc: "A modernização exige instalação de medidores inteligentes e automação de ponta que previnem perdas, mas exige aporte importado.",
-    optionA: { title: "Financiar Sistema Inteligente", sub: "+Estabilidade (+15%), +Sociedade (+12%), -Economia (-12%)", indicators: { economy: -12, social: 12, environment: 6, stability: 15 }, matrix: { solar: 2.0 }, regions: { southeast: 'active' } },
-    optionB: { title: "Manter Infraestrutura Obsoleta", sub: "+Economia (+8%), -Estabilidade (-10%)", indicators: { economy: 8, social: -6, environment: -2, stability: -10 }, matrix: {}, regions: { southeast: 'stable' } }
+    desc: "Instalação de sensores e redes inteligentes (Smart Grids) que previnem perdas de transmissão e evitam apagões urbanos.",
+    optionA: { title: "Financiar Sistema Inteligente", sub: "+Estabilidade (+15%), +Sociedade (+10%), -Economia (-10%)", indicators: { economy: -10, social: 10, environment: 4, stability: 15 }, matrix: { solar: 2.0 }, regions: { southeast: 'active' } },
+    optionB: { title: "Manter Infraestrutura Antiga", sub: "+Economia (+8%), -Estabilidade (-8%)", indicators: { economy: 8, social: -4, environment: -2, stability: -8 }, matrix: {}, regions: { southeast: 'stable' } }
   },
   {
     id: 20, category: "<CARROS ELÉTRICOS>", icon: "fa-plug",
     title: "Isenção Fiscal para Veículos 100% Elétricos",
-    desc: "Trocar energia fóssil pela elétrica limpa as cidades. Porém, recarga noturna em massa gera sobrecarga severa nos transformadores.",
-    optionA: { title: "Aprovar Isenção", sub: "+Ambiente (+15%), -Estabilidade (-10%), -Economia (-12%)", indicators: { economy: -12, social: 8, environment: 15, stability: -10 }, matrix: { solar: 2.0 }, regions: { southeast: 'active' } },
-    optionB: { title: "Taxar Elétricos", sub: "+Economia (+8%), -Ambiente (-12%)", indicators: { economy: 8, social: -10, environment: -12, stability: 4 }, matrix: {}, regions: { southeast: 'stable' } }
+    desc: "Estímulo à substituição da frota a combustível fóssil por elétricos, limpando o ar urbano e alavancando a demanda limpa.",
+    optionA: { title: "Aprovar Isenção", sub: "+Ambiente (+14%), +Sociedade (+8%), -Economia (-8%)", indicators: { economy: -8, social: 8, environment: 14, stability: -6 }, matrix: { solar: 2.0 }, regions: { southeast: 'active' } },
+    optionB: { title: "Taxar Elétricos", sub: "+Economia (+8%), -Ambiente (-8%)", indicators: { economy: 8, social: -6, environment: -8, stability: 4 }, matrix: {}, regions: { southeast: 'stable' } }
   }
 ];
 
-// QUESTÕES DE CORRUPÇÃO E CRISES PERDE-PERDE (IDs 71 A 110)
+// QUESTÕES DE CORRUPÇÃO E CRISES RE-BALANÇADAS (MAX -10 DE PERDA E RECOMPENSAS POSITIVAS)
 const PERDE_PERDE_QUESTIONS = [
   {
     id: 71, category: "<CORRUPÇÃO & HIDRELÉTRICA>", icon: "fa-triangle-exclamation",
     title: "Empreiteira e a Falha Estrutural da Hidrelétrica",
-    desc: "Uma empreiteira subornou laudos para ignorar trincas no concreto da nova barragem. Elevar o nível de água para gerar mais energia pode romper a represa.",
-    optionA: { title: "Acumular Água e Arriscar Rompimento", sub: "-Ambiente (-20%), -Sociedade (-18%), -Estabilidade (-12%)", indicators: { economy: 5, social: -18, environment: -20, stability: -12 }, matrix: { hydro: 2.0 }, regions: { north: 'warning' } },
-    optionB: { title: "Denunciar e Paralisar por 10 Anos", sub: "-Economia (-20%), -Estabilidade (-18%)", indicators: { economy: -20, social: -8, environment: 5, stability: -18 }, matrix: { hydro: -4.0 }, regions: { north: 'warning' } }
+    desc: "Descobriu-se falha no concreto da nova barragem. O gestor deve decidir entre paralisar as obras para reforma ou reforçar a estrutura emergencialmente.",
+    optionA: { title: "Reforçar Estrutura de Emergência", sub: "+Estabilidade (+10%), -Economia (-10%), -Ambiente (-6%)", indicators: { economy: -10, social: -4, environment: -6, stability: 10 }, matrix: { hydro: 1.0 }, regions: { north: 'warning' } },
+    optionB: { title: "Paralisar para Reforma Geral", sub: "+Ambiente (+8%), +Sociedade (+6%), -Economia (-10%)", indicators: { economy: -10, social: 6, environment: 8, stability: -8 }, matrix: { hydro: -2.0 }, regions: { north: 'warning' } }
   },
   {
     id: 72, category: "<LOBBY & FÓSSEIS>", icon: "fa-smoking",
     title: "O Lobby do Carvão Mineral",
-    desc: "Políticos financiados por mineradoras exigem que usinas ineficientes e poluidoras continuem abertas, ameaçando travar o orçamento do Ministério.",
-    optionA: { title: "Ceder ao Lobby Fóssil", sub: "-Ambiente (-22%), -Sociedade (-14%)", indicators: { economy: 6, social: -14, environment: -22, stability: 8 }, matrix: { thermal: 4.0 }, regions: { south: 'warning' } },
-    optionB: { title: "Cortar Subsídios e Sofrer Boicote", sub: "-Economia (-18%), -Estabilidade (-16%)", indicators: { economy: -18, social: -8, environment: 12, stability: -16 }, matrix: { thermal: -3.0 }, regions: { south: 'warning' } }
+    desc: "Pressão política no Sul exige manutenção de subsídios para termelétricas a carvão sob ameaça de restrições orçamentárias.",
+    optionA: { title: "Manter Queima Fóssil Temporária", sub: "+Estabilidade (+10%), -Ambiente (-10%), -Sociedade (-6%)", indicators: { economy: 4, social: -6, environment: -10, stability: 10 }, matrix: { thermal: 3.0 }, regions: { south: 'warning' } },
+    optionB: { title: "Migrar Recursos para Renovável", sub: "+Ambiente (+12%), +Sociedade (+6%), -Economia (-10%)", indicators: { economy: -10, social: 6, environment: 12, stability: -8 }, matrix: { thermal: -3.0 }, regions: { south: 'warning' } }
   },
   {
     id: 76, category: "<CRIME & INFRAESTRUTURA>", icon: "fa-shield-halved",
     title: "A Máfia do Cobre e as Milícias",
-    desc: "Milícias com proteção política furtam cabos de transmissão, gerando apagões e perdas por Efeito Joule na fiação remendada. Eles cobram propina.",
-    optionA: { title: "Pagar Propina à Milícia", sub: "-Economia (-18%), -Sociedade (-16%)", indicators: { economy: -18, social: -16, environment: 0, stability: 8 }, matrix: {}, regions: { southeast: 'warning' } },
-    optionB: { title: "Enfrentar Máfia e Sofrer Sabotagem", sub: "-Estabilidade (-20%), -Sociedade (-12%)", indicators: { economy: -8, social: -12, environment: 0, stability: -20 }, matrix: {}, regions: { southeast: 'warning' } }
+    desc: "Quadrilhas atacam linhas de transmissão urbanas para furto de fiação. É preciso reforçar o policiamento especial e blindar os cabos.",
+    optionA: { title: "Instalar Fiação Blindada", sub: "+Estabilidade (+12%), -Economia (-10%)", indicators: { economy: -10, social: 4, environment: 0, stability: 12 }, matrix: {}, regions: { southeast: 'warning' } },
+    optionB: { title: "Reforçar Patrulha Policial", sub: "+Sociedade (+8%), +Estabilidade (+6%), -Economia (-8%)", indicators: { economy: -8, social: 8, environment: 0, stability: 6 }, matrix: {}, regions: { southeast: 'warning' } }
   },
   {
     id: 91, category: "<SABOTAGEM & SEGURANÇA>", icon: "fa-user-ninja",
     title: "Sabotagem em Linhas de Alta Tensão no Centro-Oeste",
-    desc: "Facções criminosas derrubaram torres de 500 kV, exigindo a transferência de lideranças prisionais para evitar novos atentados à rede.",
-    optionA: { title: "Ceder às Exigências dos Criminosos", sub: "-Sociedade (-22%), -Economia (-14%)", indicators: { economy: -14, social: -22, environment: 0, stability: 6 }, matrix: {}, regions: { southeast: 'warning' } },
-    optionB: { title: "Enviar Força de Elite e Aceitar Apagão", sub: "-Estabilidade (-24%), -Sociedade (-14%)", indicators: { economy: -8, social: -14, environment: 0, stability: -24 }, matrix: {}, regions: { southeast: 'warning' } }
+    desc: "Avarias criminosas em torres de 500 kV ameaçam o suprimento. O governo envia engenheiros de prontidão e forças de segurança.",
+    optionA: { title: "Reparo Emergencial com Força Nacional", sub: "+Estabilidade (+14%), -Economia (-10%), -Sociedade (-6%)", indicators: { economy: -10, social: -6, environment: 0, stability: 14 }, matrix: {}, regions: { southeast: 'warning' } },
+    optionB: { title: "Redirecionar Carga de Outras Regiões", sub: "+Sociedade (+6%), -Estabilidade (-8%), -Economia (-6%)", indicators: { economy: -6, social: 6, environment: 0, stability: -8 }, matrix: {}, regions: { southeast: 'warning' } }
   },
   {
     id: 92, category: "<FURTOS & TRANSFORMADORES>", icon: "fa-wrench",
     title: "Epidemia de Furtos de Transformadores Urbanos",
-    desc: "Quadrilhas furta transformadores de rua para extrair cobre e óleo dielétrico. A reposição consome todo o orçamento emergencial do Estado.",
-    optionA: { title: "Racionar Trocas de Transformadores", sub: "-Estabilidade (-18%), -Sociedade (-18%)", indicators: { economy: 4, social: -18, environment: 0, stability: -18 }, matrix: {}, regions: { southeast: 'warning' } },
-    optionB: { title: "Remanejar Verba da Manutenção Usinas", sub: "-Economia (-18%), -Estabilidade (-15%)", indicators: { economy: -18, social: -8, environment: -4, stability: -15 }, matrix: {}, regions: { southeast: 'warning' } }
+    desc: "Instalação de caixas de proteção e alarme em transformadores de rua para deter furtos de cobre e interrupções energéticas.",
+    optionA: { title: "Instalar Alarmes e Blindagem", sub: "+Estabilidade (+10%), -Economia (-10%)", indicators: { economy: -10, social: 4, environment: 0, stability: 10 }, matrix: {}, regions: { southeast: 'warning' } },
+    optionB: { title: "Substituição sob Demanda", sub: "+Economia (+6%), -Sociedade (-8%), -Estabilidade (-8%)", indicators: { economy: 6, social: -8, environment: 0, stability: -8 }, matrix: {}, regions: { southeast: 'warning' } }
   },
   {
     id: 93, category: "<SUPERFATURAMENTO & DIESEL>", icon: "fa-file-invoice-dollar",
     title: "Superfaturamento na Compra de Óleo Diesel Isolado",
-    desc: "A compra de combustível para térmicas do Norte teve valor inflacionado em 400% por esquema de notas frias operado por políticos locais.",
-    optionA: { title: "Manter Abastecimento Inflacionado", sub: "-Economia (-20%), -Sociedade (-14%)", indicators: { economy: -20, social: -14, environment: -8, stability: 8 }, matrix: { thermal: 2.0 }, regions: { north: 'warning' } },
-    optionB: { title: "Cortar Fornecimento Suspeito", sub: "-Estabilidade (-22%), -Sociedade (-18%)", indicators: { economy: 5, social: -18, environment: 6, stability: -22 }, matrix: { thermal: -4.0 }, regions: { north: 'warning' } }
+    desc: "Auditoria identifica cobrança indevida em contratos de térmicas no Norte. É necessário renegociar o fornecimento sem cortar a energia.",
+    optionA: { title: "Auditar e Renegociar Contratos", sub: "+Economia (+10%), +Sociedade (+6%), -Estabilidade (-6%)", indicators: { economy: 10, social: 6, environment: 2, stability: -6 }, matrix: { thermal: -2.0 }, regions: { north: 'warning' } },
+    optionB: { title: "Intervir na Distribuição Local", sub: "+Estabilidade (+10%), -Economia (-8%)", indicators: { economy: -8, social: -4, environment: -4, stability: 10 }, matrix: {}, regions: { north: 'warning' } }
   },
   {
     id: 98, category: "<SOBRECARGA & INCÊNDIO>", icon: "fa-temperature-high",
     title: "Superaquecimento por Excesso de Carga em Subestações",
-    desc: "Subestações operam com 140% da capacidade nominal no verão escaldante. Risco iminente de explosão e incêndio químico em transformadores.",
-    optionA: { title: "Desligar Subestações no Pico", sub: "-Sociedade (-20%), -Estabilidade (-18%)", indicators: { economy: -6, social: -20, environment: 4, stability: -18 }, matrix: {}, regions: { southeast: 'warning' } },
-    optionB: { title: "Forçar Operação em Overload", sub: "-Estabilidade (-22%), -Ambiente (-16%)", indicators: { economy: -10, social: -8, environment: -16, stability: -22 }, matrix: {}, regions: { southeast: 'warning' } }
+    desc: "Subestações urbanas registram picos de aquecimento durante ondas de calor extrema. Obras de resfriamento evitam danos graves.",
+    optionA: { title: "Instalar Refrigeração Industrial", sub: "+Estabilidade (+14%), +Ambiente (+6%), -Economia (-10%)", indicators: { economy: -10, social: 6, environment: 6, stability: 14 }, matrix: {}, regions: { southeast: 'warning' } },
+    optionB: { title: "Rodízio Preventivo de Carga", sub: "+Economia (+5%), -Sociedade (-8%), -Estabilidade (-6%)", indicators: { economy: 5, social: -8, environment: 2, stability: -6 }, matrix: {}, regions: { southeast: 'warning' } }
   },
   {
     id: 106, category: "<CORRUPÇÃO & CARVÃO>", icon: "fa-skull-crossbones",
     title: "Propina na Aquisição de Carvão Mineral Sujo",
-    desc: "Esquema corrupto comprou carvão mineral de péssima qualidade com alto teor de enxofre que entope turbinas e triplica a emissão de fuligem.",
-    optionA: { title: "Cancelar Contrato e Sofrer Apagão", sub: "-Estabilidade (-24%), -Economia (-14%)", indicators: { economy: -14, social: -10, environment: 10, stability: -24 }, matrix: { thermal: -5.0 }, regions: { south: 'warning' } },
-    optionB: { title: "Queimar Carvão Tóxico", sub: "-Ambiente (-26%), -Sociedade (-16%)", indicators: { economy: 4, social: -16, environment: -26, stability: 10 }, matrix: { thermal: 4.0 }, regions: { south: 'warning' } }
+    desc: "Substituição imediata de lote de combustível adulterado por fontes de gás natural mais limpas no Sul.",
+    optionA: { title: "Converter Usina para Gás Natural", sub: "+Ambiente (+12%), +Estabilidade (+10%), -Economia (-10%)", indicators: { economy: -10, social: 4, environment: 12, stability: 10 }, matrix: { thermal: 2.0 }, regions: { south: 'warning' } },
+    optionB: { title: "Cancelar Contrato Adulterado", sub: "+Sociedade (+8%), -Estabilidade (-8%), -Economia (-6%)", indicators: { economy: -6, social: 8, environment: 8, stability: -8 }, matrix: { thermal: -3.0 }, regions: { south: 'warning' } }
   },
   {
     id: 110, category: "<MONOPÓLIO & CHANTAGEM>", icon: "fa-handcuffs",
     title: "Chantagem do Monopólio de Cabos de Alta Tensão",
-    desc: "O único fabricante nacional de condutores de alta tensão paralisou as entregas exigindo isenção fiscal perpétua do Governo.",
-    optionA: { title: "Conceder Isenção Fiscal Perpétua", sub: "-Economia (-20%), -Sociedade (-14%)", indicators: { economy: -20, social: -14, environment: 0, stability: 10 }, matrix: {}, regions: { southeast: 'active' } },
-    optionB: { title: "Importar Condutores a Custo Triplo", sub: "-Economia (-24%), -Estabilidade (-15%)", indicators: { economy: -24, social: -6, environment: 0, stability: -15 }, matrix: {}, regions: { southeast: 'warning' } }
+    desc: "Abertura de concorrência e compra internacional de cabos condutores de alta tensão para quebrar monopólio abusivo.",
+    optionA: { title: "Importar Concorrentes Internacionais", sub: "+Estabilidade (+12%), +Economia (+6%), -Sociedade (-4%)", indicators: { economy: 6, social: -4, environment: 0, stability: 12 }, matrix: {}, regions: { southeast: 'active' } },
+    optionB: { title: "Subsidiar Fabricação Nacional", sub: "+Sociedade (+8%), +Estabilidade (+8%), -Economia (-10%)", indicators: { economy: -10, social: 8, environment: 0, stability: 8 }, matrix: {}, regions: { southeast: 'warning' } }
   }
 ];
 
-// COMBINA OS DOIS CONJUNTOS NO BANCO COMPLETO
+// COMBINA OS CONJUNTOS NO BANCO COMPLETO
 const ALL_DECK_QUESTIONS = [...RAW_QUESTIONS, ...PERDE_PERDE_QUESTIONS];
 
 // ESTADO GLOBAL DO JOGO (GAME STATE)
@@ -234,12 +233,16 @@ const GameState = {
   isGameOver: false
 };
 
-// ALGORITMO FISHER-YATES: EMBARALHAMENTO 100% ALEATÓRIO E UNBIASED
+/**
+ * ALGORITMO FISHER-YATES DE 3 PASSAGENS COM RANDOMIZAÇÃO DE ALTA ENTROPIA (100% SEM VIÉS)
+ */
 function shuffleArray(array) {
   const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+  for (let pass = 0; pass < 3; pass++) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
   }
   return arr;
 }
@@ -287,9 +290,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnChoiceA = document.getElementById('btn-choice-a');
   const btnChoiceB = document.getElementById('btn-choice-b');
   const choiceATitle = document.getElementById('choice-a-title');
-  const choiceASub = document.getElementById('choice-a-sub');
+  const choiceAImpacts = document.getElementById('choice-a-impacts');
   const choiceBTitle = document.getElementById('choice-b-title');
-  const choiceBSub = document.getElementById('choice-b-sub');
+  const choiceBImpacts = document.getElementById('choice-b-impacts');
 
   const gameOverModal = document.getElementById('game-over-modal');
   const gameOverCardBox = document.getElementById('game-over-card-box');
@@ -520,7 +523,6 @@ document.addEventListener('DOMContentLoaded', () => {
     GameState.history = [];
     GameState.isGameOver = false;
 
-    // EMBARALHAMENTO 100% ALEATÓRIO (Fisher-Yates) DOS 110 DILEMAS
     GameState.questionsDeck = shuffleArray(ALL_DECK_QUESTIONS);
 
     if (gameOverModal) gameOverModal.classList.add('hidden');
@@ -531,21 +533,38 @@ document.addEventListener('DOMContentLoaded', () => {
   function loadNextQuestion() {
     if (GameState.isGameOver) return;
 
-    const isCritical = Object.values(GameState.indicators).some(val => val < 20);
-
-    if (isCritical) {
-      // Injeta dilemas de crise / perde-perde prioritários no modo emergência
-      const perdePerdeDeck = ALL_DECK_QUESTIONS.filter(q => q.id >= 71);
-      const crisisIndex = Math.floor(Math.random() * perdePerdeDeck.length);
-      GameState.currentQuestion = perdePerdeDeck[crisisIndex];
-    } else {
-      if (GameState.questionsDeck.length === 0) {
-        GameState.questionsDeck = shuffleArray(ALL_DECK_QUESTIONS);
-      }
-      GameState.currentQuestion = GameState.questionsDeck.pop();
+    if (GameState.questionsDeck.length === 0) {
+      GameState.questionsDeck = shuffleArray(ALL_DECK_QUESTIONS);
     }
-
+    
+    GameState.currentQuestion = GameState.questionsDeck.pop();
     renderCurrentQuestion();
+  }
+
+  // RENDERIZA BADGES DE IMPACTO ALTAMENTE VISÍVEIS
+  function renderImpactPills(containerElem, indicators) {
+    if (!containerElem || !indicators) return;
+    containerElem.innerHTML = '';
+
+    const meta = {
+      economy: { name: 'Economia', icon: 'fa-dollar-sign' },
+      social: { name: 'Sociedade', icon: 'fa-heart' },
+      environment: { name: 'Ambiente', icon: 'fa-tree' },
+      stability: { name: 'Rede', icon: 'fa-bolt' }
+    };
+
+    Object.keys(indicators).forEach(key => {
+      let delta = indicators[key];
+      if (delta === 0) return;
+      if (delta < 0) delta = Math.max(-10, delta);
+
+      const isPos = delta > 0;
+      const signStr = isPos ? `+${delta}%` : `${delta}%`;
+      const pill = document.createElement('span');
+      pill.className = `impact-pill ${isPos ? 'pos' : 'neg'}`;
+      pill.innerHTML = `<i class="fa-solid ${meta[key].icon}"></i> ${meta[key].name} ${signStr}`;
+      containerElem.appendChild(pill);
+    });
   }
 
   function renderCurrentQuestion() {
@@ -559,10 +578,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dilemmaDesc) dilemmaDesc.textContent = q.desc;
 
     if (choiceATitle) choiceATitle.textContent = q.optionA.title;
-    if (choiceASub) choiceASub.textContent = q.optionA.sub;
-
     if (choiceBTitle) choiceBTitle.textContent = q.optionB.title;
-    if (choiceBSub) choiceBSub.textContent = q.optionB.sub;
+
+    renderImpactPills(choiceAImpacts, q.optionA.indicators);
+    renderImpactPills(choiceBImpacts, q.optionB.indicators);
 
     if (dilemmaCardElement) {
       dilemmaCardElement.classList.remove('slide-left', 'slide-right');
@@ -580,9 +599,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     setTimeout(() => {
-      // Atualiza Indicadores Globais
+      // Atualiza Indicadores Globais GARANTINDO QUE NENHUMA PERDA ULTRAPASSE -10 PONTOS POR COMPONENTE
       Object.keys(option.indicators).forEach(ind => {
-        GameState.indicators[ind] = Math.max(0, Math.min(100, GameState.indicators[ind] + option.indicators[ind]));
+        let delta = option.indicators[ind];
+        if (delta < 0) {
+          delta = Math.max(-10, delta); // TRAVA DE PERDA MÁXIMA DE -10 PONTOS
+        }
+        GameState.indicators[ind] = Math.max(0, Math.min(100, GameState.indicators[ind] + delta));
       });
 
       // Atualiza Matriz Energética e Normaliza

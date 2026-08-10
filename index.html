@@ -17,7 +17,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- Retro Stylesheet (Cache-Busted) -->
-  <link rel="stylesheet" href="css/styles.css?v=1850">
+  <link rel="stylesheet" href="css/styles.css?v=1860">
 </head>
 <body>
 
@@ -193,7 +193,7 @@
 
       </header>
 
-      <!-- CENTRO (O FOCO): CARTA DE DILEMA GRANDE COM INTERAÇÃO DE ESCOLHA -->
+      <!-- CENTRO (O FOCO): CARTA DE DILEMA GRANDE COM BADGES DE IMPACTO ALTAMENTE LEGÍVEIS -->
       <main class="hud-center-dilemma" id="tut-target-dilemma">
         
         <div class="pixel-dilemma-card" id="dilemma-card-element">
@@ -211,18 +211,18 @@
             Proposta de construção de usina de grande porte em rio de planície para conversão de energia potencial gravítica em elétrica (Ep = m·g·h). Causa alagamento florestal, emissão de metano (CH₄) e deslocamento de comunidades ribeirinhas.
           </p>
 
-          <!-- 2 BOTÕES INTERATIVOS DE ESCOLHA -->
+          <!-- 2 BOTÕES INTERATIVOS DE ESCOLHA COM BADGES DE IMPACTO VISÍVEIS -->
           <div class="dilemma-choice-buttons">
             <button class="pixel-choice-btn left" id="btn-choice-a">
               <span class="choice-tag">OPÇÃO A (TECLA A / ESQUERDA)</span>
               <span class="choice-title" id="choice-a-title">Aprovar Construção</span>
-              <span class="choice-sub" id="choice-a-sub">+Estabilidade, -Meio Ambiente</span>
+              <div class="choice-impact-container" id="choice-a-impacts"></div>
             </button>
 
             <button class="pixel-choice-btn right" id="btn-choice-b">
               <span class="choice-tag">OPÇÃO B (TECLA B / DIREITA)</span>
               <span class="choice-title" id="choice-b-title">Rejeitar Projeto</span>
-              <span class="choice-sub" id="choice-b-sub">+Meio Ambiente, -Estabilidade</span>
+              <div class="choice-impact-container" id="choice-b-impacts"></div>
             </button>
           </div>
         </div>
@@ -459,6 +459,6 @@
   </div>
 
   <!-- Scripts (Cache-Busted) -->
-  <script src="js/app.js?v=1850"></script>
+  <script src="js/app.js?v=1860"></script>
 </body>
 </html>
