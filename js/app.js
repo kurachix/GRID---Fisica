@@ -1,6 +1,6 @@
 /**
  * GRID - O Gestor da Rede Elétrica Nacional
- * Core Game Engine: 110 Dilema Deck, High-Entropy Randomness, Balanced Rules & High-Visibility Impact Pills
+ * Core Game Engine: 110 Dilema Deck, High-Entropy Randomness, Balanced Rules, High-Visibility Impact Pills & Settings System
  */
 
 // 1. BARALHO COMPLETO DE 110 DILEMAS COM PERDAS MAXIMIZADAS EM NO MÁXIMO -10 PONTOS POR COMPONENTE
@@ -275,6 +275,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnTutPrev = document.getElementById('btn-tut-prev');
   const btnTutNext = document.getElementById('btn-tut-next');
 
+  // ELEMENTOS DO MODAL DE CONFIGURAÇÕES
+  const btnOpenSettings = document.getElementById('btn-open-settings');
+  const settingsModal = document.getElementById('settings-modal');
+  const btnCloseSettings = document.getElementById('btn-close-settings');
+  const settingsMainMenu = document.getElementById('settings-main-menu');
+  const settingsCreditsPanel = document.getElementById('settings-credits-panel');
+  const btnSettingsRestartGame = document.getElementById('btn-settings-restart-game');
+  const btnSettingsRestartTerm = document.getElementById('btn-settings-restart-term');
+  const btnSettingsCredits = document.getElementById('btn-settings-credits');
+  const btnSettingsExit = document.getElementById('btn-settings-exit');
+  const btnBackCredits = document.getElementById('btn-back-credits');
+
   const cutsceneAvatar = document.getElementById('cutscene-avatar');
   const cutsceneSpeakerName = document.getElementById('cutscene-speaker-name');
   const cutsceneSpeakerTitle = document.getElementById('cutscene-speaker-title');
@@ -541,7 +553,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderCurrentQuestion();
   }
 
-  // RENDERIZA BADGES DE IMPACTO ALTAMENTE VISÍVEIS
   function renderImpactPills(containerElem, indicators) {
     if (!containerElem || !indicators) return;
     containerElem.innerHTML = '';
@@ -599,16 +610,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     setTimeout(() => {
-      // Atualiza Indicadores Globais GARANTINDO QUE NENHUMA PERDA ULTRAPASSE -10 PONTOS POR COMPONENTE
       Object.keys(option.indicators).forEach(ind => {
         let delta = option.indicators[ind];
         if (delta < 0) {
-          delta = Math.max(-10, delta); // TRAVA DE PERDA MÁXIMA DE -10 PONTOS
+          delta = Math.max(-10, delta);
         }
         GameState.indicators[ind] = Math.max(0, Math.min(100, GameState.indicators[ind] + delta));
       });
 
-      // Atualiza Matriz Energética e Normaliza
       if (option.matrix) {
         Object.keys(option.matrix).forEach(m => {
           if (GameState.matrix[m] !== undefined) {
@@ -618,7 +627,6 @@ document.addEventListener('DOMContentLoaded', () => {
         normalizeMatrix();
       }
 
-      // Atualiza Regiões
       if (option.regions) {
         Object.keys(option.regions).forEach(reg => {
           GameState.regions[reg] = option.regions[reg];
@@ -797,6 +805,63 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // EVENTOS DO MODAL DE CONFIGURAÇÕES
+  function openSettingsModal() {
+    if (settingsModal) settingsModal.classList.remove('hidden');
+    if (settingsMainMenu) settingsMainMenu.classList.remove('hidden');
+    if (settingsCreditsPanel) settingsCreditsPanel.classList.add('hidden');
+  }
+
+  function closeSettingsModal() {
+    if (settingsModal) settingsModal.classList.add('hidden');
+  }
+
+  if (btnOpenSettings) btnOpenSettings.addEventListener('click', openSettingsModal);
+  if (btnCloseSettings) btnCloseSettings.addEventListener('click', closeSettingsModal);
+
+  if (settingsModal) {
+    settingsModal.addEventListener('click', (e) => {
+      if (e.target === settingsModal) closeSettingsModal();
+    });
+  }
+
+  if (btnSettingsRestartGame) {
+    btnSettingsRestartGame.addEventListener('click', () => {
+      closeSettingsModal();
+      if (hudDashboardScreen) hudDashboardScreen.classList.add('hidden');
+      if (cutsceneScreen) cutsceneScreen.classList.add('hidden');
+      if (titleScreen) titleScreen.classList.remove('hidden');
+      if (inputElem) inputElem.value = '';
+    });
+  }
+
+  if (btnSettingsRestartTerm) {
+    btnSettingsRestartTerm.addEventListener('click', () => {
+      closeSettingsModal();
+      initNewGame();
+    });
+  }
+
+  if (btnSettingsCredits) {
+    btnSettingsCredits.addEventListener('click', () => {
+      if (settingsMainMenu) settingsMainMenu.classList.add('hidden');
+      if (settingsCreditsPanel) settingsCreditsPanel.classList.remove('hidden');
+    });
+  }
+
+  if (btnBackCredits) {
+    btnBackCredits.addEventListener('click', () => {
+      if (settingsCreditsPanel) settingsCreditsPanel.classList.add('hidden');
+      if (settingsMainMenu) settingsMainMenu.classList.remove('hidden');
+    });
+  }
+
+  if (btnSettingsExit) {
+    btnSettingsExit.addEventListener('click', () => {
+      window.location.href = 'https://www.google.com';
+    });
+  }
+
   if (btnChoiceA) {
     btnChoiceA.addEventListener('click', (e) => {
       e.preventDefault();
@@ -819,7 +884,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.addEventListener('keydown', (e) => {
-    if (hudDashboardScreen && !hudDashboardScreen.classList.contains('hidden') && tutorialOverlay && tutorialOverlay.classList.contains('hidden') && !GameState.isGameOver) {
+    if (e.key === 'Escape') {
+      if (settingsModal && !settingsModal.classList.contains('hidden')) {
+        closeSettingsModal();
+      } else if (hudDashboardScreen && !hudDashboardScreen.classList.contains('hidden')) {
+        openSettingsModal();
+      }
+    }
+
+    if (hudDashboardScreen && !hudDashboardScreen.classList.contains('hidden') && 
+        tutorialOverlay && tutorialOverlay.classList.contains('hidden') && 
+        settingsModal && settingsModal.classList.contains('hidden') && 
+        !GameState.isGameOver) {
       if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') {
         e.preventDefault();
         applyChoice('A');

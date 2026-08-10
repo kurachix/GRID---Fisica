@@ -17,7 +17,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- Retro Stylesheet (Cache-Busted) -->
-  <link rel="stylesheet" href="css/styles.css?v=1860">
+  <link rel="stylesheet" href="css/styles.css?v=1870">
 </head>
 <body>
 
@@ -136,6 +136,11 @@
     
     <!-- Fundo da Sala de Controle (Troca Automática: Estável ou Emergência) -->
     <div id="hud-bg-room" class="hud-bg-room stable"></div>
+
+    <!-- BOTÃO DE CONFIGURAÇÕES NO CANTO SUPERIOR DIREITO -->
+    <button id="btn-open-settings" class="pixel-settings-btn" title="Configurações &amp; Pausa">
+      <i class="fa-solid fa-gear"></i>
+    </button>
 
     <!-- CONTAINER PRINCIPAL DO PAINEL -->
     <div class="hud-panel-layout">
@@ -407,7 +412,57 @@
 
 
   <!-- ==========================================
-       VIEW 5: MODAL DE FIM DE JOGO (VITÓRIA OU COLAPSO)
+       VIEW 5: MODAL DE CONFIGURAÇÕES & PAUSA
+       ========================================== -->
+  <div id="settings-modal" class="settings-backdrop hidden">
+    <div class="settings-modal-card">
+      
+      <div class="settings-card-header">
+        <h2><i class="fa-solid fa-gear"></i> CONFIGURAÇÕES &amp; PAUSA</h2>
+        <button id="btn-close-settings" class="pixel-close-btn" title="Fechar">&times;</button>
+      </div>
+
+      <div class="settings-card-body" id="settings-main-menu">
+        <button id="btn-settings-restart-game" class="pixel-settings-option">
+          <i class="fa-solid fa-house"></i> REINICIAR JOGO (TELA INICIAL)
+        </button>
+
+        <button id="btn-settings-restart-term" class="pixel-settings-option">
+          <i class="fa-solid fa-arrows-rotate"></i> REINICIAR MANDATO (ANO 2026)
+        </button>
+
+        <button id="btn-settings-credits" class="pixel-settings-option">
+          <i class="fa-solid fa-graduation-cap"></i> CRÉDITOS
+        </button>
+
+        <button id="btn-settings-exit" class="pixel-settings-option exit">
+          <i class="fa-solid fa-right-from-bracket"></i> SAIR DO JOGO
+        </button>
+      </div>
+
+      <!-- SUB-PAINEL DE CRÉDITOS -->
+      <div id="settings-credits-panel" class="settings-subpanel hidden">
+        <div class="subpanel-header">
+          <h3><i class="fa-solid fa-graduation-cap"></i> CRÉDITOS DO PROJETO</h3>
+        </div>
+        <div class="subpanel-body">
+          <p class="credits-bold">GRID - O Gestor da Rede Elétrica Nacional (2026-2056)</p>
+          <p class="subpanel-desc">Jogo educativo de simulação interdisciplinar unindo os currículos de Física e Geografia.</p>
+          <p class="subpanel-note"><em>(Seção reservada para adição de créditos futuros dos autores e colaboradores)</em></p>
+        </div>
+        <div class="subpanel-footer">
+          <button id="btn-back-credits" class="pixel-btn-start restart">
+            <span class="btn-text">VOLTAR</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ==========================================
+       VIEW 6: MODAL DE FIM DE JOGO (VITÓRIA OU COLAPSO)
        ========================================== -->
   <div id="game-over-modal" class="game-over-backdrop hidden">
     <div class="game-over-card" id="game-over-card-box">
@@ -459,6 +514,6 @@
   </div>
 
   <!-- Scripts (Cache-Busted) -->
-  <script src="js/app.js?v=1860"></script>
+  <script src="js/app.js?v=1870"></script>
 </body>
 </html>
