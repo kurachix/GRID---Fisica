@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const initialDialogueElem = document.getElementById('initial-dialogue-text');
-  const initialText = "Bem-vindo, Gestor! Identifique-se para assumir o controle do sistema elétrico nacional.";
+  const initialText = "Saudações, futuro Gestor da Rede Elétrica Nacional! Eu sou o Robô Volta, assistente de inteligência do Sistema Interligado Nacional (SIN). Por favor, digite seu nome abaixo para assumirmos o comando do Centro Nacional de Operações e evitar o colapso energético do Brasil.";
   const inputElem = document.getElementById('player-name');
   const btnStart = document.getElementById('btn-start');
 
@@ -363,9 +363,107 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const CUTSCENE_SCRIPT = [
-    { speaker: "Dra. Elena", title: "Membro Sênior / Física Teórica", avatar: "assets/dra_elena_avatar.jpg", text: "Ministro {NAME}! Em 2026, o modelo fóssil desmoronou. Secas extremas reduziram os reservatórios hidrelétricos a 14% de energia potencial gravítica (Ep = mgh)." },
-    { speaker: "Robô Volta", title: "Assistente de Automação SIN", avatar: "assets/robo_volta_avatar.jpg", text: "ALERTA! A gestão anterior acionou termelétricas poluentes. A tarifa de energia subiu 85%, provocando inflação e onda de protestos nas capitais!" },
-    { speaker: "Dra. Elena", title: "Membro Sênior / Física Teórica", avatar: "assets/dra_elena_avatar.jpg", text: "Seu papel até 2056 é manter o equilíbrio entre Economia, Sociedade, Meio Ambiente e Estabilidade da Rede Elétrica. Não deixe nenhum indicador chegar a 0%!" }
+    // [Cena 1: O Diagnóstico do Colapso]
+    {
+      speaker: "Dra. Elena",
+      title: "Membro Sênior / Física Teórica",
+      avatar: "assets/dra_elena_avatar.jpg",
+      text: "{NAME}... Sente-se. O que você vai ouvir agora não está nos jornais."
+    },
+    {
+      speaker: "Dra. Elena",
+      title: "Membro Sênior / Física Teórica",
+      avatar: "assets/dra_elena_avatar.jpg",
+      text: "Nós perdemos o controle. O modelo energético do século XX entrou em colapso definitivo. A dependência excessiva de combustíveis fósseis no Hemisfério Norte gerou um efeito cascata no clima global."
+    },
+    {
+      speaker: "Robô Volta",
+      title: "Assistente de Automação SIN",
+      avatar: "assets/robo_volta_avatar.jpg",
+      text: "[Bip] Nossos sistemas inteligentes de medição e automação da rede registram falhas múltiplas. A Europa está racionando gás natural, e o preço do barril de petróleo atingiu picos insustentáveis."
+    },
+    {
+      speaker: "Dra. Elena",
+      title: "Membro Sênior / Física Teórica",
+      avatar: "assets/dra_elena_avatar.jpg",
+      text: "E aqui no Brasil, a conta chegou. Uma anomalia climática brutal secou as principais bacias hidrográficas do Sudeste e Centro-Oeste. Sem água, nossa principal fonte despencou."
+    },
+    {
+      speaker: "Robô Volta",
+      title: "Assistente de Automação SIN",
+      avatar: "assets/robo_volta_avatar.jpg",
+      text: "[Alerta] A capacidade dos nossos reservatórios atingiu a marca de 14%. A geração de energia nas turbinas está seriamente comprometida."
+    },
+
+    // [Cena 2: As Consequências Econômicas e Sociais]
+    {
+      speaker: "Dra. Elena",
+      title: "Membro Sênior / Física Teórica",
+      avatar: "assets/dra_elena_avatar.jpg",
+      text: "Para evitar um apagão total, o antigo Ministério religou todas as usinas termelétricas a carvão e óleo diesel de emergência."
+    },
+    {
+      speaker: "Dra. Elena",
+      title: "Membro Sênior / Física Teórica",
+      avatar: "assets/dra_elena_avatar.jpg",
+      text: "O resultado? A energia gerada nestas usinas possui um custo operacional altíssimo e uma grande perda de rendimento, além de poluir os céus das nossas cidades."
+    },
+    {
+      speaker: "Robô Volta",
+      title: "Assistente de Automação SIN",
+      avatar: "assets/robo_volta_avatar.jpg",
+      text: "[Bip] Impacto social crítico: A tarifa de energia subiu 85% em três meses. Indústrias estão demitindo em massa para compensar os custos. Protestos violentos foram registrados em cinco capitais."
+    },
+    {
+      speaker: "Dra. Elena",
+      title: "Membro Sênior / Física Teórica",
+      avatar: "assets/dra_elena_avatar.jpg",
+      text: "O antigo Ministro não suportou a pressão e renunciou esta manhã. O país está à beira do abismo econômico, {NAME}."
+    },
+
+    // [Cena 3: A Posse e as Regras do Jogo]
+    {
+      speaker: "Dra. Elena",
+      title: "Membro Sênior / Física Teórica",
+      avatar: "assets/dra_elena_avatar.jpg",
+      text: "O Presidente assinou sua nomeação. A partir de agora, você é a autoridade máxima do Sistema Elétrico Nacional."
+    },
+    {
+      speaker: "Robô Volta",
+      title: "Assistente de Automação SIN",
+      avatar: "assets/robo_volta_avatar.jpg",
+      text: "Iniciando protocolo de transição. Ministro {NAME}, você deverá monitorar os dados das nossas centrais automatizadas."
+    },
+    {
+      speaker: "Robô Volta",
+      title: "Assistente de Automação SIN",
+      avatar: "assets/robo_volta_avatar.jpg",
+      text: "Você deve manter quatro pilares acima da linha de colapso de 20%: O Caixa do Governo, a Aprovação Popular, a Preservação Ambiental e a Estabilidade da Rede Elétrica."
+    },
+    {
+      speaker: "Dra. Elena",
+      title: "Membro Sênior / Física Teórica",
+      avatar: "assets/dra_elena_avatar.jpg",
+      text: "Não existe mágica aqui, Ministro. A primeira lei da conservação da energia é implacável: a energia não se cria, apenas se transforma."
+    },
+    {
+      speaker: "Dra. Elena",
+      title: "Membro Sênior / Física Teórica",
+      avatar: "assets/dra_elena_avatar.jpg",
+      text: "Se você investir pesado em fazendas solares e eólicas, teremos energia limpa, mas terá que lidar com a intermitência dos ventos e do sol. Se optar por construir novas hidrelétricas, enfrentará a fúria da população e de ativistas devido ao alagamento de terras e perda de biodiversidade."
+    },
+    {
+      speaker: "Dra. Elena",
+      title: "Membro Sênior / Física Teórica",
+      avatar: "assets/dra_elena_avatar.jpg",
+      text: "Cada escolha sua moldará o mapa geográfico e a economia do Brasil nas próximas três décadas. Nós não temos margem para erro."
+    },
+    {
+      speaker: "Robô Volta",
+      title: "Assistente de Automação SIN",
+      avatar: "assets/robo_volta_avatar.jpg",
+      text: "[Bip] O sistema está online. A primeira crise acaba de chegar na sua mesa, Ministro. Boa sorte."
+    }
   ];
 
   const TUTORIAL_STEPS = [
