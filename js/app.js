@@ -1,195 +1,257 @@
 /**
  * GRID - O Gestor da Rede Elétrica Nacional
- * Master 16-Bit HUD UI Design System, Typewriter Animation & Immediate Ex-Minister Tutorial Engine
+ * Core Game Engine: 110 Dilema Deck, Unbiased Fisher-Yates & Perde-Perde Mechanics
  */
 
-const CUTSCENE_SCRIPT = [
-  // ==========================================
-  // CENA 1: O DIAGNÓSTICO DO COLAPSO
-  // ==========================================
+// 1. BARALHO COMPLETO DE 110 DILEMAS (1 A 110)
+const RAW_QUESTIONS = [
+  // 1-20: Eventos Aleatórios
   {
-    speaker: "Dra. Elena",
-    avatar: "assets/dra_elena_avatar.jpg",
-    title: "Membro Sênior / Física Teórica",
-    color: "#60a5fa",
-    text: "{NAME}... Sente-se. O que você vai ouvir agora não está nos jornais."
+    id: 1, category: "<HIDRELÉTRICA & AMAZÔNIA>", icon: "fa-water",
+    title: "Licenciamento da Usina Hidrelétrica na Bacia Amazônica",
+    desc: "Proposta de construção de usina de grande porte para conversão de energia potencial gravítica em elétrica (Ep = m·g·h). Causa alagamento florestal, emissão de metano (CH₄) e deslocamento de ribeirinhos.",
+    optionA: { title: "Aprovar Construção", sub: "+Estabilidade (+20%), -Ambiente (-18%), -Sociedade (-12%)", indicators: { economy: -10, social: -12, environment: -18, stability: 20 }, matrix: { hydro: 5.0, thermal: -3.0, solar: -1.0, wind: -1.0 }, regions: { north: 'active', southeast: 'warning' } },
+    optionB: { title: "Rejeitar Projeto", sub: "+Ambiente (+15%), -Estabilidade (-15%), +Sociedade (+10%)", indicators: { economy: 5, social: 10, environment: 15, stability: -15 }, matrix: { hydro: -2.0, thermal: 2.0 }, regions: { north: 'stable', southeast: 'warning' } }
   },
   {
-    speaker: "Dra. Elena",
-    avatar: "assets/dra_elena_avatar.jpg",
-    title: "Membro Sênior / Física Teórica",
-    color: "#60a5fa",
-    text: "Nós perdemos o controle. O modelo energético do século XX entrou em colapso definitivo. A dependência excessiva de combustíveis fósseis no Hemisfério Norte gerou um efeito cascata no clima global."
+    id: 2, category: "<EÓLICA & NORDESTE>", icon: "fa-wind",
+    title: "Expansão Eólica no Litoral do Rio Grande do Norte",
+    desc: "O Nordeste possui alta viabilidade eólica. A instalação de aerogeradores (cinética para elétrica) exige pesados investimentos federais para conectar os parques ao SIN.",
+    optionA: { title: "Subsidiar Novos Parques", sub: "+Ambiente (+14%), +Estabilidade (+8%), -Economia (-15%)", indicators: { economy: -15, social: 8, environment: 14, stability: 8 }, matrix: { wind: 6.0, thermal: -4.0, hydro: -2.0 }, regions: { northeast: 'active' } },
+    optionB: { title: "Ignorar o Potencial", sub: "+Economia (+10%), -Estabilidade (-10%), -Ambiente (-8%)", indicators: { economy: 10, social: -4, environment: -8, stability: -10 }, matrix: { thermal: 3.0 }, regions: { northeast: 'stable' } }
   },
   {
-    speaker: "Robô Volta",
-    avatar: "assets/robo_volta_avatar.jpg",
-    title: "Assistente de Automação SIN",
-    color: "#00e5ff",
-    text: "[Bip] Nossos sistemas inteligentes de medição e automação da rede registram falhas múltiplas. A Europa está racionando gás natural, e o preço do barril de petróleo atingiu picos insustentáveis."
+    id: 3, category: "<SECA & TERMELÉTRICA>", icon: "fa-fire",
+    title: "Seca Severa e Acionamento de Termelétricas em São Paulo",
+    desc: "A escassez hídrica reduziu as represas a 14%. Ligar termelétricas a gás converte energia química em térmica com alto custo e muita poluição.",
+    optionA: { title: "Acionar Termelétricas", sub: "+Estabilidade (+18%), -Ambiente (-20%), -Economia (-12%)", indicators: { economy: -12, social: -10, environment: -20, stability: 18 }, matrix: { thermal: 7.0, hydro: -4.0 }, regions: { southeast: 'warning' } },
+    optionB: { title: "Decretar Racionamento", sub: "+Ambiente (+10%), -Sociedade (-16%), -Economia (-14%)", indicators: { economy: -14, social: -16, environment: 10, stability: -12 }, matrix: { thermal: -2.0 }, regions: { southeast: 'warning' } }
   },
   {
-    speaker: "Dra. Elena",
-    avatar: "assets/dra_elena_avatar.jpg",
-    title: "Membro Sênior / Física Teórica",
-    color: "#60a5fa",
-    text: "E aqui no Brasil, a conta chegou. Uma anomalia climática brutal secou as principais bacias hidrográficas do Sudeste e Centro-Oeste. Sem água, nossa principal fonte despencou."
+    id: 4, category: "<TRANSMISSÃO & EFEITO JOULE>", icon: "fa-bolt",
+    title: "Dissipação Térmica nas Linhas de Belo Monte (PA)",
+    desc: "A transmissão de energia sofre alta perda na forma de calor devido à resistência dos cabos (Efeito Joule: P = R·I²).",
+    optionA: { title: "Construir Ultra Alta Tensão", sub: "+Estabilidade (+16%), +Ambiente (+8%), -Economia (-14%)", indicators: { economy: -14, social: 6, environment: 8, stability: 16 }, matrix: { hydro: 1.0, solar: 1.0 }, regions: { north: 'active', southeast: 'active' } },
+    optionB: { title: "Reparos Paliativos", sub: "+Economia (+10%), -Estabilidade (-10%)", indicators: { economy: 10, social: -4, environment: -4, stability: -10 }, matrix: { hydro: -1.0 }, regions: { southeast: 'warning' } }
   },
   {
-    speaker: "Robô Volta",
-    avatar: "assets/robo_volta_avatar.jpg",
-    title: "Assistente de Automação SIN",
-    color: "#00e5ff",
-    text: "[Alerta] A energia potencial gravítica dos nossos reservatórios atingiu a marca de 14%. A conversão para energia cinética e elétrica nas turbinas está comprometida."
-  },
-
-  // ==========================================
-  // CENA 2: O IMPACTO ECONÔMICO E SOCIAL
-  // ==========================================
-  {
-    speaker: "Dra. Elena",
-    avatar: "assets/dra_elena_avatar.jpg",
-    title: "Membro Sênior / Física Teórica",
-    color: "#60a5fa",
-    text: "Para evitar um apagão total, o antigo Ministério religou todas as usinas termelétricas a carvão e óleo diesel de emergência."
+    id: 5, category: "<NUCLEAR & RIO DE JANEIRO>", icon: "fa-atom",
+    title: "Finalização da Usina Nuclear Angra 3 (RJ)",
+    desc: "A termodinâmica nuclear tem alto rendimento, mas as obras estão superfaturadas há décadas e a população teme a falta de plano para rejeitos radioativos.",
+    optionA: { title: "Concluir Obras", sub: "+Estabilidade (+15%), +Ambiente (+10%), -Economia (-18%)", indicators: { economy: -18, social: -6, environment: 10, stability: 15 }, matrix: { nuclear: 4.0, thermal: -2.0 }, regions: { southeast: 'active' } },
+    optionB: { title: "Cancelar Definitivamente", sub: "+Economia (+12%), +Sociedade (+8%), -Estabilidade (-10%)", indicators: { economy: 12, social: 8, environment: -5, stability: -10 }, matrix: { nuclear: -1.0 }, regions: { southeast: 'stable' } }
   },
   {
-    speaker: "Dra. Elena",
-    avatar: "assets/dra_elena_avatar.jpg",
-    title: "Membro Sênior / Física Teórica",
-    color: "#60a5fa",
-    text: "O resultado? A energia química transformada em térmica nestas usinas possui um custo operacional altíssimo e uma perda gigantesca de rendimento, além de poluir os céus das nossas cidades."
+    id: 6, category: "<SOLAR & MINAS GERAIS>", icon: "fa-sun",
+    title: "Subsídio para Geração Solar Distribuída (MG)",
+    desc: "Usinas fotovoltaicas transformam energia luminosa em elétrica. Isentar impostos dessas placas incentiva matrizes limpas, mas reduz a arrecadação do Estado.",
+    optionA: { title: "Ampliar Isenções", sub: "+Ambiente (+16%), +Sociedade (+12%), -Economia (-12%)", indicators: { economy: -12, social: 12, environment: 16, stability: 6 }, matrix: { solar: 5.0, thermal: -3.0 }, regions: { southeast: 'active' } },
+    optionB: { title: "Cortar Incentivos", sub: "+Economia (+14%), -Sociedade (-15%), -Ambiente (-8%)", indicators: { economy: 14, social: -15, environment: -8, stability: -4 }, matrix: { solar: -1.0 }, regions: { southeast: 'stable' } }
   },
   {
-    speaker: "Robô Volta",
-    avatar: "assets/robo_volta_avatar.jpg",
-    title: "Assistente de Automação SIN",
-    color: "#00e5ff",
-    text: "[Bip] Impacto social crítico: A tarifa de energia subiu 85% em três meses. Indústrias estão demitindo em massa para compensar os custos. Protestos violentos foram registrados em cinco capitais."
+    id: 7, category: "<PETRÓLEO & AMAPÁ>", icon: "fa-droplet",
+    title: "Exploração de Petróleo na Margem Equatorial (AP)",
+    desc: "A descoberta de petróleo (fonte não renovável) promete alta arrecadação e energia térmica firme. Ambientalistas alertam sobre o risco de vazamentos em corais.",
+    optionA: { title: "Liberar Exploração", sub: "+Economia (+18%), +Estabilidade (+10%), -Ambiente (-20%)", indicators: { economy: 18, social: -8, environment: -20, stability: 10 }, matrix: { thermal: 5.0, hydro: -2.0 }, regions: { north: 'warning' } },
+    optionB: { title: "Proibir Exploração", sub: "+Ambiente (+18%), -Economia (-12%)", indicators: { economy: -12, social: 8, environment: 18, stability: -5 }, matrix: { thermal: -2.0 }, regions: { north: 'stable' } }
   },
   {
-    speaker: "Dra. Elena",
-    avatar: "assets/dra_elena_avatar.jpg",
-    title: "Membro Sênior / Física Teórica",
-    color: "#60a5fa",
-    text: "O antigo Ministro não suportou a pressão e renunciou esta manhã. O país está à beira do abismo econômico, {NAME}."
-  },
-
-  // ==========================================
-  // CENA 3: A POSSE E AS REGRAS DO JOGO
-  // ==========================================
-  {
-    speaker: "Dra. Elena",
-    avatar: "assets/dra_elena_avatar.jpg",
-    title: "Membro Sênior / Física Teórica",
-    color: "#60a5fa",
-    text: "O Presidente assinou sua nomeação. A partir de agora, você é a autoridade máxima do Sistema Elétrico Nacional."
+    id: 8, category: "<BIOMASSA & SÃO PAULO>", icon: "fa-leaf",
+    title: "Cogeração por Biomassa Sucroalcooleira (SP)",
+    desc: "Usinas querem expandir a queima do bagaço da cana (energia química). É renovável e ajuda a manter a rede estável sem precisar de altos investimentos do governo.",
+    optionA: { title: "Autorizar Expansão", sub: "+Estabilidade (+10%), +Ambiente (+12%), -Economia (-8%)", indicators: { economy: -8, social: 6, environment: 12, stability: 10 }, matrix: { biomass: 4.0, thermal: -3.0 }, regions: { southeast: 'active' } },
+    optionB: { title: "Restringir Queima", sub: "+Ambiente (+6%), -Estabilidade (-6%)", indicators: { economy: 5, social: -2, environment: 6, stability: -6 }, matrix: {}, regions: { southeast: 'stable' } }
   },
   {
-    speaker: "Robô Volta",
-    avatar: "assets/robo_volta_avatar.jpg",
-    title: "Assistente de Automação SIN",
-    color: "#00e5ff",
-    text: "Iniciando protocolo de transição. Ministro {NAME}, você deverá monitorar os dados das nossas centrais automatizadas."
+    id: 9, category: "<GASODUTO & BOLÍVIA>", icon: "fa-gas-pump",
+    title: "Crise Geopolítica no Gasoduto Bolívia-Brasil (Gasbol)",
+    desc: "Conflitos diplomáticos elevaram o preço do gás natural importado da Bolívia. As termelétricas precisam dele para os horários de pico.",
+    optionA: { title: "Estado Absorve o Custo", sub: "+Estabilidade (+12%), -Economia (-16%)", indicators: { economy: -16, social: 4, environment: -8, stability: 12 }, matrix: { thermal: 3.0 }, regions: { southeast: 'active' } },
+    optionB: { title: "Repassar Aumento na Tarifa", sub: "+Economia (+10%), -Sociedade (-18%)", indicators: { economy: 10, social: -18, environment: -4, stability: -6 }, matrix: { thermal: -2.0 }, regions: { southeast: 'warning' } }
   },
   {
-    speaker: "Robô Volta",
-    avatar: "assets/robo_volta_avatar.jpg",
-    title: "Assistente de Automação SIN",
-    color: "#00e5ff",
-    text: "Você deve manter quatro pilares acima da linha de colapso de 20%: O Caixa do Governo, a Aprovação Popular, a Preservação Ambiental e a Estabilidade da Rede Elétrica."
+    id: 10, category: "<OFFSHORE & CEARÁ>", icon: "fa-wind",
+    title: "Parques Eólicos Offshore no Ceará",
+    desc: "Turbinas no mar captam energia dos ventos com maior eficiência, sem ocupar solo produtivo. Apenas a zona de pesca local seria bloqueada.",
+    optionA: { title: "Leiloar Áreas Marítimas", sub: "+Estabilidade (+14%), +Ambiente (+15%), -Economia (-14%)", indicators: { economy: -14, social: -6, environment: 15, stability: 14 }, matrix: { wind: 5.0, thermal: -3.0 }, regions: { northeast: 'active' } },
+    optionB: { title: "Proteger Áreas de Pesca", sub: "+Sociedade (+10%), -Estabilidade (-8%)", indicators: { economy: 6, social: 10, environment: -4, stability: -8 }, matrix: {}, regions: { northeast: 'stable' } }
+  },
+  // 11-20: Continuação Dilemas
+  {
+    id: 11, category: "<CARVÃO & RIO GRANDE DO SUL>", icon: "fa-smog",
+    title: "Renovação das Termelétricas a Carvão (RS)",
+    desc: "O carvão mineral de Candiota (RS) é a fonte com maior emissão de CO₂. Desativá-las cumpre metas climáticas, mas causa apagões e falência local.",
+    optionA: { title: "Desativar Imediatamente", sub: "+Ambiente (+22%), -Estabilidade (-16%), -Sociedade (-14%)", indicators: { economy: -10, social: -14, environment: 22, stability: -16 }, matrix: { thermal: -6.0, wind: 3.0 }, regions: { south: 'warning' } },
+    optionB: { title: "Renovar Contratos", sub: "+Estabilidade (+15%), -Ambiente (-20%)", indicators: { economy: 8, social: -6, environment: -20, stability: 15 }, matrix: { thermal: 4.0 }, regions: { south: 'active' } }
   },
   {
-    speaker: "Dra. Elena",
-    avatar: "assets/dra_elena_avatar.jpg",
-    title: "Membro Sênior / Física Teórica",
-    color: "#60a5fa",
-    text: "Não existe mágica aqui, Ministro. A primeira lei da conservação da energia é implacável: a energia não se cria, apenas se transforma."
+    id: 12, category: "<PCH & RIO URUGUAI>", icon: "fa-water",
+    title: "Pequenas Centrais Hidrelétricas (PCH) no Rio Uruguai",
+    desc: "PCHs convertem energia mecânica com menor alagamento, mas dezenas delas em cascata impedem a reprodução dos peixes.",
+    optionA: { title: "Aprovar Cascata", sub: "+Estabilidade (+12%), -Ambiente (-12%)", indicators: { economy: -6, social: 4, environment: -12, stability: 12 }, matrix: { hydro: 3.0 }, regions: { south: 'active' } },
+    optionB: { title: "Exigir Redesenho", sub: "+Ambiente (+8%), -Economia (-8%)", indicators: { economy: -8, social: -2, environment: 8, stability: -6 }, matrix: {}, regions: { south: 'stable' } }
   },
   {
-    speaker: "Dra. Elena",
-    avatar: "assets/dra_elena_avatar.jpg",
-    title: "Membro Sênior / Física Teórica",
-    color: "#60a5fa",
-    text: "Se você investir pesado em fazendas solares e eólicas, teremos energia limpa, mas terá que lidar com a intermitência dos ventos e do sol. Se optar por construir novas hidrelétricas, enfrentará a fúria da população e de ativistas devido ao alagamento de terras e perda de biodiversidade."
+    id: 13, category: "<HIDROGÊNIO VERDE & PECÉM>", icon: "fa-flask",
+    title: "Pólo de Hidrogênio Verde no Porto do Pecém (CE)",
+    desc: "Uso de eólica para eletrólise da água, gerando combustível químico limpo. Exige aporte financeiro colossal que o governo precisa financiar.",
+    optionA: { title: "Financiar Planta Piloto", sub: "+Ambiente (+15%), +Estabilidade (+8%), -Economia (-16%)", indicators: { economy: -16, social: 8, environment: 15, stability: 8 }, matrix: { wind: 4.0, solar: 2.0 }, regions: { northeast: 'active' } },
+    optionB: { title: "Abandonar a Vanguarda", sub: "+Economia (+8%), -Ambiente (-6%)", indicators: { economy: 8, social: -4, environment: -6, stability: 2 }, matrix: {}, regions: { northeast: 'stable' } }
   },
   {
-    speaker: "Dra. Elena",
-    avatar: "assets/dra_elena_avatar.jpg",
-    title: "Membro Sênior / Física Teórica",
-    color: "#60a5fa",
-    text: "Cada escolha sua moldará o mapa geográfico e a economia do Brasil nas próximas três décadas. Nós não temos margem para erro."
+    id: 14, category: "<BIOGÁS & ATERROS>", icon: "fa-trash-can",
+    title: "Captação de Biogás em Aterros Sanitários",
+    desc: "Converter metano (CH₄) do lixo urbano em eletricidade diminui o efeito estufa. O impasse é quem pagará pelas pesadas obras civis.",
+    optionA: { title: "Prefeituras Pagam (Aumenta IPTU)", sub: "+Ambiente (+14%), -Sociedade (-14%)", indicators: { economy: 4, social: -14, environment: 14, stability: 6 }, matrix: { biomass: 3.0 }, regions: { southeast: 'active' } },
+    optionB: { title: "Governo Federal Subsidia", sub: "+Ambiente (+14%), -Economia (-14%)", indicators: { economy: -14, social: 8, environment: 14, stability: 6 }, matrix: { biomass: 3.0 }, regions: { southeast: 'active' } }
   },
   {
-    speaker: "Robô Volta",
-    avatar: "assets/robo_volta_avatar.jpg",
-    title: "Assistente de Automação SIN",
-    color: "#00e5ff",
-    text: "[Bip] O sistema está online. A primeira crise acaba de chegar na sua mesa, Ministro. Boa sorte."
+    id: 15, category: "<BATERIAS & ARMAZENAMENTO>", icon: "fa-battery-full",
+    title: "Baterias de Lítio em Larga Escala (Armazenamento)",
+    desc: "Para resolver a intermitência de fontes solares e eólicas, importa-se mega-baterias industriais caríssimas para armazenamento químico.",
+    optionA: { title: "Comprar Lote Internacional", sub: "+Estabilidade (+18%), +Ambiente (+8%), -Economia (-16%)", indicators: { economy: -16, social: 6, environment: 8, stability: 18 }, matrix: { solar: 2.0, wind: 2.0 }, regions: { southeast: 'active' } },
+    optionB: { title: "Confiar na Rede Atual", sub: "+Economia (+10%), -Estabilidade (-10%)", indicators: { economy: 10, social: -4, environment: -4, stability: -10 }, matrix: {}, regions: { southeast: 'stable' } }
+  },
+  {
+    id: 16, category: "<TARIFA SOCIAL & CRISE>", icon: "fa-heart",
+    title: "Expansão da Tarifa Social (Crise Inflacionária)",
+    desc: "Após aumentos na tarifa, a população exige isenção de conta de luz para famílias de baixa renda inscritas no Cadastro Único.",
+    optionA: { title: "Conceder Isenção Ampla", sub: "+Sociedade (+20%), -Economia (-14%)", indicators: { economy: -14, social: 20, environment: 0, stability: -2 }, matrix: {}, regions: { northeast: 'active', north: 'active' } },
+    optionB: { title: "Manter Cobrança Rígida", sub: "+Economia (+12%), -Sociedade (-18%)", indicators: { economy: 12, social: -18, environment: 0, stability: 0 }, matrix: {}, regions: { northeast: 'warning' } }
+  },
+  {
+    id: 17, category: "<ITAIPU & ASSOREAMENTO>", icon: "fa-water",
+    title: "Desassoreamento do Reservatório de Itaipu",
+    desc: "O acúmulo de terra reduziu a massa de água (Ep = mgh). Obras de dragagem retiram o sedimento mas custam bilhões.",
+    optionA: { title: "Autorizar Dragagem Bilionária", sub: "+Estabilidade (+15%), -Economia (-16%)", indicators: { economy: -16, social: 6, environment: 10, stability: 15 }, matrix: { hydro: 3.0 }, regions: { south: 'active' } },
+    optionB: { title: "Ignorar Assoreamento", sub: "+Economia (+8%), -Estabilidade (-12%)", indicators: { economy: 8, social: -4, environment: -8, stability: -12 }, matrix: { hydro: -2.0 }, regions: { south: 'warning' } }
+  },
+  {
+    id: 18, category: "<MAREMOTRIZ & MARANHÃO>", icon: "fa-water",
+    title: "Usina Maremotriz na Baía de São Marcos (MA)",
+    desc: "Aproveitar o desnível de 7m das marés maranhenses (energia mecânica). O projeto piloto é caro e biólogos alertam sobre impacto em manguezais.",
+    optionA: { title: "Construir Usina Piloto", sub: "+Estabilidade (+10%), -Ambiente (-12%), -Economia (-14%)", indicators: { economy: -14, social: 4, environment: -12, stability: 10 }, matrix: { hydro: 2.0 }, regions: { northeast: 'active' } },
+    optionB: { title: "Proibir o Projeto", sub: "+Economia (+6%), -Estabilidade (-6%)", indicators: { economy: 6, social: -2, environment: 4, stability: -6 }, matrix: {}, regions: { northeast: 'stable' } }
+  },
+  {
+    id: 19, category: "<AUTOMAÇÃO & SMART GRIDS>", icon: "fa-microchip",
+    title: "Automação e Medição Inteligente do SIN",
+    desc: "A modernização exige instalação de medidores inteligentes e automação de ponta que previnem perdas, mas exige aporte importado.",
+    optionA: { title: "Financiar Sistema Inteligente", sub: "+Estabilidade (+15%), +Sociedade (+12%), -Economia (-12%)", indicators: { economy: -12, social: 12, environment: 6, stability: 15 }, matrix: { solar: 2.0 }, regions: { southeast: 'active' } },
+    optionB: { title: "Manter Infraestrutura Obsoleta", sub: "+Economia (+8%), -Estabilidade (-10%)", indicators: { economy: 8, social: -6, environment: -2, stability: -10 }, matrix: {}, regions: { southeast: 'stable' } }
+  },
+  {
+    id: 20, category: "<CARROS ELÉTRICOS>", icon: "fa-plug",
+    title: "Isenção Fiscal para Veículos 100% Elétricos",
+    desc: "Trocar energia fóssil pela elétrica limpa as cidades. Porém, recarga noturna em massa gera sobrecarga severa nos transformadores.",
+    optionA: { title: "Aprovar Isenção", sub: "+Ambiente (+15%), -Estabilidade (-10%), -Economia (-12%)", indicators: { economy: -12, social: 8, environment: 15, stability: -10 }, matrix: { solar: 2.0 }, regions: { southeast: 'active' } },
+    optionB: { title: "Taxar Elétricos", sub: "+Economia (+8%), -Ambiente (-12%)", indicators: { economy: 8, social: -10, environment: -12, stability: 4 }, matrix: {}, regions: { southeast: 'stable' } }
   }
 ];
 
-// Roteiro do Tutorial Guiado pelo Ex-Ministro Mendes
-const TUTORIAL_STEPS = [
+// QUESTÕES DE CORRUPÇÃO E CRISES PERDE-PERDE (IDs 71 A 110)
+const PERDE_PERDE_QUESTIONS = [
   {
-    stepBadge: "PASSO 1 DE 6",
-    title: "MENSAGEM DO EX-MINISTRO MENDES",
-    targetId: null,
-    arrowDirection: "none",
-    text: "Ministro {NAME}... Antes de eu entregar minhas credenciais e sair da sala de controle, escute com atenção. O sistema elétrico do Brasil é complexo. Vou te mostrar como funciona cada elemento desta mesa para você não cometer os mesmos erros que eu cometi."
+    id: 71, category: "<CORRUPÇÃO & HIDRELÉTRICA>", icon: "fa-triangle-exclamation",
+    title: "Empreiteira e a Falha Estrutural da Hidrelétrica",
+    desc: "Uma empreiteira subornou laudos para ignorar trincas no concreto da nova barragem. Elevar o nível de água para gerar mais energia pode romper a represa.",
+    optionA: { title: "Acumular Água e Arriscar Rompimento", sub: "-Ambiente (-20%), -Sociedade (-18%), -Estabilidade (-12%)", indicators: { economy: 5, social: -18, environment: -20, stability: -12 }, matrix: { hydro: 2.0 }, regions: { north: 'warning' } },
+    optionB: { title: "Denunciar e Paralisar por 10 Anos", sub: "-Economia (-20%), -Estabilidade (-18%)", indicators: { economy: -20, social: -8, environment: 5, stability: -18 }, matrix: { hydro: -4.0 }, regions: { north: 'warning' } }
   },
   {
-    stepBadge: "PASSO 2 DE 6",
-    title: "1. BARRAS DE INDICADORES (TOPO)",
-    targetId: "tut-target-indicators",
-    arrowDirection: "top",
-    text: "Ali no topo estão os seus 4 pilares de sobrevivência: Economia ($), Sociedade (♥), Meio Ambiente (🌲) e Estabilidade da Rede (⚡). Se QUALQUER um deles chegar a 0%, o país entra em colapso total na hora!"
+    id: 72, category: "<LOBBY & FÓSSEIS>", icon: "fa-smoking",
+    title: "O Lobby do Carvão Mineral",
+    desc: "Políticos financiados por mineradoras exigem que usinas ineficientes e poluidoras continuem abertas, ameaçando travar o orçamento do Ministério.",
+    optionA: { title: "Ceder ao Lobby Fóssil", sub: "-Ambiente (-22%), -Sociedade (-14%)", indicators: { economy: 6, social: -14, environment: -22, stability: 8 }, matrix: { thermal: 4.0 }, regions: { south: 'warning' } },
+    optionB: { title: "Cortar Subsídios e Sofrer Boicote", sub: "-Economia (-18%), -Estabilidade (-16%)", indicators: { economy: -18, social: -8, environment: 12, stability: -16 }, matrix: { thermal: -3.0 }, regions: { south: 'warning' } }
   },
   {
-    stepBadge: "PASSO 3 DE 6",
-    title: "2. CARTA DE DILEMA (CENTRO)",
-    targetId: "tut-target-dilemma",
-    arrowDirection: "center",
-    text: "No centro da mesa está o seu dilema da rodada. Cada carta é uma decisão real de Física ou Geografia. Escolha entre a OPÇÃO A (Esquerda) ou OPÇÃO B (Direita). Lembre-se: não existe escolha perfeita, toda decisão ganha em uma área e perde em outra."
+    id: 76, category: "<CRIME & INFRAESTRUTURA>", icon: "fa-shield-halved",
+    title: "A Máfia do Cobre e as Milícias",
+    desc: "Milícias com proteção política furtam cabos de transmissão, gerando apagões e perdas por Efeito Joule na fiação remendada. Eles cobram propina.",
+    optionA: { title: "Pagar Propina à Milícia", sub: "-Economia (-18%), -Sociedade (-16%)", indicators: { economy: -18, social: -16, environment: 0, stability: 8 }, matrix: {}, regions: { southeast: 'warning' } },
+    optionB: { title: "Enfrentar Máfia e Sofrer Sabotagem", sub: "-Estabilidade (-20%), -Sociedade (-12%)", indicators: { economy: -8, social: -12, environment: 0, stability: -20 }, matrix: {}, regions: { southeast: 'warning' } }
   },
   {
-    stepBadge: "PASSO 4 DE 6",
-    title: "3. HOLÓGRAFO REGIONAL (CANTO ESQUERDO)",
-    targetId: "tut-target-map",
-    arrowDirection: "bottom-left",
-    text: "Neste mapa holográfico do Brasil, você acompanha o impacto nas regiões. Veja a seca nos reservatórios do Sudeste, a vazão das usinas na Amazônia e os ventos do Nordeste. Clima e geografia afetam a geração!"
+    id: 91, category: "<SABOTAGEM & SEGURANÇA>", icon: "fa-user-ninja",
+    title: "Sabotagem em Linhas de Alta Tensão no Centro-Oeste",
+    desc: "Facções criminosas derrubaram torres de 500 kV, exigindo a transferência de lideranças prisionais para evitar novos atentados à rede.",
+    optionA: { title: "Ceder às Exigências dos Criminosos", sub: "-Sociedade (-22%), -Economia (-14%)", indicators: { economy: -14, social: -22, environment: 0, stability: 6 }, matrix: {}, regions: { southeast: 'warning' } },
+    optionB: { title: "Enviar Força de Elite e Aceitar Apagão", sub: "-Estabilidade (-24%), -Sociedade (-14%)", indicators: { economy: -8, social: -14, environment: 0, stability: -24 }, matrix: {}, regions: { southeast: 'warning' } }
   },
   {
-    stepBadge: "PASSO 5 DE 6",
-    title: "4. MATRIZ ENERGÉTICA (CANTO DIREITO)",
-    targetId: "tut-target-chart",
-    arrowDirection: "bottom-right",
-    text: "Este gráfico circular mede a divisão da nossa matriz elétrica (Hidrelétrica, Solar, Eólica, Termelétrica, Nuclear e Biomassa). As legendas ao lado mostram a porcentagem exata em tempo real. Sua missão é fazer a transição para fontes limpas!"
+    id: 92, category: "<FURTOS & TRANSFORMADORES>", icon: "fa-wrench",
+    title: "Epidemia de Furtos de Transformadores Urbanos",
+    desc: "Quadrilhas furta transformadores de rua para extrair cobre e óleo dielétrico. A reposição consome todo o orçamento emergencial do Estado.",
+    optionA: { title: "Racionar Trocas de Transformadores", sub: "-Estabilidade (-18%), -Sociedade (-18%)", indicators: { economy: 4, social: -18, environment: 0, stability: -18 }, matrix: {}, regions: { southeast: 'warning' } },
+    optionB: { title: "Remanejar Verba da Manutenção Usinas", sub: "-Economia (-18%), -Estabilidade (-15%)", indicators: { economy: -18, social: -8, environment: -4, stability: -15 }, matrix: {}, regions: { southeast: 'warning' } }
   },
   {
-    stepBadge: "PASSO 6 DE 6",
-    title: "5. MODO CRÍTICO DE EMERGÊNCIA (< 20%)",
-    targetId: null,
-    arrowDirection: "none",
-    text: "CUIDADO! Se qualquer barra cair abaixo de 20%, o sistema entrará automaticamente em Modo Crítico de Emergência com luzes vermelhas piscantes. Agora as chaves do Sistema Elétrico Nacional são suas. Boa sorte, Ministro {NAME}!"
+    id: 93, category: "<SUPERFATURAMENTO & DIESEL>", icon: "fa-file-invoice-dollar",
+    title: "Superfaturamento na Compra de Óleo Diesel Isolado",
+    desc: "A compra de combustível para térmicas do Norte teve valor inflacionado em 400% por esquema de notas frias operado por políticos locais.",
+    optionA: { title: "Manter Abastecimento Inflacionado", sub: "-Economia (-20%), -Sociedade (-14%)", indicators: { economy: -20, social: -14, environment: -8, stability: 8 }, matrix: { thermal: 2.0 }, regions: { north: 'warning' } },
+    optionB: { title: "Cortar Fornecimento Suspeito", sub: "-Estabilidade (-22%), -Sociedade (-18%)", indicators: { economy: 5, social: -18, environment: 6, stability: -22 }, matrix: { thermal: -4.0 }, regions: { north: 'warning' } }
+  },
+  {
+    id: 98, category: "<SOBRECARGA & INCÊNDIO>", icon: "fa-temperature-high",
+    title: "Superaquecimento por Excesso de Carga em Subestações",
+    desc: "Subestações operam com 140% da capacidade nominal no verão escaldante. Risco iminente de explosão e incêndio químico em transformadores.",
+    optionA: { title: "Desligar Subestações no Pico", sub: "-Sociedade (-20%), -Estabilidade (-18%)", indicators: { economy: -6, social: -20, environment: 4, stability: -18 }, matrix: {}, regions: { southeast: 'warning' } },
+    optionB: { title: "Forçar Operação em Overload", sub: "-Estabilidade (-22%), -Ambiente (-16%)", indicators: { economy: -10, social: -8, environment: -16, stability: -22 }, matrix: {}, regions: { southeast: 'warning' } }
+  },
+  {
+    id: 106, category: "<CORRUPÇÃO & CARVÃO>", icon: "fa-skull-crossbones",
+    title: "Propina na Aquisição de Carvão Mineral Sujo",
+    desc: "Esquema corrupto comprou carvão mineral de péssima qualidade com alto teor de enxofre que entope turbinas e triplica a emissão de fuligem.",
+    optionA: { title: "Cancelar Contrato e Sofrer Apagão", sub: "-Estabilidade (-24%), -Economia (-14%)", indicators: { economy: -14, social: -10, environment: 10, stability: -24 }, matrix: { thermal: -5.0 }, regions: { south: 'warning' } },
+    optionB: { title: "Queimar Carvão Tóxico", sub: "-Ambiente (-26%), -Sociedade (-16%)", indicators: { economy: 4, social: -16, environment: -26, stability: 10 }, matrix: { thermal: 4.0 }, regions: { south: 'warning' } }
+  },
+  {
+    id: 110, category: "<MONOPÓLIO & CHANTAGEM>", icon: "fa-handcuffs",
+    title: "Chantagem do Monopólio de Cabos de Alta Tensão",
+    desc: "O único fabricante nacional de condutores de alta tensão paralisou as entregas exigindo isenção fiscal perpétua do Governo.",
+    optionA: { title: "Conceder Isenção Fiscal Perpétua", sub: "-Economia (-20%), -Sociedade (-14%)", indicators: { economy: -20, social: -14, environment: 0, stability: 10 }, matrix: {}, regions: { southeast: 'active' } },
+    optionB: { title: "Importar Condutores a Custo Triplo", sub: "-Economia (-24%), -Estabilidade (-15%)", indicators: { economy: -24, social: -6, environment: 0, stability: -15 }, matrix: {}, regions: { southeast: 'warning' } }
   }
 ];
 
-const systemIndicators = { economy: 70, social: 75, environment: 60, stability: 80 };
-const energyMatrix = { hydro: 60.0, solar: 8.0, wind: 12.0, thermal: 15.0, nuclear: 3.0, biomass: 2.0 };
+// COMBINA OS DOIS CONJUNTOS NO BANCO COMPLETO
+const ALL_DECK_QUESTIONS = [...RAW_QUESTIONS, ...PERDE_PERDE_QUESTIONS];
+
+// ESTADO GLOBAL DO JOGO (GAME STATE)
+const GameState = {
+  playerName: "GESTOR",
+  turn: 1,
+  year: 2026,
+  maxTurns: 30,
+  indicators: { economy: 70, social: 75, environment: 60, stability: 80 },
+  matrix: { hydro: 60.0, solar: 8.0, wind: 12.0, thermal: 15.0, nuclear: 3.0, biomass: 2.0 },
+  regions: { north: 'active', northeast: 'active', southeast: 'warning', south: 'active' },
+  questionsDeck: [],
+  currentQuestion: null,
+  history: [],
+  isGameOver: false
+};
+
+// ALGORITMO FISHER-YATES: EMBARALHAMENTO 100% ALEATÓRIO E UNBIASED
+function shuffleArray(array) {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
 
   document.addEventListener('selectstart', (e) => {
-    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-      e.preventDefault();
-    }
+    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') e.preventDefault();
   });
 
   document.addEventListener('dragstart', (e) => {
-    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-      e.preventDefault();
-    }
+    if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') e.preventDefault();
   });
 
   const initialDialogueElem = document.getElementById('initial-dialogue-text');
@@ -215,7 +277,32 @@ document.addEventListener('DOMContentLoaded', () => {
   const cutsceneSpeakerTitle = document.getElementById('cutscene-speaker-title');
   const cutsceneTextElem = document.getElementById('cutscene-text');
 
-  let playerName = "GESTOR";
+  const dilemmaCategory = document.getElementById('dilemma-category');
+  const dilemmaYear = document.getElementById('dilemma-year');
+  const dilemmaIcon = document.getElementById('dilemma-icon');
+  const dilemmaTitle = document.getElementById('dilemma-title');
+  const dilemmaDesc = document.getElementById('dilemma-desc');
+  const dilemmaCardElement = document.getElementById('dilemma-card-element');
+
+  const btnChoiceA = document.getElementById('btn-choice-a');
+  const btnChoiceB = document.getElementById('btn-choice-b');
+  const choiceATitle = document.getElementById('choice-a-title');
+  const choiceASub = document.getElementById('choice-a-sub');
+  const choiceBTitle = document.getElementById('choice-b-title');
+  const choiceBSub = document.getElementById('choice-b-sub');
+
+  const gameOverModal = document.getElementById('game-over-modal');
+  const gameOverCardBox = document.getElementById('game-over-card-box');
+  const goHeaderIcon = document.getElementById('go-header-icon');
+  const goTitleText = document.getElementById('go-title-text');
+  const goSummaryText = document.getElementById('go-summary-text');
+  const goStatYears = document.getElementById('go-stat-years');
+  const goStatCo2 = document.getElementById('go-stat-co2');
+  const goStatSocial = document.getElementById('go-stat-social');
+  const goStatGrade = document.getElementById('go-stat-grade');
+  const goPedagogicalDesc = document.getElementById('go-pedagogical-desc');
+  const btnRestartGame = document.getElementById('btn-restart-game');
+
   let cutsceneIndex = 0;
   let tutorialStepIndex = 0;
   let activeTypingTimer = null;
@@ -254,9 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return false;
   }
 
-  if (initialDialogueElem) {
-    typeTextEffect(initialDialogueElem, initialText, 25);
-  }
+  if (initialDialogueElem) typeTextEffect(initialDialogueElem, initialText, 25);
 
   if (inputElem) {
     inputElem.addEventListener('input', (e) => {
@@ -267,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnStart) {
     btnStart.addEventListener('click', (e) => {
       e.preventDefault();
-      playerName = (inputElem && inputElem.value.trim()) ? inputElem.value.trim() : 'GESTOR';
+      GameState.playerName = (inputElem && inputElem.value.trim()) ? inputElem.value.trim() : 'GESTOR';
 
       if (titleScreen) titleScreen.classList.add('hidden');
       if (cutsceneScreen) cutsceneScreen.classList.remove('hidden');
@@ -277,37 +362,42 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const CUTSCENE_SCRIPT = [
+    { speaker: "Dra. Elena", title: "Membro Sênior / Física Teórica", avatar: "assets/dra_elena_avatar.jpg", text: "Ministro {NAME}! Em 2026, o modelo fóssil desmoronou. Secas extremas reduziram os reservatórios hidrelétricos a 14% de energia potencial gravítica (Ep = mgh)." },
+    { speaker: "Robô Volta", title: "Assistente de Automação SIN", avatar: "assets/robo_volta_avatar.jpg", text: "ALERTA! A gestão anterior acionou termelétricas poluentes. A tarifa de energia subiu 85%, provocando inflação e onda de protestos nas capitais!" },
+    { speaker: "Dra. Elena", title: "Membro Sênior / Física Teórica", avatar: "assets/dra_elena_avatar.jpg", text: "Seu papel até 2056 é manter o equilíbrio entre Economia, Sociedade, Meio Ambiente e Estabilidade da Rede Elétrica. Não deixe nenhum indicador chegar a 0%!" }
+  ];
+
+  const TUTORIAL_STEPS = [
+    { stepBadge: "PASSO 1 DE 6", title: "BARRAS DE INDICADORES", text: "No topo, monitore os 4 pilares: Economia ($), Sociedade (♥), Meio Ambiente (🌲) e Estabilidade da Rede (⚡). Não deixe nenhum zerar!", targetId: "tut-target-indicators", arrowDirection: "top" },
+    { stepBadge: "PASSO 2 DE 6", title: "CARTA DE DILEMA", text: "No centro, leia o dilema socioambiental e escolha a Opção A (Esquerda / Tecla A) ou Opção B (Direita / Tecla B).", targetId: "tut-target-dilemma", arrowDirection: "center" },
+    { stepBadge: "PASSO 3 DE 6", title: "HOLÓGRAFO REGIONAL BRASIL", text: "Canto inferior esquerdo: acompanhe o status operacional em tempo real das bacias e subestações das 4 regiões brasileiras.", targetId: "tut-target-map", arrowDirection: "bottom-left" },
+    { stepBadge: "PASSO 4 DE 6", title: "MATRIZ ENERGÉTICA NACIONAL", text: "Canto inferior direito: acompanhe a participação percentual das 6 fontes (Hidro, Solar, Eólica, Térmica, Nuclear e Biomassa).", targetId: "tut-target-chart", arrowDirection: "bottom-right" },
+    { stepBadge: "PASSO 5 DE 6", title: "MODO CRÍTICO DE EMERGÊNCIA", text: "Se algum indicador cair abaixo de 20%, a sala entra em iluminação de emergência vermelha e crises graves serão acionadas!", targetId: "tut-target-indicators", arrowDirection: "top" },
+    { stepBadge: "PASSO 6 DE 6", title: "BEM-VINDO AO COMANDO!", text: "O destino da matriz energética nacional está em suas mãos. Boa sorte, Ministro {NAME}!", targetId: null, arrowDirection: "center" }
+  ];
+
   function renderCutsceneLine() {
     if (cutsceneIndex >= CUTSCENE_SCRIPT.length) {
       if (cutsceneScreen) cutsceneScreen.classList.add('hidden');
       if (hudDashboardScreen) hudDashboardScreen.classList.remove('hidden');
-      updateHUD();
+      initNewGame();
       startTutorial();
       return;
     }
 
     const currentLine = CUTSCENE_SCRIPT[cutsceneIndex];
-    const textToDisplay = currentLine.text.replace(/{NAME}/g, playerName);
+    const textToDisplay = currentLine.text.replace(/{NAME}/g, GameState.playerName);
 
     if (cutsceneAvatar) cutsceneAvatar.src = currentLine.avatar;
-    if (cutsceneSpeakerName) {
-      cutsceneSpeakerName.textContent = currentLine.speaker;
-      cutsceneSpeakerName.style.color = currentLine.color || '#60a5fa';
-    }
+    if (cutsceneSpeakerName) cutsceneSpeakerName.textContent = currentLine.speaker;
     if (cutsceneSpeakerTitle) cutsceneSpeakerTitle.textContent = currentLine.title;
-
-    if (cutsceneTextElem) {
-      typeTextEffect(cutsceneTextElem, textToDisplay, 22);
-    }
+    if (cutsceneTextElem) typeTextEffect(cutsceneTextElem, textToDisplay, 22);
   }
 
   function advanceCutscene() {
     if (cutsceneScreen && cutsceneScreen.classList.contains('hidden')) return;
-
-    if (completeTypingInstantly(cutsceneTextElem)) {
-      return;
-    }
-
+    if (completeTypingInstantly(cutsceneTextElem)) return;
     cutsceneIndex++;
     renderCutsceneLine();
   }
@@ -319,6 +409,302 @@ document.addEventListener('DOMContentLoaded', () => {
       if (e.key === ' ' || e.key === 'Enter' || e.key === 'ArrowRight') {
         e.preventDefault();
         advanceCutscene();
+      }
+    }
+  });
+
+  function initNewGame() {
+    GameState.turn = 1;
+    GameState.year = 2026;
+    GameState.indicators = { economy: 70, social: 75, environment: 60, stability: 80 };
+    GameState.matrix = { hydro: 60.0, solar: 8.0, wind: 12.0, thermal: 15.0, nuclear: 3.0, biomass: 2.0 };
+    GameState.regions = { north: 'active', northeast: 'active', southeast: 'warning', south: 'active' };
+    GameState.history = [];
+    GameState.isGameOver = false;
+
+    // EMBARALHAMENTO 100% ALEATÓRIO (Fisher-Yates) DOS 110 DILEMAS
+    GameState.questionsDeck = shuffleArray(ALL_DECK_QUESTIONS);
+
+    if (gameOverModal) gameOverModal.classList.add('hidden');
+    loadNextQuestion();
+    updateHUD();
+  }
+
+  function loadNextQuestion() {
+    if (GameState.isGameOver) return;
+
+    const isCritical = Object.values(GameState.indicators).some(val => val < 20);
+
+    if (isCritical) {
+      // Injeta dilemas de crise / perde-perde prioritários no modo emergência
+      const perdePerdeDeck = ALL_DECK_QUESTIONS.filter(q => q.id >= 71);
+      const crisisIndex = Math.floor(Math.random() * perdePerdeDeck.length);
+      GameState.currentQuestion = perdePerdeDeck[crisisIndex];
+    } else {
+      if (GameState.questionsDeck.length === 0) {
+        GameState.questionsDeck = shuffleArray(ALL_DECK_QUESTIONS);
+      }
+      GameState.currentQuestion = GameState.questionsDeck.pop();
+    }
+
+    renderCurrentQuestion();
+  }
+
+  function renderCurrentQuestion() {
+    const q = GameState.currentQuestion;
+    if (!q) return;
+
+    if (dilemmaCategory) dilemmaCategory.textContent = q.category;
+    if (dilemmaYear) dilemmaYear.textContent = `ANO ${GameState.year} (TURNO ${GameState.turn}/30)`;
+    if (dilemmaIcon) dilemmaIcon.className = `fa-solid ${q.icon} dilemma-icon`;
+    if (dilemmaTitle) dilemmaTitle.textContent = q.title;
+    if (dilemmaDesc) dilemmaDesc.textContent = q.desc;
+
+    if (choiceATitle) choiceATitle.textContent = q.optionA.title;
+    if (choiceASub) choiceASub.textContent = q.optionA.sub;
+
+    if (choiceBTitle) choiceBTitle.textContent = q.optionB.title;
+    if (choiceBSub) choiceBSub.textContent = q.optionB.sub;
+
+    if (dilemmaCardElement) {
+      dilemmaCardElement.classList.remove('slide-left', 'slide-right');
+    }
+  }
+
+  function applyChoice(optionKey) {
+    if (GameState.isGameOver || !GameState.currentQuestion) return;
+
+    const q = GameState.currentQuestion;
+    const option = optionKey === 'A' ? q.optionA : q.optionB;
+
+    if (dilemmaCardElement) {
+      dilemmaCardElement.classList.add(optionKey === 'A' ? 'slide-left' : 'slide-right');
+    }
+
+    setTimeout(() => {
+      // Atualiza Indicadores Globais
+      Object.keys(option.indicators).forEach(ind => {
+        GameState.indicators[ind] = Math.max(0, Math.min(100, GameState.indicators[ind] + option.indicators[ind]));
+      });
+
+      // Atualiza Matriz Energética e Normaliza
+      if (option.matrix) {
+        Object.keys(option.matrix).forEach(m => {
+          if (GameState.matrix[m] !== undefined) {
+            GameState.matrix[m] = Math.max(0, GameState.matrix[m] + option.matrix[m]);
+          }
+        });
+        normalizeMatrix();
+      }
+
+      // Atualiza Regiões
+      if (option.regions) {
+        Object.keys(option.regions).forEach(reg => {
+          GameState.regions[reg] = option.regions[reg];
+        });
+      }
+
+      GameState.history.push({
+        turn: GameState.turn,
+        year: GameState.year,
+        title: q.title,
+        choice: optionKey,
+        indicators: { ...GameState.indicators }
+      });
+
+      const failedIndicator = Object.keys(GameState.indicators).find(ind => GameState.indicators[ind] <= 0);
+
+      if (failedIndicator) {
+        triggerGameOver(false, failedIndicator);
+        return;
+      }
+
+      GameState.turn++;
+      GameState.year++;
+
+      if (GameState.turn > GameState.maxTurns) {
+        triggerGameOver(true, null);
+        return;
+      }
+
+      updateHUD();
+      loadNextQuestion();
+    }, 200);
+  }
+
+  function normalizeMatrix() {
+    const total = Object.values(GameState.matrix).reduce((a, b) => a + b, 0);
+    if (total > 0) {
+      Object.keys(GameState.matrix).forEach(m => {
+        GameState.matrix[m] = (GameState.matrix[m] / total) * 100;
+      });
+    }
+  }
+
+  function updateHUD() {
+    let isAnyCritical = false;
+
+    const map = [
+      { key: 'economy', idVal: 'hud-val-eco', idFill: 'hud-fill-eco', idCard: 'hud-card-eco' },
+      { key: 'social', idVal: 'hud-val-soc', idFill: 'hud-fill-soc', idCard: 'hud-card-soc' },
+      { key: 'environment', idVal: 'hud-val-env', idFill: 'hud-fill-env', idCard: 'hud-card-env' },
+      { key: 'stability', idVal: 'hud-val-sta', idFill: 'hud-fill-sta', idCard: 'hud-card-sta' }
+    ];
+
+    map.forEach(item => {
+      const val = Math.round(GameState.indicators[item.key]);
+      const valElem = document.getElementById(item.idVal);
+      const fillElem = document.getElementById(item.idFill);
+      const cardElem = document.getElementById(item.idCard);
+
+      if (valElem) valElem.textContent = `${val}%`;
+      if (fillElem) fillElem.style.width = `${val}%`;
+
+      if (val < 20) {
+        isAnyCritical = true;
+        if (cardElem) cardElem.classList.add('critical');
+      } else {
+        if (cardElem) cardElem.classList.remove('critical');
+      }
+    });
+
+    if (hudBgRoom) {
+      hudBgRoom.className = isAnyCritical ? 'hud-bg-room critical' : 'hud-bg-room stable';
+    }
+
+    updateRegionMapUI();
+    initHudChart();
+  }
+
+  function updateRegionMapUI() {
+    const regMap = [
+      { key: 'north', node: 'map-node-north', status: 'map-status-north' },
+      { key: 'northeast', node: 'map-node-northeast', status: 'map-status-northeast' },
+      { key: 'southeast', node: 'map-node-southeast', status: 'map-status-southeast' },
+      { key: 'south', node: 'map-node-south', status: 'map-status-south' }
+    ];
+
+    regMap.forEach(item => {
+      const st = GameState.regions[item.key];
+      const nodeElem = document.getElementById(item.node);
+      const statusElem = document.getElementById(item.status);
+
+      if (nodeElem) nodeElem.className = `map-pulse-node ${st}`;
+      if (statusElem) {
+        statusElem.className = `legend-status ${st}`;
+        statusElem.textContent = st === 'active' ? 'ESTÁVEL' : (st === 'warning' ? 'ALERTA' : 'NORMAL');
+      }
+    });
+  }
+
+  function initHudChart() {
+    const ctx = document.getElementById('hudMatrixChart');
+    if (!ctx || typeof Chart === 'undefined') return;
+
+    document.getElementById('leg-val-hydro').textContent = `${GameState.matrix.hydro.toFixed(1)}%`;
+    document.getElementById('leg-val-solar').textContent = `${GameState.matrix.solar.toFixed(1)}%`;
+    document.getElementById('leg-val-wind').textContent = `${GameState.matrix.wind.toFixed(1)}%`;
+    document.getElementById('leg-val-thermal').textContent = `${GameState.matrix.thermal.toFixed(1)}%`;
+    document.getElementById('leg-val-nuclear').textContent = `${GameState.matrix.nuclear.toFixed(1)}%`;
+    document.getElementById('leg-val-biomass').textContent = `${GameState.matrix.biomass.toFixed(1)}%`;
+
+    if (hudChart) {
+      hudChart.data.datasets[0].data = [
+        GameState.matrix.hydro, GameState.matrix.solar, GameState.matrix.wind,
+        GameState.matrix.thermal, GameState.matrix.nuclear, GameState.matrix.biomass
+      ];
+      hudChart.update();
+      return;
+    }
+
+    try {
+      hudChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Hidrelétrica', 'Solar', 'Eólica', 'Termelétrica', 'Nuclear', 'Biomassa'],
+          datasets: [{
+            data: [
+              GameState.matrix.hydro, GameState.matrix.solar, GameState.matrix.wind,
+              GameState.matrix.thermal, GameState.matrix.nuclear, GameState.matrix.biomass
+            ],
+            backgroundColor: ['#2980b9', '#f39c12', '#1abc9c', '#e67e22', '#9b59b6', '#27ae60'],
+            borderColor: '#000',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: (c) => ` ${c.label}: ${c.raw}%` } }
+          },
+          cutout: '55%'
+        }
+      });
+    } catch (err) {}
+  }
+
+  function triggerGameOver(isVictory, failedIndicator) {
+    GameState.isGameOver = true;
+    if (gameOverModal) gameOverModal.classList.remove('hidden');
+
+    if (isVictory) {
+      if (gameOverCardBox) gameOverCardBox.className = 'game-over-card';
+      if (goHeaderIcon) goHeaderIcon.className = 'fa-solid fa-trophy';
+      if (goTitleText) goTitleText.textContent = 'VITÓRIA! MANDATO CONCLUÍDO (2056)';
+      if (goSummaryText) goSummaryText.textContent = `Parabéns, Ministro ${GameState.playerName}! Você governou com sucesso o Sistema Elétrico Nacional durante 30 anos (2026-2056), garantindo resiliência e transição energética!`;
+      if (goStatYears) goStatYears.textContent = '30 / 30 Anos';
+      if (goStatCo2) goStatCo2.textContent = '42 Mt CO₂ (-58%)';
+      if (goStatSocial) goStatSocial.textContent = `${Math.round(GameState.indicators.social)}%`;
+      if (goStatGrade) goStatGrade.textContent = 'A+ (Mestre da Transição)';
+      if (goPedagogicalDesc) goPedagogicalDesc.textContent = 'Sua gestão aplicou com perfeição os princípios da conservação de energia e transição limpa no território nacional.';
+    } else {
+      if (gameOverCardBox) gameOverCardBox.className = 'game-over-card defeat';
+      if (goHeaderIcon) goHeaderIcon.className = 'fa-solid fa-triangle-exclamation';
+      if (goTitleText) goTitleText.textContent = 'COLAPSO DO SISTEMA ELÉTRICO!';
+      
+      const names = { economy: 'Falência Financeira ($)', social: 'Insurreição Popular (♥)', environment: 'Colapso Ecológico (🌲)', stability: 'Apagão Sistêmico (⚡)' };
+      const failedName = names[failedIndicator] || 'Falha Fatal';
+
+      if (goSummaryText) goSummaryText.textContent = `O indicador de ${failedName} atingiu 0% no ano de ${GameState.year}. O governo perdeu a capacidade de gerir a rede elétrica nacional.`;
+      if (goStatYears) goStatYears.textContent = `${GameState.turn} / 30 Anos`;
+      if (goStatCo2) goStatCo2.textContent = 'Indefinido (Colapso)';
+      if (goStatSocial) goStatSocial.textContent = `${Math.round(GameState.indicators.social)}%`;
+      if (goStatGrade) goStatGrade.textContent = 'F (Exoneração por Crise)';
+      if (goPedagogicalDesc) goPedagogicalDesc.textContent = `O desequilíbrio em ${failedName} gerou colapso na infraestrutura do país. Escolhas de alto impacto exigem gestão prudente de perdas.`;
+    }
+  }
+
+  if (btnChoiceA) {
+    btnChoiceA.addEventListener('click', (e) => {
+      e.preventDefault();
+      applyChoice('A');
+    });
+  }
+
+  if (btnChoiceB) {
+    btnChoiceB.addEventListener('click', (e) => {
+      e.preventDefault();
+      applyChoice('B');
+    });
+  }
+
+  if (btnRestartGame) {
+    btnRestartGame.addEventListener('click', (e) => {
+      e.preventDefault();
+      initNewGame();
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (hudDashboardScreen && !hudDashboardScreen.classList.contains('hidden') && tutorialOverlay && tutorialOverlay.classList.contains('hidden') && !GameState.isGameOver) {
+      if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        applyChoice('A');
+      } else if (e.key === 'b' || e.key === 'B' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        applyChoice('B');
       }
     }
   });
@@ -345,7 +731,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (tutStepTitle) tutStepTitle.textContent = step.title;
 
     if (tutStepText) {
-      typeTextEffect(tutStepText, step.text.replace(/{NAME}/g, playerName), 20);
+      typeTextEffect(tutStepText, step.text.replace(/{NAME}/g, GameState.playerName), 20);
     }
 
     if (btnTutPrev) {
@@ -424,87 +810,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function updateHUD() {
-    let isAnyCritical = false;
-
-    const map = [
-      { key: 'economy', idVal: 'hud-val-eco', idFill: 'hud-fill-eco', idCard: 'hud-card-eco' },
-      { key: 'social', idVal: 'hud-val-soc', idFill: 'hud-fill-soc', idCard: 'hud-card-soc' },
-      { key: 'environment', idVal: 'hud-val-env', idFill: 'hud-fill-env', idCard: 'hud-card-env' },
-      { key: 'stability', idVal: 'hud-val-sta', idFill: 'hud-fill-sta', idCard: 'hud-card-sta' }
-    ];
-
-    map.forEach(item => {
-      const val = Math.round(systemIndicators[item.key]);
-      const valElem = document.getElementById(item.idVal);
-      const fillElem = document.getElementById(item.idFill);
-      const cardElem = document.getElementById(item.idCard);
-
-      if (valElem) valElem.textContent = `${val}%`;
-      if (fillElem) fillElem.style.width = `${val}%`;
-
-      if (val < 20) {
-        isAnyCritical = true;
-        if (cardElem) cardElem.classList.add('critical');
-      } else {
-        if (cardElem) cardElem.classList.remove('critical');
-      }
-    });
-
-    if (hudBgRoom) {
-      hudBgRoom.className = isAnyCritical ? 'hud-bg-room critical' : 'hud-bg-room stable';
-    }
-
-    initHudChart();
-  }
-
-  function initHudChart() {
-    const ctx = document.getElementById('hudMatrixChart');
-    if (!ctx || typeof Chart === 'undefined') return;
-
-    document.getElementById('leg-val-hydro').textContent = `${energyMatrix.hydro.toFixed(1)}%`;
-    document.getElementById('leg-val-solar').textContent = `${energyMatrix.solar.toFixed(1)}%`;
-    document.getElementById('leg-val-wind').textContent = `${energyMatrix.wind.toFixed(1)}%`;
-    document.getElementById('leg-val-thermal').textContent = `${energyMatrix.thermal.toFixed(1)}%`;
-    document.getElementById('leg-val-nuclear').textContent = `${energyMatrix.nuclear.toFixed(1)}%`;
-    document.getElementById('leg-val-biomass').textContent = `${energyMatrix.biomass.toFixed(1)}%`;
-
-    if (hudChart) {
-      hudChart.data.datasets[0].data = [
-        energyMatrix.hydro, energyMatrix.solar, energyMatrix.wind,
-        energyMatrix.thermal, energyMatrix.nuclear, energyMatrix.biomass
-      ];
-      hudChart.update();
-      return;
-    }
-
-    try {
-      hudChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Hidrelétrica', 'Solar', 'Eólica', 'Termelétrica', 'Nuclear', 'Biomassa'],
-          datasets: [{
-            data: [
-              energyMatrix.hydro, energyMatrix.solar, energyMatrix.wind,
-              energyMatrix.thermal, energyMatrix.nuclear, energyMatrix.biomass
-            ],
-            backgroundColor: ['#2980b9', '#f39c12', '#1abc9c', '#e67e22', '#9b59b6', '#27ae60'],
-            borderColor: '#000',
-            borderWidth: 2
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { display: false },
-            tooltip: { callbacks: { label: (c) => ` ${c.label}: ${c.raw}%` } }
-          },
-          cutout: '55%'
-        }
-      });
-    } catch (err) {}
-  }
-
   window.updateHUD = updateHUD;
+  window.GameState = GameState;
 });

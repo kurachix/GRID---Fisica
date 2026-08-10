@@ -1,6 +1,6 @@
 /* ==========================================================================
    GRID - O Gestor da Rede Elétrica Nacional
-   Part 1, Part 2, Master HUD & Ex-Minister Tutorial System
+   Part 1, Part 2, Master HUD, Game Mechanics Engine & Ex-Minister Tutorial
    ========================================================================== */
 
 :root {
@@ -351,6 +351,11 @@ body {
     0 0 15px rgba(0, 255, 102, 0.5);
 }
 
+.pixel-btn-start.restart {
+  font-size: 0.85rem;
+  padding: 0.85rem 1.5rem;
+}
+
 /* ==========================================================================
    VIEW 2: RPG CUTSCENE / DIALOGUE SYSTEM
    ========================================================================== */
@@ -648,6 +653,17 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.pixel-dilemma-card.slide-left {
+  transform: translateX(-100px) rotate(-4deg);
+  opacity: 0;
+}
+
+.pixel-dilemma-card.slide-right {
+  transform: translateX(100px) rotate(4deg);
+  opacity: 0;
 }
 
 .dilemma-card-header {
@@ -912,23 +928,11 @@ body {
   transition: all 0.4s ease;
 }
 
-.tutorial-pixel-arrow.top {
-  animation: bounceDown 0.8s infinite alternate;
-}
+.tutorial-pixel-arrow.top { animation: bounceDown 0.8s infinite alternate; }
+.tutorial-pixel-arrow.bottom { animation: bounceUp 0.8s infinite alternate; }
 
-.tutorial-pixel-arrow.bottom {
-  animation: bounceUp 0.8s infinite alternate;
-}
-
-@keyframes bounceDown {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(12px); }
-}
-
-@keyframes bounceUp {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-12px); }
-}
+@keyframes bounceDown { 0% { transform: translateY(0); } 100% { transform: translateY(12px); } }
+@keyframes bounceUp { 0% { transform: translateY(0); } 100% { transform: translateY(-12px); } }
 
 .tutorial-dialogue-card {
   background: rgba(10, 14, 23, 0.96);
@@ -992,17 +996,8 @@ body {
   flex: 1;
 }
 
-.tut-speaker-name {
-  font-size: 0.8rem;
-  color: #fbbf24;
-  letter-spacing: 0.05em;
-}
-
-.tut-description {
-  font-size: 0.78rem;
-  line-height: 1.6;
-  color: #cbd5e1;
-}
+.tut-speaker-name { font-size: 0.8rem; color: #fbbf24; letter-spacing: 0.05em; }
+.tut-description { font-size: 0.78rem; line-height: 1.6; color: #cbd5e1; }
 
 .tutorial-card-footer {
   display: flex;
@@ -1024,21 +1019,144 @@ body {
   transition: all 0.15s ease;
 }
 
-.tut-btn.sec {
+.tut-btn.sec { background: #1e293b; border: 2px solid #475569; color: #ffffff; }
+.tut-btn.pri { background: var(--btn-green); border: 2px solid var(--btn-yellow-border); color: #ffffff; font-weight: bold; }
+.tut-btn.pri:hover { background: #00c853; }
+
+/* ==========================================================================
+   VIEW 5: MODAL DE FIM DE JOGO (VITÓRIA OU COLAPSO)
+   ========================================================================== */
+
+.game-over-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(3, 7, 18, 0.88);
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.game-over-card {
+  background: rgba(10, 14, 23, 0.98);
+  border: 4px solid var(--neon-green);
+  outline: 4px solid #000000;
+  box-shadow: 
+    0 0 0 4px #000000,
+    0 0 40px rgba(0, 255, 102, 0.4);
+  padding: 1.75rem;
+  max-width: 720px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.game-over-card.defeat {
+  border-color: var(--color-critical) !important;
+  box-shadow: 
+    0 0 0 4px #000000,
+    0 0 40px rgba(255, 51, 68, 0.5) !important;
+}
+
+.game-over-header {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  border-bottom: 2px dashed #334155;
+  padding-bottom: 0.75rem;
+}
+
+.game-over-header i {
+  font-size: 1.8rem;
+  color: var(--neon-green);
+}
+
+.game-over-card.defeat .game-over-header i {
+  color: var(--color-critical);
+}
+
+.game-over-header h2 {
+  font-size: 1.1rem;
+  color: #ffffff;
+  letter-spacing: 0.05em;
+}
+
+.game-over-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.go-summary {
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+.go-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.stat-box {
   background: #1e293b;
-  border: 2px solid #475569;
+  border: 2px solid #334155;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+.stat-value {
+  font-size: 0.95rem;
   color: #ffffff;
 }
 
-.tut-btn.pri {
-  background: var(--btn-green);
-  border: 2px solid var(--btn-yellow-border);
-  color: #ffffff;
-  font-weight: bold;
+.stat-value.grade {
+  color: var(--neon-green);
 }
 
-.tut-btn.pri:hover {
-  background: #00c853;
+.game-over-card.defeat .stat-value.grade {
+  color: var(--color-critical);
+}
+
+.go-pedagogical-box {
+  background: rgba(15, 23, 42, 0.8);
+  border: 2px solid #334155;
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.go-ped-title {
+  font-size: 0.68rem;
+  color: #38bdf8;
+}
+
+.go-ped-text {
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: #94a3b8;
+  font-family: var(--font-body);
+}
+
+.game-over-footer {
+  display: flex;
+  justify-content: center;
+  border-top: 2px dashed #334155;
+  padding-top: 0.75rem;
 }
 
 /* Responsive */
@@ -1048,4 +1166,5 @@ body {
   .hud-chart-flex-layout { grid-template-columns: 1fr; }
   .hud-map-flex-layout { grid-template-columns: 1fr; }
   .tutorial-dialogue-card { max-width: 100%; }
+  .go-stats-grid { grid-template-columns: 1fr; }
 }

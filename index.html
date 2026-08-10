@@ -17,7 +17,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <!-- Retro Stylesheet (Cache-Busted) -->
-  <link rel="stylesheet" href="css/styles.css?v=1837">
+  <link rel="stylesheet" href="css/styles.css?v=1850">
 </head>
 <body>
 
@@ -193,36 +193,36 @@
 
       </header>
 
-      <!-- CENTRO (O FOCO): CARTA DE DILEMA GRANDE -->
+      <!-- CENTRO (O FOCO): CARTA DE DILEMA GRANDE COM INTERAÇÃO DE ESCOLHA -->
       <main class="hud-center-dilemma" id="tut-target-dilemma">
         
-        <div class="pixel-dilemma-card">
+        <div class="pixel-dilemma-card" id="dilemma-card-element">
           <div class="dilemma-card-header">
-            <span class="dilemma-tag">&lt;DILEMA CLIMÁTICO &amp; ENGENHARIA&gt;</span>
-            <span class="dilemma-year">ANO 2026</span>
+            <span class="dilemma-tag" id="dilemma-category">&lt;DILEMA CLIMÁTICO &amp; ENGENHARIA&gt;</span>
+            <span class="dilemma-year" id="dilemma-year">ANO 2026 (TURNO 1/30)</span>
           </div>
 
           <div class="dilemma-title-row">
-            <i class="fa-solid fa-water dilemma-icon"></i>
-            <h2>Licenciamento da Usina Hidrelétrica na Bacia Amazônica</h2>
+            <i class="fa-solid fa-water dilemma-icon" id="dilemma-icon"></i>
+            <h2 id="dilemma-title">Licenciamento da Usina Hidrelétrica na Bacia Amazônica</h2>
           </div>
 
-          <p class="dilemma-desc-text">
+          <p class="dilemma-desc-text" id="dilemma-desc">
             Proposta de construção de usina de grande porte em rio de planície para conversão de energia potencial gravítica em elétrica (Ep = m·g·h). Causa alagamento florestal, emissão de metano (CH₄) e deslocamento de comunidades ribeirinhas.
           </p>
 
-          <!-- 2 BOTÕES VISUAIS ESTÁTICOS DE ESCOLHA -->
+          <!-- 2 BOTÕES INTERATIVOS DE ESCOLHA -->
           <div class="dilemma-choice-buttons">
-            <button class="pixel-choice-btn left">
-              <span class="choice-tag">OPÇÃO A (ESQUERDA)</span>
-              <span class="choice-title">Aprovar Construção</span>
-              <span class="choice-sub">+Estabilidade, -Meio Ambiente</span>
+            <button class="pixel-choice-btn left" id="btn-choice-a">
+              <span class="choice-tag">OPÇÃO A (TECLA A / ESQUERDA)</span>
+              <span class="choice-title" id="choice-a-title">Aprovar Construção</span>
+              <span class="choice-sub" id="choice-a-sub">+Estabilidade, -Meio Ambiente</span>
             </button>
 
-            <button class="pixel-choice-btn right">
-              <span class="choice-tag">OPÇÃO B (DIREITA)</span>
-              <span class="choice-title">Rejeitar Projeto</span>
-              <span class="choice-sub">+Meio Ambiente, -Estabilidade</span>
+            <button class="pixel-choice-btn right" id="btn-choice-b">
+              <span class="choice-tag">OPÇÃO B (TECLA B / DIREITA)</span>
+              <span class="choice-title" id="choice-b-title">Rejeitar Projeto</span>
+              <span class="choice-sub" id="choice-b-sub">+Meio Ambiente, -Estabilidade</span>
             </button>
           </div>
         </div>
@@ -239,10 +239,8 @@
           </div>
 
           <div class="hud-map-flex-layout">
-            <!-- Lado Esquerdo: Mapa SVG Nitidamente Iluminado -->
             <div class="brazil-map-wrapper">
               <svg class="pixel-brazil-svg" viewBox="0 0 320 280">
-                <!-- Contorno do Brasil -->
                 <path d="M 100 20 
                          L 230 15 
                          L 290 60 
@@ -259,33 +257,27 @@
                       stroke-width="2.5" 
                       stroke-dasharray="4,4" />
 
-                <!-- Linhas Divisórias Regionais -->
                 <path d="M 40 80 L 160 120 L 290 60" fill="none" stroke="rgba(0,229,255,0.3)" stroke-width="1.5" />
                 <path d="M 160 120 L 210 260" fill="none" stroke="rgba(0,229,255,0.3)" stroke-width="1.5" />
 
-                <!-- Nó 1: Norte -->
                 <g class="map-node-group">
-                  <circle cx="110" cy="70" r="8" class="map-pulse-node active" />
+                  <circle cx="110" cy="70" r="8" class="map-pulse-node active" id="map-node-north" />
                 </g>
 
-                <!-- Nó 2: Nordeste -->
                 <g class="map-node-group">
-                  <circle cx="235" cy="85" r="7" class="map-pulse-node active" />
+                  <circle cx="235" cy="85" r="7" class="map-pulse-node active" id="map-node-northeast" />
                 </g>
 
-                <!-- Nó 3: Sudeste/CO -->
                 <g class="map-node-group">
-                  <circle cx="170" cy="165" r="8" class="map-pulse-node warning" />
+                  <circle cx="170" cy="165" r="8" class="map-pulse-node warning" id="map-node-southeast" />
                 </g>
 
-                <!-- Nó 4: Sul -->
                 <g class="map-node-group">
-                  <circle cx="150" cy="230" r="7" class="map-pulse-node active" />
+                  <circle cx="150" cy="230" r="7" class="map-pulse-node active" id="map-node-south" />
                 </g>
               </svg>
             </div>
 
-            <!-- Lado Direito: Painel de Legendas Regionais Estruturadas -->
             <div class="hud-map-legend-panel">
               <div class="legend-item map-north">
                 <span class="legend-color map-node-color north"></span>
@@ -293,7 +285,7 @@
                   <span class="legend-name">Norte / Amazônia</span>
                   <span class="legend-sub">Bacias Hidrográficas</span>
                 </div>
-                <strong class="legend-status active">NORMAIS</strong>
+                <strong class="legend-status active" id="map-status-north">ESTÁVEL</strong>
               </div>
 
               <div class="legend-item map-northeast">
@@ -302,7 +294,7 @@
                   <span class="legend-name">Nordeste</span>
                   <span class="legend-sub">Eólica &amp; Solar</span>
                 </div>
-                <strong class="legend-status active">ALTOS VENTOS</strong>
+                <strong class="legend-status active" id="map-status-northeast">ESTÁVEL</strong>
               </div>
 
               <div class="legend-item map-southeast">
@@ -311,7 +303,7 @@
                   <span class="legend-name">Sudeste / CO</span>
                   <span class="legend-sub">Reservatórios Principais</span>
                 </div>
-                <strong class="legend-status warning">CRÍTICO 14%</strong>
+                <strong class="legend-status warning" id="map-status-southeast">CRÍTICO 14%</strong>
               </div>
 
               <div class="legend-item map-south">
@@ -320,7 +312,7 @@
                   <span class="legend-name">Sul</span>
                   <span class="legend-sub">Térmicas &amp; Eólicas</span>
                 </div>
-                <strong class="legend-status active">ESTÁVEL</strong>
+                <strong class="legend-status active" id="map-status-south">ESTÁVEL</strong>
               </div>
             </div>
 
@@ -385,12 +377,10 @@
        ========================================== -->
   <div id="tutorial-overlay" class="tutorial-overlay-backdrop hidden">
     
-    <!-- Seta Indicadora Pixelada Animada -->
     <div id="tutorial-arrow" class="tutorial-pixel-arrow top">
       <div class="arrow-shape">▼</div>
     </div>
 
-    <!-- Caixa de Diálogo do Tutorial pelo Ex-Ministro Mendes -->
     <div id="tutorial-dialogue-box" class="tutorial-dialogue-card">
       <div class="tutorial-card-header">
         <span class="tut-badge" id="tut-step-badge">PASSO 1 DE 6</span>
@@ -415,7 +405,60 @@
 
   </div>
 
+
+  <!-- ==========================================
+       VIEW 5: MODAL DE FIM DE JOGO (VITÓRIA OU COLAPSO)
+       ========================================== -->
+  <div id="game-over-modal" class="game-over-backdrop hidden">
+    <div class="game-over-card" id="game-over-card-box">
+      
+      <div class="game-over-header" id="go-header-tag">
+        <i class="fa-solid fa-award" id="go-header-icon"></i>
+        <h2 id="go-title-text">RELATÓRIO DE FINAL DE MANDATO (2056)</h2>
+      </div>
+
+      <div class="game-over-body">
+        <p id="go-summary-text" class="go-summary">
+          Você governou a Rede Elétrica Nacional durante 30 anos consecutivos!
+        </p>
+
+        <div class="go-stats-grid">
+          <div class="stat-box">
+            <span class="stat-label">Anos Governados:</span>
+            <strong class="stat-value" id="go-stat-years">30 / 30</strong>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Emissões de CO₂:</span>
+            <strong class="stat-value" id="go-stat-co2">42% (-58%)</strong>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Aprovação Popular:</span>
+            <strong class="stat-value" id="go-stat-social">72%</strong>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">Avaliação Pedagógica:</span>
+            <strong class="stat-value grade" id="go-stat-grade">A+ (Mestre da Transição)</strong>
+          </div>
+        </div>
+
+        <div class="go-pedagogical-box">
+          <span class="go-ped-title"><i class="fa-solid fa-graduation-cap"></i> PARECER TÉCNICO INTERDISCIPLINAR:</span>
+          <p id="go-pedagogical-desc" class="go-ped-text">
+            Sua gestão aplicou com perfeição os princípios da conservação de energia e a expansão territorial de matrizes renováveis, garantindo resiliência contra eventos climáticos extremos.
+          </p>
+        </div>
+      </div>
+
+      <div class="game-over-footer">
+        <button id="btn-restart-game" class="pixel-btn-start restart">
+          <span class="btn-text"><i class="fa-solid fa-arrows-rotate"></i> REINICIAR MANDATO</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Scripts (Cache-Busted) -->
-  <script src="js/app.js?v=1837"></script>
+  <script src="js/app.js?v=1850"></script>
 </body>
 </html>
