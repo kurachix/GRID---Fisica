@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="100%" height="100%">
+  <defs>
+    <linearGradient id="toxicSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#111827"/>
+      <stop offset="60%" stop-color="#374151"/>
+      <stop offset="100%" stop-color="#064e3b"/>
+    </linearGradient>
+    <pattern id="pixelGrid" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="2" height="2" fill="rgba(0,0,0,0.3)"/>
+    </pattern>
+  </defs>
+
+  <!-- Céu Tóxico e Poluído -->
+  <rect width="1280" height="720" fill="url(#toxicSky)"/>
+
+  <!-- Sol Apagado por Fumaça Negra -->
+  <circle cx="640" cy="180" r="70" fill="#facc15" opacity="0.25"/>
+  <ellipse cx="640" cy="190" rx="300" ry="80" fill="#1f2937" opacity="0.85"/>
+
+  <!-- Chaminés Industriais Soltando Fumaça Fóssil -->
+  <rect x="150" y="240" width="70" height="220" fill="#111827" stroke="#374151" stroke-width="4"/>
+  <rect x="250" y="200" width="90" height="260" fill="#111827" stroke="#374151" stroke-width="4"/>
+
+  <!-- Fumaça Preta Densa -->
+  <circle cx="185" cy="190" r="50" fill="#111827" opacity="0.9"/>
+  <circle cx="210" cy="130" r="70" fill="#1f2937" opacity="0.8"/>
+  <circle cx="295" cy="140" r="60" fill="#111827" opacity="0.9"/>
+
+  <!-- Rio de Lama Verde Tóxica Neon -->
+  <path d="M 0 520 Q 300 480 600 540 Q 900 600 1280 500 L 1280 720 L 0 720 Z" fill="#059669" stroke="#10b981" stroke-width="6"/>
+  <path d="M 100 580 Q 400 520 800 620 L 1200 560" fill="none" stroke="#34d399" stroke-width="8" opacity="0.6"/>
+
+  <!-- Árvores Secas e Mortas -->
+  <path d="M 900 500 L 900 380 M 900 430 L 860 390 M 900 410 L 940 370 M 900 450 L 850 430" fill="none" stroke="#064e3b" stroke-width="8" stroke-linecap="round"/>
+  <path d="M 1050 520 L 1050 410 M 1050 450 L 1010 420 M 1050 430 L 1090 390" fill="none" stroke="#064e3b" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- Tarja de Alerta Ambiental -->
+  <rect x="340" y="60" width="600" height="60" fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="3"/>
+  <text x="640" y="100" fill="#34d399" font-family="'Press Start 2P', monospace" font-size="20" text-anchor="middle">COLAPSO ECOLÓGICO ABSOLUTO</text>
+
+  <!-- CRT Overlay -->
+  <rect width="1280" height="720" fill="url(#pixelGrid)"/>
+</svg>

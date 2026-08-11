@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#050608"/>
+      <stop offset="100%" stop-color="#0d0e15"/>
+    </linearGradient>
+    <pattern id="pixelGrid" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="2" height="2" fill="rgba(0,0,0,0.3)"/>
+    </pattern>
+  </defs>
+
+  <!-- Fundo Escuro Abandonado -->
+  <rect width="1280" height="720" fill="url(#bgGrad)"/>
+  
+  <!-- Sala de Controle em Escombros -->
+  <rect x="100" y="80" width="1080" height="480" fill="#080a10" stroke="#1e293b" stroke-width="6"/>
+
+  <!-- Monitores Desligados e Falidos -->
+  <rect x="160" y="120" width="280" height="180" fill="#030406" stroke="#475569" stroke-width="4"/>
+  <text x="300" y="210" fill="#ef4444" font-family="'Press Start 2P', monospace" font-size="18" text-anchor="middle">BANKRUPT</text>
+  
+  <rect x="480" y="120" width="320" height="200" fill="#030406" stroke="#475569" stroke-width="4"/>
+  <text x="640" y="215" fill="#f59e0b" font-family="'Press Start 2P', monospace" font-size="20" text-anchor="middle">FORECLOSED</text>
+
+  <rect x="840" y="120" width="280" height="180" fill="#030406" stroke="#475569" stroke-width="4"/>
+  <text x="980" y="210" fill="#ef4444" font-family="'Press Start 2P', monospace" font-size="18" text-anchor="middle">0.00 $</text>
+
+  <!-- Fitas de Interdição Amarelas / Cuidado -->
+  <path d="M 120 100 L 1160 520 L 1160 580 L 120 160 Z" fill="#f59e0b" opacity="0.85"/>
+  <path d="M 120 100 L 1160 520 L 1160 580 L 120 160 Z" fill="none" stroke="#000" stroke-width="4" stroke-dasharray="30,30"/>
+
+  <path d="M 1160 100 L 120 520 L 120 580 L 1160 160 Z" fill="#f59e0b" opacity="0.85"/>
+  <path d="M 1160 100 L 120 520 L 120 580 L 1160 160 Z" fill="none" stroke="#000" stroke-width="4" stroke-dasharray="30,30"/>
+
+  <text x="640" y="360" fill="#000000" font-family="'Press Start 2P', monospace" font-size="24" text-anchor="middle" font-weight="bold">CONFISCATED BY CREDITORS</text>
+
+  <!-- Mesa com Pastas Vazias -->
+  <rect x="200" y="440" width="880" height="160" fill="#0f172a" stroke="#334155" stroke-width="4"/>
+  <rect x="580" y="480" width="120" height="70" fill="#475569" stroke="#94a3b8" stroke-width="2"/>
+  
+  <!-- Overlay CRT Grid -->
+  <rect width="1280" height="720" fill="url(#pixelGrid)"/>
+</svg>

@@ -1,6 +1,6 @@
 /**
  * GRID - O Gestor da Rede Elétrica Nacional
- * Core Game Engine: 110 Dilema Deck, High-Entropy Randomness, Balanced Rules, High-Visibility Impact Pills & Settings System
+ * Core Game Engine: 110 Dilema Deck, High-Entropy Randomness, Balanced Rules, High-Visibility Impact Pills, Settings System, 12-Scene Victory Cutscene & Dynamic Failure Condition (Condição de Falha Dinâmica)
  */
 
 // 1. BARALHO COMPLETO DE 110 DILEMAS COM PERDAS MAXIMIZADAS EM NO MÁXIMO -10 PONTOS POR COMPONENTE
@@ -230,7 +230,8 @@ const GameState = {
   questionsDeck: [],
   currentQuestion: null,
   history: [],
-  isGameOver: false
+  isGameOver: false,
+  failedReason: null
 };
 
 /**
@@ -264,6 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const titleScreen = document.getElementById('title-screen');
   const cutsceneScreen = document.getElementById('cutscene-screen');
+  const cutsceneBg = document.getElementById('cutscene-bg');
   const hudDashboardScreen = document.getElementById('hud-dashboard-screen');
   const hudBgRoom = document.getElementById('hud-bg-room');
 
@@ -319,6 +321,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnRestartGame = document.getElementById('btn-restart-game');
 
   let cutsceneIndex = 0;
+  let isVictoryCutsceneActive = false;
+  let isDefeatCutsceneActive = false;
+  let activeCutsceneScript = [];
   let tutorialStepIndex = 0;
   let activeTypingTimer = null;
   let isCurrentlyTyping = false;
@@ -372,6 +377,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (titleScreen) titleScreen.classList.add('hidden');
       if (cutsceneScreen) cutsceneScreen.classList.remove('hidden');
 
+      isVictoryCutsceneActive = false;
+      isDefeatCutsceneActive = false;
+      activeCutsceneScript = CUTSCENE_SCRIPT;
       cutsceneIndex = 0;
       renderCutsceneLine();
     });
@@ -383,30 +391,35 @@ document.addEventListener('DOMContentLoaded', () => {
       speaker: "Dra. Elena",
       title: "Membro Sênior / Física Teórica",
       avatar: "assets/dra_elena_avatar.jpg",
+      bg: "assets/control_room_bg.jpg",
       text: "{NAME}... Sente-se. O que você vai ouvir agora não está nos jornais."
     },
     {
       speaker: "Dra. Elena",
       title: "Membro Sênior / Física Teórica",
       avatar: "assets/dra_elena_avatar.jpg",
+      bg: "assets/control_room_bg.jpg",
       text: "Nós perdemos o controle. O modelo energético do século XX entrou em colapso definitivo. A dependência excessiva de combustíveis fósseis no Hemisfério Norte gerou um efeito cascata no clima global."
     },
     {
       speaker: "Robô Volta",
       title: "Assistente de Automação SIN",
       avatar: "assets/robo_volta_avatar.jpg",
+      bg: "assets/control_room_bg.jpg",
       text: "[Bip] Nossos sistemas inteligentes de medição e automação da rede registram falhas múltiplas. A Europa está racionando gás natural, e o preço do barril de petróleo atingiu picos insustentáveis."
     },
     {
       speaker: "Dra. Elena",
       title: "Membro Sênior / Física Teórica",
       avatar: "assets/dra_elena_avatar.jpg",
+      bg: "assets/control_room_bg.jpg",
       text: "E aqui no Brasil, a conta chegou. Uma anomalia climática brutal secou as principais bacias hidrográficas do Sudeste e Centro-Oeste. Sem água, nossa principal fonte despencou."
     },
     {
       speaker: "Robô Volta",
       title: "Assistente de Automação SIN",
       avatar: "assets/robo_volta_avatar.jpg",
+      bg: "assets/control_room_bg.jpg",
       text: "[Alerta] A capacidade dos nossos reservatórios atingiu a marca de 14%. A geração de energia nas turbinas está seriamente comprometida."
     },
 
@@ -415,24 +428,28 @@ document.addEventListener('DOMContentLoaded', () => {
       speaker: "Dra. Elena",
       title: "Membro Sênior / Física Teórica",
       avatar: "assets/dra_elena_avatar.jpg",
+      bg: "assets/control_room_bg.jpg",
       text: "Para evitar um apagão total, o antigo Ministério religou todas as usinas termelétricas a carvão e óleo diesel de emergência."
     },
     {
       speaker: "Dra. Elena",
       title: "Membro Sênior / Física Teórica",
       avatar: "assets/dra_elena_avatar.jpg",
+      bg: "assets/control_room_bg.jpg",
       text: "O resultado? A energia gerada nestas usinas possui um custo operacional altíssimo e uma grande perda de rendimento, além de poluir os céus das nossas cidades."
     },
     {
       speaker: "Robô Volta",
       title: "Assistente de Automação SIN",
       avatar: "assets/robo_volta_avatar.jpg",
+      bg: "assets/control_room_bg.jpg",
       text: "[Bip] Impacto social crítico: A tarifa de energia subiu 85% em três meses. Indústrias estão demitindo em massa para compensar os custos. Protestos violentos foram registrados em cinco capitais."
     },
     {
       speaker: "Dra. Elena",
       title: "Membro Sênior / Física Teórica",
       avatar: "assets/dra_elena_avatar.jpg",
+      bg: "assets/control_room_bg.jpg",
       text: "O antigo Ministro não suportou a pressão e renunciou esta manhã. O país está à beira do abismo econômico, {NAME}."
     },
 
@@ -441,45 +458,180 @@ document.addEventListener('DOMContentLoaded', () => {
       speaker: "Dra. Elena",
       title: "Membro Sênior / Física Teórica",
       avatar: "assets/dra_elena_avatar.jpg",
+      bg: "assets/control_room_bg.jpg",
       text: "O Presidente assinou sua nomeação. A partir de agora, você é a autoridade máxima do Sistema Elétrico Nacional."
     },
     {
       speaker: "Robô Volta",
       title: "Assistente de Automação SIN",
       avatar: "assets/robo_volta_avatar.jpg",
+      bg: "assets/control_room_bg.jpg",
       text: "Iniciando protocolo de transição. Ministro {NAME}, você deverá monitorar os dados das nossas centrais automatizadas."
     },
     {
       speaker: "Robô Volta",
       title: "Assistente de Automação SIN",
       avatar: "assets/robo_volta_avatar.jpg",
+      bg: "assets/control_room_bg.jpg",
       text: "Você deve manter quatro pilares acima da linha de colapso de 20%: O Caixa do Governo, a Aprovação Popular, a Preservação Ambiental e a Estabilidade da Rede Elétrica."
     },
     {
       speaker: "Dra. Elena",
       title: "Membro Sênior / Física Teórica",
       avatar: "assets/dra_elena_avatar.jpg",
+      bg: "assets/control_room_bg.jpg",
       text: "Não existe mágica aqui, Ministro. A primeira lei da conservação da energia é implacável: a energia não se cria, apenas se transforma."
     },
     {
       speaker: "Dra. Elena",
       title: "Membro Sênior / Física Teórica",
       avatar: "assets/dra_elena_avatar.jpg",
+      bg: "assets/control_room_bg.jpg",
       text: "Se você investir pesado em fazendas solares e eólicas, teremos energia limpa, mas terá que lidar com a intermitência dos ventos e do sol. Se optar por construir novas hidrelétricas, enfrentará a fúria da população e de ativistas devido ao alagamento de terras e perda de biodiversidade."
     },
     {
       speaker: "Dra. Elena",
       title: "Membro Sênior / Física Teórica",
       avatar: "assets/dra_elena_avatar.jpg",
+      bg: "assets/control_room_bg.jpg",
       text: "Cada escolha sua moldará o mapa geográfico e a economia do Brasil nas próximas três décadas. Nós não temos margem para erro."
     },
     {
       speaker: "Robô Volta",
       title: "Assistente de Automação SIN",
       avatar: "assets/robo_volta_avatar.jpg",
+      bg: "assets/control_room_bg.jpg",
       text: "[Bip] O sistema está online. A primeira crise acaba de chegar na sua mesa, Ministro. Boa sorte."
     }
   ];
+
+  // ROTEIRO COMPLETO DE VITÓRIA (12 DIÁLOGOS COM FONDOS DEDICADOS E AVATARES PONTUAIS)
+  const VICTORY_CUTSCENE_SCRIPT = [
+    {
+      speaker: "Robô Volta",
+      title: "Assistente de Automação SIN",
+      avatar: "assets/robo_volta_avatar.jpg",
+      bg: "assets/victory_bg_1.jpg",
+      text: "Bip-bop! Relatório final compilado. Data atual: 31 de dezembro de 2056. Tempo de operação ininterrupta do Gestor: 30 anos exatos."
+    },
+    {
+      speaker: "Dra. Elena",
+      title: "Membro Sênior / Física Teórica",
+      avatar: "assets/dra_elena_avatar.jpg",
+      bg: "assets/victory_bg_2.jpg",
+      text: "Nós conseguimos... Ou melhor, você conseguiu. Seu mandato termina oficialmente à meia-noite."
+    },
+    {
+      speaker: "Robô Volta",
+      title: "Assistente de Automação SIN",
+      avatar: "assets/robo_volta_avatar.jpg",
+      bg: "assets/victory_bg_3.jpg",
+      text: "Análise do Sistema Interligado Nacional (SIN): Estabilidade da rede em 98.7%. Emissões de carbono reduzidas além da meta. O colapso foi totalmente evitado."
+    },
+    {
+      speaker: "Dra. Elena",
+      title: "Membro Sênior / Física Teórica",
+      avatar: "assets/dra_elena_avatar.jpg",
+      bg: "assets/victory_bg_4.jpg",
+      text: "Parece que foi ontem que você assumiu aquela cadeira em 2026. O país estava à beira do abismo, as hidrelétricas secando, a tensão social explodindo nas ruas..."
+    },
+    {
+      speaker: "Dra. Elena",
+      title: "Membro Sênior / Física Teórica",
+      avatar: "assets/dra_elena_avatar.jpg",
+      bg: "assets/victory_bg_5.jpg",
+      text: "Você pegou as leis da física e a realidade geográfica e fez escolhas difíceis. Transformou nossa matriz energética, lidou com a intermitência dos ventos e do sol..."
+    },
+    {
+      speaker: "Presidente Holograma",
+      title: "Presidência da República",
+      avatar: "assets/presidente_holograma_avatar.jpg",
+      bg: "assets/victory_bg_6.jpg",
+      text: "Boa noite, sala de controle. Ministro, pedi para abrir um canal direto antes que você desligue os servidores."
+    },
+    {
+      speaker: "Presidente Holograma",
+      title: "Presidência da República",
+      avatar: "assets/presidente_holograma_avatar.jpg",
+      bg: "assets/victory_bg_7.jpg",
+      text: "Falo em nome de toda a nação. O que você construiu nestas três décadas não foi apenas uma nova rede elétrica. Você construiu a espinha dorsal do novo Brasil."
+    },
+    {
+      speaker: "Presidente Holograma",
+      title: "Presidência da República",
+      avatar: "assets/presidente_holograma_avatar.jpg",
+      bg: "assets/victory_bg_8.jpg",
+      text: "Graças à sua gestão, hoje exportamos tecnologia de hidrogênio verde, nossas indústrias operam com matriz 100% limpa e nossos ecossistemas ganharam uma chance de se regenerar."
+    },
+    {
+      speaker: "Robô Volta",
+      title: "Assistente de Automação SIN",
+      avatar: "assets/robo_volta_avatar.jpg",
+      bg: "assets/victory_bg_9.jpg",
+      text: "E o melhor: o desperdício por Efeito Joule nas nossas linhas de transmissão foi reduzido aos menores níveis da história! Físicos do mundo todo estão chorando de alegria. Bip!"
+    },
+    {
+      speaker: "Dra. Elena",
+      title: "Membro Sênior / Física Teórica",
+      avatar: "assets/dra_elena_avatar.jpg",
+      bg: "assets/victory_bg_10.jpg",
+      text: "(Risos) O Volta tem razão. A Primeira Lei da Termodinâmica diz que a energia não se cria, apenas se transforma. E você transformou o destino deste país."
+    },
+    {
+      speaker: "Presidente Holograma",
+      title: "Presidência da República",
+      avatar: "assets/presidente_holograma_avatar.jpg",
+      bg: "assets/victory_bg_11.jpg",
+      text: "Seu dever está cumprido com louvor, Ministro. Agora, passe o bastão. Vá para casa, descanse e aproveite o mundo que você ajudou a salvar. Muito obrigada."
+    },
+    {
+      speaker: "Robô Volta",
+      title: "Assistente de Automação SIN",
+      avatar: "assets/robo_volta_avatar.jpg",
+      bg: "assets/victory_bg_12.jpg",
+      text: "Iniciando protocolo de hibernação. Transferindo credenciais... Foi a maior honra dos meus circuitos processar dados ao seu lado, Chefe. Desconectando em 3... 2... 1..."
+    }
+  ];
+
+  // ROTEIROS DE DERROTA PERSONALIZADOS (CONDIÇÃO DE FALHA DINÂMICA)
+  const DEFEAT_SCRIPTS = {
+    economy: [
+      {
+        speaker: "Ex-Ministro Mendes",
+        title: "Ex-Ministro de Minas e Energia",
+        avatar: "assets/ex_ministro_avatar.jpg",
+        bg: "assets/defeat_bg_economy.svg",
+        text: "Você quebrou o país, garoto. Sem caixa para importar gás, pagar salários ou fazer manutenção nas linhas, os credores internacionais confiscaram nossa infraestrutura. O sistema elétrico brasileiro agora pertence a fundos abutres."
+      }
+    ],
+    social: [
+      {
+        speaker: "Dra. Elena",
+        title: "Membro Sênior / Física Teórica",
+        avatar: "assets/dra_elena_avatar.jpg",
+        bg: "assets/defeat_bg_social.svg",
+        text: "Eles derrubaram os portões! A tarifa abusiva, as demissões e a falta de energia nos bairros mais pobres geraram uma revolta sem precedentes. O Ministério caiu, fuja enquanto há tempo!"
+      }
+    ],
+    environment: [
+      {
+        speaker: "Dra. Elena",
+        title: "Membro Sênior / Física Teórica",
+        avatar: "assets/dra_elena_avatar.jpg",
+        bg: "assets/defeat_bg_environment.svg",
+        text: "Olhe pela janela... O céu está escuro ao meio-dia e os rios viraram lama tóxica. Nós garantimos a energia e o dinheiro, sim, mas destruímos o próprio país que pretendíamos iluminar."
+      }
+    ],
+    stability: [
+      {
+        speaker: "Robô Volta",
+        title: "Assistente de Automação SIN",
+        avatar: "assets/robo_volta_avatar.jpg",
+        bg: "assets/defeat_bg_stability.svg",
+        text: "[ALERTA CRÍTICO] Efeito Joule incontrolável. Transformadores derretendo em cascata. O Sistema Interligado Nacional entrou em colapso absoluto. Bem-vindo à nova Idade das Trevas. Desligando circuitos..."
+      }
+    ]
+  };
 
   const TUTORIAL_STEPS = [
     { stepBadge: "PASSO 1 DE 6", title: "BARRAS DE INDICADORES", text: "No topo, monitore os 4 pilares: Economia ($), Sociedade (♥), Meio Ambiente (🌲) e Estabilidade da Rede (⚡). Não deixe nenhum zerar!", targetId: "tut-target-indicators", arrowDirection: "top" },
@@ -491,16 +643,27 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   function renderCutsceneLine() {
-    if (cutsceneIndex >= CUTSCENE_SCRIPT.length) {
+    if (cutsceneIndex >= activeCutsceneScript.length) {
       if (cutsceneScreen) cutsceneScreen.classList.add('hidden');
-      if (hudDashboardScreen) hudDashboardScreen.classList.remove('hidden');
-      initNewGame();
-      startTutorial();
+      
+      if (isVictoryCutsceneActive) {
+        renderGameOverModal(true, null);
+      } else if (isDefeatCutsceneActive) {
+        renderGameOverModal(false, GameState.failedReason);
+      } else {
+        if (hudDashboardScreen) hudDashboardScreen.classList.remove('hidden');
+        initNewGame();
+        startTutorial();
+      }
       return;
     }
 
-    const currentLine = CUTSCENE_SCRIPT[cutsceneIndex];
+    const currentLine = activeCutsceneScript[cutsceneIndex];
     const textToDisplay = currentLine.text.replace(/{NAME}/g, GameState.playerName);
+
+    if (cutsceneBg && currentLine.bg) {
+      cutsceneBg.style.backgroundImage = `url('${currentLine.bg}')`;
+    }
 
     if (cutsceneAvatar) cutsceneAvatar.src = currentLine.avatar;
     if (cutsceneSpeakerName) cutsceneSpeakerName.textContent = currentLine.speaker;
@@ -534,6 +697,7 @@ document.addEventListener('DOMContentLoaded', () => {
     GameState.regions = { north: 'active', northeast: 'active', southeast: 'warning', south: 'active' };
     GameState.history = [];
     GameState.isGameOver = false;
+    GameState.failedReason = null;
 
     GameState.questionsDeck = shuffleArray(ALL_DECK_QUESTIONS);
 
@@ -641,6 +805,7 @@ document.addEventListener('DOMContentLoaded', () => {
         indicators: { ...GameState.indicators }
       });
 
+      // CONDIÇÃO DE FALHA DINÂMICA: CHECA QUAL INDICADOR ATINGIU 0% PRIMEIRO
       const failedIndicator = Object.keys(GameState.indicators).find(ind => GameState.indicators[ind] <= 0);
 
       if (failedIndicator) {
@@ -776,6 +941,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function triggerGameOver(isVictory, failedIndicator) {
     GameState.isGameOver = true;
+    GameState.failedReason = failedIndicator;
+
+    if (isVictory) {
+      // VITÓRIA: DISPARA PRIMEIRO A CINEMÁTICA DE VITÓRIA DE 12 DIÁLOGOS
+      if (hudDashboardScreen) hudDashboardScreen.classList.add('hidden');
+      if (cutsceneScreen) cutsceneScreen.classList.remove('hidden');
+
+      isVictoryCutsceneActive = true;
+      isDefeatCutsceneActive = false;
+      activeCutsceneScript = VICTORY_CUTSCENE_SCRIPT;
+      cutsceneIndex = 0;
+      renderCutsceneLine();
+    } else {
+      // CONDIÇÃO DE FALHA DINÂMICA: DISPARA A CINEMÁTICA ESPECÍFICA DO COLAPSO QUE ZEROU
+      if (hudDashboardScreen) hudDashboardScreen.classList.add('hidden');
+      if (cutsceneScreen) cutsceneScreen.classList.remove('hidden');
+
+      isVictoryCutsceneActive = false;
+      isDefeatCutsceneActive = true;
+      activeCutsceneScript = DEFEAT_SCRIPTS[failedIndicator] || DEFEAT_SCRIPTS.stability;
+      cutsceneIndex = 0;
+      renderCutsceneLine();
+    }
+  }
+
+  function renderGameOverModal(isVictory, failedIndicator) {
     if (gameOverModal) gameOverModal.classList.remove('hidden');
 
     if (isVictory) {
@@ -791,17 +982,30 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       if (gameOverCardBox) gameOverCardBox.className = 'game-over-card defeat';
       if (goHeaderIcon) goHeaderIcon.className = 'fa-solid fa-triangle-exclamation';
-      if (goTitleText) goTitleText.textContent = 'COLAPSO DO SISTEMA ELÉTRICO!';
       
-      const names = { economy: 'Falência Financeira ($)', social: 'Insurreição Popular (♥)', environment: 'Colapso Ecológico (🌲)', stability: 'Apagão Sistêmico (⚡)' };
+      const names = { 
+        economy: 'Falência Financeira ($)', 
+        social: 'Insurreição Popular (♥)', 
+        environment: 'Colapso Ecológico (🌲)', 
+        stability: 'Apagão Sistêmico (⚡)' 
+      };
+      
       const failedName = names[failedIndicator] || 'Falha Fatal';
 
+      const descriptions = {
+        economy: "O tesouro público zerou. Sem verba para salários, gás importado e manutenção, credores internacionais tomaram o SIN.",
+        social: "O descontentamento popular zerou a aprovação. Tarifas abusivas e apagões periféricos desencadearam a queda do governo.",
+        environment: "A preservação ambiental zerou. A poluição fóssil extrema e o desmatamento tornaram o ecossistema brasileiro inóspito.",
+        stability: "A estabilidade da rede zerou. Sobrecarga por Efeito Joule e desequilíbrio na alta tensão provocaram a Idade das Trevas."
+      };
+
+      if (goTitleText) goTitleText.textContent = `COLAPSO: ${failedName.toUpperCase()}`;
       if (goSummaryText) goSummaryText.textContent = `O indicador de ${failedName} atingiu 0% no ano de ${GameState.year}. O governo perdeu a capacidade de gerir a rede elétrica nacional.`;
       if (goStatYears) goStatYears.textContent = `${GameState.turn} / 30 Anos`;
       if (goStatCo2) goStatCo2.textContent = 'Indefinido (Colapso)';
       if (goStatSocial) goStatSocial.textContent = `${Math.round(GameState.indicators.social)}%`;
       if (goStatGrade) goStatGrade.textContent = 'F (Exoneração por Crise)';
-      if (goPedagogicalDesc) goPedagogicalDesc.textContent = `O desequilíbrio em ${failedName} gerou colapso na infraestrutura do país. Escolhas de alto impacto exigem gestão prudente de perdas.`;
+      if (goPedagogicalDesc) goPedagogicalDesc.textContent = descriptions[failedIndicator] || `O desequilíbrio em ${failedName} gerou colapso na infraestrutura do país.`;
     }
   }
 
