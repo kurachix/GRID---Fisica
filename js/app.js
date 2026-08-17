@@ -146,9 +146,2067 @@ const RAW_QUESTIONS = [
     optionA: { title: "Aprovar Isenção", sub: "+Ambiente (+14%), +Sociedade (+8%), -Economia (-8%)", indicators: { economy: -8, social: 8, environment: 14, stability: -6 }, matrix: { solar: 2.0 }, regions: { southeast: 'active' } },
     optionB: { title: "Taxar Elétricos", sub: "+Economia (+8%), -Ambiente (-8%)", indicators: { economy: 8, social: -6, environment: -8, stability: 4 }, matrix: {}, regions: { southeast: 'stable' } }
   }
+,
+{
+    id: 21,
+    category: "<MAREMOTRIZ & MARANHÃO>",
+    icon: "fa-water",
+    title: "Usina Maremotriz no Estuário de São Luís (MA)",
+    desc: "Captação da energia cinética e potencial gravitacional das marés no litoral maranhense (massa d'água em movimento), gerando eletricidade previsível e limpa.",
+    optionA: {
+        title: "Financiar Usina Maremotriz",
+        sub: "+Ambiente (+12%), +Estabilidade (+10%), -Economia (-10%)",
+        indicators: {
+            economy: -10,
+            social: 6,
+            environment: 12,
+            stability: 10
+        },
+        matrix: {
+            hydro: 2.0,
+            thermal: -2.0
+        },
+        regions: {
+            north: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Geração Térmica Local",
+        sub: "+Economia (+6%), -Ambiente (-8%), -Estabilidade (-4%)",
+        indicators: {
+            economy: 6,
+            social: -4,
+            environment: -8,
+            stability: -4
+        },
+        matrix: {
+            thermal: 2.0
+        },
+        regions: {
+            north: "stable"
+        }
+    }
+},
+{
+    id: 22,
+    category: "<GEOTERMIA & GOIÁS>",
+    icon: "fa-temperature-high",
+    title: "Aproveitamento Geotérmico em Caldas Novas (GO)",
+    desc: "Uso do calor interno da Terra (gradiente geotérmico) para acionamento de turbinas a vapor com emissão nula de CO₂.",
+    optionA: {
+        title: "Implantar Usina Geotérmica",
+        sub: "+Ambiente (+14%), +Estabilidade (+12%), -Economia (-9%)",
+        indicators: {
+            economy: -9,
+            social: 6,
+            environment: 14,
+            stability: 12
+        },
+        matrix: {
+            thermal: 1.0,
+            solar: 1.0
+        },
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Preservar Uso Apenas Turístico",
+        sub: "+Sociedade (+8%), +Economia (+4%), -Estabilidade (-6%)",
+        indicators: {
+            economy: 4,
+            social: 8,
+            environment: 2,
+            stability: -6
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 23,
+    category: "<MICRO-HIDRO & RIO GRANDE DO SUL>",
+    icon: "fa-water",
+    title: "Microgeradores Hídricos na Serra Gaúcha",
+    desc: "Instalação de pequenas turbinas Banki em riachos de serra para aproveitamento de energia potencial hídrica sem grandes reservatórios.",
+    optionA: {
+        title: "Subsidiar Microturbinas",
+        sub: "+Ambiente (+10%), +Sociedade (+10%), -Economia (-6%)",
+        indicators: {
+            economy: -6,
+            social: 10,
+            environment: 10,
+            stability: 8
+        },
+        matrix: {
+            hydro: 2.0
+        },
+        regions: {
+            south: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Dependência da Rede Central",
+        sub: "+Economia (+6%), -Sociedade (-6%)",
+        indicators: {
+            economy: 6,
+            social: -6,
+            environment: 0,
+            stability: -4
+        },
+        matrix: {},
+        regions: {
+            south: "stable"
+        }
+    }
+},
+{
+    id: 24,
+    category: "<BIOCOMBUSTÍVEL & BAHIA>",
+    icon: "fa-flask",
+    title: "Cultivo de Algas para Bioóleo no Litoral Baiano",
+    desc: "Fotobiorreatores marinhos utilizam fotossíntese para converter radiação solar e CO₂ industrial em bioóleo para termelétricas limpas.",
+    optionA: {
+        title: "Construir Fotobiorreatores",
+        sub: "+Ambiente (+15%), +Estabilidade (+8%), -Economia (-10%)",
+        indicators: {
+            economy: -10,
+            social: 6,
+            environment: 15,
+            stability: 8
+        },
+        matrix: {
+            biomass: 4.0,
+            thermal: -3.0
+        },
+        regions: {
+            northeast: "active"
+        }
+    },
+    optionB: {
+        title: "Rejeitar Subsídios Tecnológicos",
+        sub: "+Economia (+8%), -Ambiente (-8%)",
+        indicators: {
+            economy: 8,
+            social: -4,
+            environment: -8,
+            stability: -2
+        },
+        matrix: {},
+        regions: {
+            northeast: "stable"
+        }
+    }
+},
+{
+    id: 25,
+    category: "<NUCLEAR SMR & RIO DE JANEIRO>",
+    icon: "fa-atom",
+    title: "Reatores Nucleares Modulares Pequenos (SMR) em Angra",
+    desc: "SMRs utilizam fissão de urânio enriquecido com sistemas de resfriamento passivo intrinsecamente seguros para carga de base.",
+    optionA: {
+        title: "Construir Reatores Modulares",
+        sub: "+Estabilidade (+16%), +Ambiente (+10%), -Economia (-10%)",
+        indicators: {
+            economy: -10,
+            social: -4,
+            environment: 10,
+            stability: 16
+        },
+        matrix: {
+            nuclear: 5.0,
+            thermal: -3.0
+        },
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Investir Apenas em Fontes Variáveis",
+        sub: "+Sociedade (+8%), -Estabilidade (-8%)",
+        indicators: {
+            economy: 4,
+            social: 8,
+            environment: 4,
+            stability: -8
+        },
+        matrix: {
+            nuclear: -1.0
+        },
+        regions: {
+            southeast: "warning"
+        }
+    }
+},
+{
+    id: 26,
+    category: "<SOLAR FLUTUANTE & BAHIA>",
+    icon: "fa-sun",
+    title: "Usina Fotovoltaica Flutuante no Reservatório de Sobradinho",
+    desc: "Painéis fotovoltaicos flutuantes reduzem a evaporação da água e aproveitam a infraestrutura de transmissão hídrica existente.",
+    optionA: {
+        title: "Instalar Painéis Flutuantes",
+        sub: "+Ambiente (+14%), +Estabilidade (+12%), -Economia (-8%)",
+        indicators: {
+            economy: -8,
+            social: 8,
+            environment: 14,
+            stability: 12
+        },
+        matrix: {
+            solar: 5.0,
+            hydro: 1.0,
+            thermal: -3.0
+        },
+        regions: {
+            northeast: "active"
+        }
+    },
+    optionB: {
+        title: "Expandir Apenas em Solo Firme",
+        sub: "+Economia (+6%), -Ambiente (-6%)",
+        indicators: {
+            economy: 6,
+            social: -2,
+            environment: -6,
+            stability: 2
+        },
+        matrix: {
+            solar: 2.0
+        },
+        regions: {
+            northeast: "stable"
+        }
+    }
+},
+{
+    id: 27,
+    category: "<SMART GRID & PARANÁ>",
+    icon: "fa-network-wired",
+    title: "Rede Elétrica Inteligente (Smart Grid) em Curitiba",
+    desc: "Medidores digitais bidirecionais e automação de religadores reduzem o tempo de interrupção e otimizam o fluxo de potência.",
+    optionA: {
+        title: "Digitalizar Toda a Rede",
+        sub: "+Estabilidade (+15%), +Sociedade (+10%), -Economia (-9%)",
+        indicators: {
+            economy: -9,
+            social: 10,
+            environment: 4,
+            stability: 15
+        },
+        matrix: {},
+        regions: {
+            south: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Medição Analógica",
+        sub: "+Economia (+8%), -Estabilidade (-8%)",
+        indicators: {
+            economy: 8,
+            social: -6,
+            environment: 0,
+            stability: -8
+        },
+        matrix: {},
+        regions: {
+            south: "warning"
+        }
+    }
+},
+{
+    id: 28,
+    category: "<EÓLICA OFFSHORE & RIO GRANDE DO SUL>",
+    icon: "fa-wind",
+    title: "Complexo Eólico Offshore no Litoral de Rio Grande (RS)",
+    desc: "Ventos oceânicos de alta densidade e constância acionam turbinas de grande porte longe da costa, sem impacto direto em cidades.",
+    optionA: {
+        title: "Autorizar Parque Oceânico",
+        sub: "+Ambiente (+15%), +Estabilidade (+14%), -Economia (-10%)",
+        indicators: {
+            economy: -10,
+            social: 4,
+            environment: 15,
+            stability: 14
+        },
+        matrix: {
+            wind: 6.0,
+            thermal: -4.0
+        },
+        regions: {
+            south: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Geração Térmica a Carvão",
+        sub: "+Economia (+8%), -Ambiente (-10%)",
+        indicators: {
+            economy: 8,
+            social: -6,
+            environment: -10,
+            stability: 6
+        },
+        matrix: {
+            thermal: 3.0
+        },
+        regions: {
+            south: "warning"
+        }
+    }
+},
+{
+    id: 29,
+    category: "<EFICIÊNCIA HÍDRICA & PARANÁ>",
+    icon: "fa-gears",
+    title: "Modernização das Turbinas Francis de Itaipu Binacional",
+    desc: "Substituição de rotores antigos por ligas de aço inoxidável revestido com rendimento hidráulico 5% superior (η = P_el / P_hidr).",
+    optionA: {
+        title: "Trocar Rotores das Turbinas",
+        sub: "+Estabilidade (+15%), +Economia (+6%), -Economia (-8%)",
+        indicators: {
+            economy: -8,
+            social: 6,
+            environment: 8,
+            stability: 15
+        },
+        matrix: {
+            hydro: 4.0,
+            thermal: -2.0
+        },
+        regions: {
+            south: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Equipamentos Atuais",
+        sub: "+Economia (+6%), -Estabilidade (-6%)",
+        indicators: {
+            economy: 6,
+            social: -2,
+            environment: -2,
+            stability: -6
+        },
+        matrix: {},
+        regions: {
+            south: "stable"
+        }
+    }
+},
+{
+    id: 30,
+    category: "<CAPTURA DE CARBONO & PRÉ-SAL>",
+    icon: "fa-cloud-arrow-down",
+    title: "Injeção de CO₂ e Captura de Carbono no Pré-Sal",
+    desc: "Separação do gás carbônico nos poços petrolíferos e reinjeção em reservatórios profundos para zerar emissões atmosféricas diretas.",
+    optionA: {
+        title: "Exigir Tecnologias de CCS",
+        sub: "+Ambiente (+16%), +Estabilidade (+8%), -Economia (-10%)",
+        indicators: {
+            economy: -10,
+            social: 6,
+            environment: 16,
+            stability: 8
+        },
+        matrix: {
+            thermal: 2.0
+        },
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Queimar Gás na Tocha (Flare)",
+        sub: "+Economia (+8%), -Ambiente (-12%)",
+        indicators: {
+            economy: 8,
+            social: -8,
+            environment: -12,
+            stability: -4
+        },
+        matrix: {},
+        regions: {
+            southeast: "warning"
+        }
+    }
+},
+{
+    id: 31,
+    category: "<ARMAZENAMENTO & SERTÃO>",
+    icon: "fa-battery-full",
+    title: "Baterias Industriais de Íon-Lítio para Energia Solar",
+    desc: "Sistemas de BESS (Battery Energy Storage System) armazenam o excedente fotovoltaico gerado de dia para injetar na rede no pico noturno.",
+    optionA: {
+        title: "Construir Parques de Baterias",
+        sub: "+Estabilidade (+16%), +Ambiente (+10%), -Economia (-10%)",
+        indicators: {
+            economy: -10,
+            social: 8,
+            environment: 10,
+            stability: 16
+        },
+        matrix: {
+            solar: 4.0,
+            thermal: -3.0
+        },
+        regions: {
+            northeast: "active"
+        }
+    },
+    optionB: {
+        title: "Curtailment (Descarte de Excedente)",
+        sub: "+Economia (+6%), -Estabilidade (-8%), -Ambiente (-6%)",
+        indicators: {
+            economy: 6,
+            social: -4,
+            environment: -6,
+            stability: -8
+        },
+        matrix: {
+            solar: -2.0
+        },
+        regions: {
+            northeast: "warning"
+        }
+    }
+},
+{
+    id: 32,
+    category: "<WASTE-TO-ENERGY & SÃO PAULO>",
+    icon: "fa-dumpster-fire",
+    title: "Usinas Waste-to-Energy nos Aterros Metropolitanos",
+    desc: "Incineração controlada de resíduos não recicláveis para acionamento de caldeiras a vapor e geração de energia elétrica urbana.",
+    optionA: {
+        title: "Construir Usinas de Lixo",
+        sub: "+Ambiente (+12%), +Estabilidade (+10%), -Economia (-8%)",
+        indicators: {
+            economy: -8,
+            social: 8,
+            environment: 12,
+            stability: 10
+        },
+        matrix: {
+            biomass: 4.0,
+            thermal: -2.0
+        },
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Aterros Convencionais",
+        sub: "+Economia (+6%), -Ambiente (-10%)",
+        indicators: {
+            economy: 6,
+            social: -6,
+            environment: -10,
+            stability: -2
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 33,
+    category: "<ILUMINAÇÃO PÚBLICA & MINAS GERAIS>",
+    icon: "fa-lightbulb",
+    title: "Substituição Massiva da Iluminação Pública por LED em BH",
+    desc: "Lâmpadas de vapor de sódio são trocadas por LED com fotocélulas inteligentes, reduzindo em 60% a demanda na ponta noturna.",
+    optionA: {
+        title: "Subsidiar Troca por LED",
+        sub: "+Economia (+10%), +Ambiente (+10%), +Sociedade (+8%)",
+        indicators: {
+            economy: 10,
+            social: 8,
+            environment: 10,
+            stability: 6
+        },
+        matrix: {},
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Lâmpadas Antigas",
+        sub: "-Economia (-6%), -Ambiente (-4%)",
+        indicators: {
+            economy: -6,
+            social: -4,
+            environment: -4,
+            stability: -2
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 34,
+    category: "<FROTA ELÉTRICA & SÃO PAULO>",
+    icon: "fa-bus-simple",
+    title: "Eletrificação Total da Frota de Ônibus de São Paulo",
+    desc: "Substituição de ônibus a diesel por veículos elétricos (e-buss) movidos a bateria, zerando emissões de fuligem e ruído.",
+    optionA: {
+        title: "Financiar Frota Elétrica",
+        sub: "+Ambiente (+15%), +Sociedade (+12%), -Economia (-10%)",
+        indicators: {
+            economy: -10,
+            social: 12,
+            environment: 15,
+            stability: -4
+        },
+        matrix: {
+            solar: 2.0,
+            thermal: -2.0
+        },
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Ônibus a Diesel",
+        sub: "+Economia (+8%), -Ambiente (-10%), -Sociedade (-8%)",
+        indicators: {
+            economy: 8,
+            social: -8,
+            environment: -10,
+            stability: 2
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 35,
+    category: "<INTEGRAÇÃO & RORAIMA>",
+    icon: "fa-tower-cell",
+    title: "Conexão de Roraima ao Sistema Interligado Nacional (Linha Tucuruí)",
+    desc: "Construção do Linhão do Manduri para desligar as usinas a óleo diesel poluentes de Boa Vista e integrar o estado ao SIN.",
+    optionA: {
+        title: "Concluir Linhão de Transmissão",
+        sub: "+Estabilidade (+16%), +Ambiente (+12%), -Economia (-9%)",
+        indicators: {
+            economy: -9,
+            social: 10,
+            environment: 12,
+            stability: 16
+        },
+        matrix: {
+            hydro: 3.0,
+            thermal: -5.0
+        },
+        regions: {
+            north: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Térmicas Isoladas a Diesel",
+        sub: "+Economia (+6%), -Ambiente (-12%), -Estabilidade (-10%)",
+        indicators: {
+            economy: 6,
+            social: -8,
+            environment: -12,
+            stability: -10
+        },
+        matrix: {
+            thermal: 3.0
+        },
+        regions: {
+            north: "warning"
+        }
+    }
+},
+{
+    id: 36,
+    category: "<SUPERCONDUTIVIDADE & RIO DE JANEIRO>",
+    icon: "fa-bolt-lightning",
+    title: "Cabos Supercondutores na Rede Subterrânea do Rio",
+    desc: "Cabos resfriados por nitrogênio líquido eliminam completamente a resistência elétrica (R = 0 Ω), anulando perdas por Efeito Joule.",
+    optionA: {
+        title: "Instalar Cabos Supercondutores",
+        sub: "+Estabilidade (+18%), +Ambiente (+8%), -Economia (-10%)",
+        indicators: {
+            economy: -10,
+            social: 6,
+            environment: 8,
+            stability: 18
+        },
+        matrix: {},
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Usar Cabos Convencionais de Cobre",
+        sub: "+Economia (+8%), -Estabilidade (-6%)",
+        indicators: {
+            economy: 8,
+            social: -2,
+            environment: -2,
+            stability: -6
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 37,
+    category: "<HELIOTÉRMICA (CSP) & PERNAMBUCO>",
+    icon: "fa-sun-plant-wilt",
+    title: "Usina Heliotérmica de Concentração (CSP) em Petrolina",
+    desc: "Espelhos heliostatos focam a radiação solar em uma torre para aquecer sais fundidos, permitindo gerar eletricidade mesmo durante a noite.",
+    optionA: {
+        title: "Construir Planta Heliotérmica",
+        sub: "+Ambiente (+15%), +Estabilidade (+14%), -Economia (-10%)",
+        indicators: {
+            economy: -10,
+            social: 6,
+            environment: 15,
+            stability: 14
+        },
+        matrix: {
+            solar: 5.0,
+            thermal: -3.0
+        },
+        regions: {
+            northeast: "active"
+        }
+    },
+    optionB: {
+        title: "Focar Apenas em Placas Plana",
+        sub: "+Economia (+6%), -Estabilidade (-6%)",
+        indicators: {
+            economy: 6,
+            social: -2,
+            environment: 4,
+            stability: -6
+        },
+        matrix: {
+            solar: 2.0
+        },
+        regions: {
+            northeast: "stable"
+        }
+    }
+},
+{
+    id: 38,
+    category: "<DESSALINIZAÇÃO & CEARÁ>",
+    icon: "fa-droplet",
+    title: "Usina de Dessalinização Solar para Abastecimento Humano",
+    desc: "Processo de osmose reversa alimentado por energia solar para converter água do mar em água potável durante secas extremas.",
+    optionA: {
+        title: "Financiar Dessalinizadora Solar",
+        sub: "+Sociedade (+15%), +Ambiente (+10%), -Economia (-9%)",
+        indicators: {
+            economy: -9,
+            social: 15,
+            environment: 10,
+            stability: 6
+        },
+        matrix: {
+            solar: 3.0
+        },
+        regions: {
+            northeast: "active"
+        }
+    },
+    optionB: {
+        title: "Abastecer Apenas por Caminhão Pipa",
+        sub: "+Economia (+5%), -Sociedade (-10%), -Ambiente (-6%)",
+        indicators: {
+            economy: 5,
+            social: -10,
+            environment: -6,
+            stability: -4
+        },
+        matrix: {},
+        regions: {
+            northeast: "warning"
+        }
+    }
+},
+{
+    id: 39,
+    category: "<REFLORESTAMENTO & SÃO FRANCISCO>",
+    icon: "fa-tree",
+    title: "Reflorestamento de Matas Ciliares nas Bacias do São Francisco",
+    desc: "Plantio de árvores nativas nas margens reduz o assoreamento dos rios e estabiliza o volume útil reservado para hidrelétricas.",
+    optionA: {
+        title: "Reflorestar Matas Ciliares",
+        sub: "+Ambiente (+16%), +Estabilidade (+8%), -Economia (-7%)",
+        indicators: {
+            economy: -7,
+            social: 8,
+            environment: 16,
+            stability: 8
+        },
+        matrix: {
+            hydro: 2.0
+        },
+        regions: {
+            northeast: "active"
+        }
+    },
+    optionB: {
+        title: "Deixar Recuperação Natural",
+        sub: "+Economia (+6%), -Ambiente (-8%), -Estabilidade (-4%)",
+        indicators: {
+            economy: 6,
+            social: -4,
+            environment: -8,
+            stability: -4
+        },
+        matrix: {},
+        regions: {
+            northeast: "stable"
+        }
+    }
+},
+{
+    id: 40,
+    category: "<BIOGÁS & SANTA CATARINA>",
+    icon: "fa-piggy-bank",
+    title: "Cogeração por Biogás da Suinocultura em Chapecó (SC)",
+    desc: "Biodigestores anaeróbicos capturam metano (CH₄) dos dejetos de suínos, gerando energia limpa e evitando contaminação dos lençóis.",
+    optionA: {
+        title: "Instalar Biodigestores",
+        sub: "+Ambiente (+14%), +Estabilidade (+8%), -Economia (-6%)",
+        indicators: {
+            economy: -6,
+            social: 8,
+            environment: 14,
+            stability: 8
+        },
+        matrix: {
+            biomass: 4.0,
+            thermal: -2.0
+        },
+        regions: {
+            south: "active"
+        }
+    },
+    optionB: {
+        title: "Não Subsidiar Pequenos Produtores",
+        sub: "+Economia (+4%), -Ambiente (-8%)",
+        indicators: {
+            economy: 4,
+            social: -4,
+            environment: -8,
+            stability: -2
+        },
+        matrix: {},
+        regions: {
+            south: "stable"
+        }
+    }
+},
+{
+    id: 41,
+    category: "<HIDRO REVERSÍVEL & SERRA DO MAR>",
+    icon: "fa-repeat",
+    title: "Usina Hidrelétrica Reversível na Serra do Mar (SP/RJ)",
+    desc: "Bombeamento de água para o reservatório superior no período de sobra de energia solar/eólica para gerar no momento de maior demanda.",
+    optionA: {
+        title: "Construir Usina Reversível",
+        sub: "+Estabilidade (+16%), +Ambiente (+10%), -Economia (-10%)",
+        indicators: {
+            economy: -10,
+            social: 6,
+            environment: 10,
+            stability: 16
+        },
+        matrix: {
+            hydro: 3.0,
+            thermal: -3.0
+        },
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Descartar Energia Excedente",
+        sub: "+Economia (+6%), -Estabilidade (-8%)",
+        indicators: {
+            economy: 6,
+            social: -4,
+            environment: -4,
+            stability: -8
+        },
+        matrix: {},
+        regions: {
+            southeast: "warning"
+        }
+    }
+},
+{
+    id: 42,
+    category: "<EFICIÊNCIA SIDERÚRGICA & MINAS GERAIS>",
+    icon: "fa-industry",
+    title: "Subvenção para Eficiência Energética na Siderurgia de MG",
+    desc: "Instalação de motores de alta eficiência (IE4) e aproveitamento de gases de alto-forno reduz a carga industrial sobre a rede.",
+    optionA: {
+        title: "Subsidiar Modernização de Motores",
+        sub: "+Economia (+10%), +Estabilidade (+10%), +Ambiente (+8%)",
+        indicators: {
+            economy: 10,
+            social: 4,
+            environment: 8,
+            stability: 10
+        },
+        matrix: {
+            thermal: -2.0
+        },
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Equipamentos Antigos",
+        sub: "-Economia (-6%), -Estabilidade (-6%)",
+        indicators: {
+            economy: -6,
+            social: -2,
+            environment: -4,
+            stability: -6
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 43,
+    category: "<ELETRICAÇÃO RURAL & PANTANAL>",
+    icon: "fa-solar-panel",
+    title: "Sistemas Fotovoltaicos Isolados com Baterias no Pantanal (MS)",
+    desc: "Kits solares em corrente contínua com baterias para pousadas e comunidades ribeirinhas sem necessidade de desmatamento para linhas.",
+    optionA: {
+        title: "Instalar Kits Solares Isolados",
+        sub: "+Ambiente (+14%), +Sociedade (+12%), -Economia (-7%)",
+        indicators: {
+            economy: -7,
+            social: 12,
+            environment: 14,
+            stability: 6
+        },
+        matrix: {
+            solar: 2.0
+        },
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Construir Linhas Aéreas Convencionais",
+        sub: "+Economia (+4%), -Ambiente (-10%), -Sociedade (-6%)",
+        indicators: {
+            economy: 4,
+            social: -6,
+            environment: -10,
+            stability: -4
+        },
+        matrix: {},
+        regions: {
+            southeast: "warning"
+        }
+    }
+},
+{
+    id: 44,
+    category: "<CABECEIRA & XINGU>",
+    icon: "fa-water",
+    title: "Pequenas Usinas Runcut (Fio d'Água) no Alto Xingu",
+    desc: "Geradores hídricos sem reservatório que acompanham a vazão natural do rio, eliminando o impacto de alagamento ambiental.",
+    optionA: {
+        title: "Aprovar Usinas Fio d'Água",
+        sub: "+Ambiente (+12%), +Estabilidade (+8%), -Economia (-6%)",
+        indicators: {
+            economy: -6,
+            social: 8,
+            environment: 12,
+            stability: 8
+        },
+        matrix: {
+            hydro: 3.0
+        },
+        regions: {
+            north: "active"
+        }
+    },
+    optionB: {
+        title: "Cancelar Projetos Hídricos",
+        sub: "+Economia (+6%), -Estabilidade (-8%)",
+        indicators: {
+            economy: 6,
+            social: -2,
+            environment: 4,
+            stability: -8
+        },
+        matrix: {
+            hydro: -1.0
+        },
+        regions: {
+            north: "stable"
+        }
+    }
+},
+{
+    id: 45,
+    category: "<EÓLICA PLANALTO & DISTRITO FEDERAL>",
+    icon: "fa-wind",
+    title: "Parques Eólicos de Ventos Fracos no Planalto Central",
+    desc: "Aerogeradores de novas pás ultra-longas com maior área de varredura captam energia mecânica em regiões de menor intensidade de vento.",
+    optionA: {
+        title: "Instalar Turbinas Especiais",
+        sub: "+Ambiente (+12%), +Estabilidade (+10%), -Economia (-8%)",
+        indicators: {
+            economy: -8,
+            social: 6,
+            environment: 12,
+            stability: 10
+        },
+        matrix: {
+            wind: 4.0,
+            thermal: -2.0
+        },
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Matriz Atual",
+        sub: "+Economia (+6%), -Ambiente (-4%)",
+        indicators: {
+            economy: 6,
+            social: -2,
+            environment: -4,
+            stability: -2
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 46,
+    category: "<AMÔNIA VERDE & SERGIPE>",
+    icon: "fa-vial",
+    title: "Pólo de Amônia Verde alimentado por Energia Eólica em Sergipe",
+    desc: "Síntese de amônia sem emissão de CO₂ para produção de fertilizantes agrícolas nacionais utilizando excedente renovável.",
+    optionA: {
+        title: "Construir Planta de Amônia Verde",
+        sub: "+Economia (+12%), +Ambiente (+12%), -Economia (-8%)",
+        indicators: {
+            economy: -8,
+            social: 8,
+            environment: 12,
+            stability: 8
+        },
+        matrix: {
+            wind: 3.0
+        },
+        regions: {
+            northeast: "active"
+        }
+    },
+    optionB: {
+        title: "Importar Fertilizantes Fósseis",
+        sub: "+Economia (+6%), -Ambiente (-8%)",
+        indicators: {
+            economy: 6,
+            social: -4,
+            environment: -8,
+            stability: -2
+        },
+        matrix: {},
+        regions: {
+            northeast: "stable"
+        }
+    }
+},
+{
+    id: 47,
+    category: "<DESACTIVATION & NORTE>",
+    icon: "fa-power-off",
+    title: "Desativação de Usinas a Óleo BPF no Interior do Pará",
+    desc: "Encerramento definitivo de usinas térmicas obsoletas que queimavam óleo pesado tóxico e substituição por energia solar + baterias.",
+    optionA: {
+        title: "Desativar Térmicas a Óleo",
+        sub: "+Ambiente (+16%), +Sociedade (+10%), -Estabilidade (-6%)",
+        indicators: {
+            economy: -6,
+            social: 10,
+            environment: 16,
+            stability: -6
+        },
+        matrix: {
+            thermal: -4.0,
+            solar: 4.0
+        },
+        regions: {
+            north: "warning"
+        }
+    },
+    optionB: {
+        title: "Renovar Contratos a Óleo",
+        sub: "+Estabilidade (+10%), -Ambiente (-12%)",
+        indicators: {
+            economy: 4,
+            social: -6,
+            environment: -12,
+            stability: 10
+        },
+        matrix: {
+            thermal: 2.0
+        },
+        regions: {
+            north: "active"
+        }
+    }
+},
+{
+    id: 48,
+    category: "<CABO SUBMARINO & NORONHA>",
+    icon: "fa-plug",
+    title: "Cabo Elétrico Submarino para Fernando de Noronha (PE)",
+    desc: "Conexão de Noronha ao continente por cabo de alta tensão submarino para desligar geradores a diesel da ilha de preservação.",
+    optionA: {
+        title: "Lançar Cabo Submarino",
+        sub: "+Ambiente (+18%), +Estabilidade (+12%), -Economia (-10%)",
+        indicators: {
+            economy: -10,
+            social: 8,
+            environment: 18,
+            stability: 12
+        },
+        matrix: {
+            wind: 2.0,
+            thermal: -3.0
+        },
+        regions: {
+            northeast: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Queima de Diesel na Ilha",
+        sub: "+Economia (+6%), -Ambiente (-14%)",
+        indicators: {
+            economy: 6,
+            social: -8,
+            environment: -14,
+            stability: -4
+        },
+        matrix: {},
+        regions: {
+            northeast: "warning"
+        }
+    }
+},
+{
+    id: 49,
+    category: "<RESILIÊNCIA CLIMÁTICA & SUL>",
+    icon: "fa-cloud-showers-heavy",
+    title: "Reforço de Linhas de Transmissão contra Vendavais no Sul",
+    desc: "Estruturas estaiadas reforçadas e cabos de liga de alumínio-zircônio resistentes a ventos ciclônicos de até 150 km/h.",
+    optionA: {
+        title: "Reforçar Torres de Transmissão",
+        sub: "+Estabilidade (+16%), +Sociedade (+8%), -Economia (-9%)",
+        indicators: {
+            economy: -9,
+            social: 8,
+            environment: 4,
+            stability: 16
+        },
+        matrix: {},
+        regions: {
+            south: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Padrão Antigo",
+        sub: "+Economia (+7%), -Estabilidade (-10%)",
+        indicators: {
+            economy: 7,
+            social: -6,
+            environment: 0,
+            stability: -10
+        },
+        matrix: {},
+        regions: {
+            south: "warning"
+        }
+    }
+},
+{
+    id: 50,
+    category: "<SENSORES OPTICOS & NACIONAL>",
+    icon: "fa-microchip",
+    title: "Sensores de Fibra Óptica para Monitoramento Térmico de Cabos",
+    desc: "Medição de temperatura ao longo de milhares de quilômetros de linhas previne o sobreaquecimento por Efeito Joule e rompimentos.",
+    optionA: {
+        title: "Instalar Sensores ópticos",
+        sub: "+Estabilidade (+14%), +Economia (+6%), -Economia (-7%)",
+        indicators: {
+            economy: -7,
+            social: 6,
+            environment: 4,
+            stability: 14
+        },
+        matrix: {},
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Inspeção Apenas Visual Manual",
+        sub: "+Economia (+5%), -Estabilidade (-6%)",
+        indicators: {
+            economy: 5,
+            social: -2,
+            environment: 0,
+            stability: -6
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 51,
+    category: "<ARQUITETURA BIOCLIMÁTICA & NACIONAL>",
+    icon: "fa-building",
+    title: "Painéis BIPV (Fotovoltaicos Integrados) em Prédios Públicos",
+    desc: "Vidros e fachadas prediais que geram energia elétrica com luz solar incidente, reduzindo o consumo nos horários de ar-condicionado.",
+    optionA: {
+        title: "Instalar Vidros Solares BIPV",
+        sub: "+Ambiente (+12%), +Economia (+8%), +Sociedade (+6%)",
+        indicators: {
+            economy: 8,
+            social: 6,
+            environment: 12,
+            stability: 6
+        },
+        matrix: {
+            solar: 3.0
+        },
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Construções Tradicionais",
+        sub: "-Economia (-4%), -Ambiente (-4%)",
+        indicators: {
+            economy: -4,
+            social: -2,
+            environment: -4,
+            stability: -2
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 52,
+    category: "<PIRÓLISE DE ARROZ & RIO GRANDE DO SUL>",
+    icon: "fa-seedling",
+    title: "Usina de Pirólise da Casca de Arroz em Uruguaiana (RS)",
+    desc: "Decomposição térmica de resíduos da lavoura de arroz em ambiente sem oxigênio, produzindo biochar e gás combustível limpo.",
+    optionA: {
+        title: "Financiar Usina de Pirólise",
+        sub: "+Ambiente (+14%), +Estabilidade (+8%), -Economia (-6%)",
+        indicators: {
+            economy: -6,
+            social: 6,
+            environment: 14,
+            stability: 8
+        },
+        matrix: {
+            biomass: 3.0
+        },
+        regions: {
+            south: "active"
+        }
+    },
+    optionB: {
+        title: "Descarte de Cascas em Queimadas",
+        sub: "+Economia (+4%), -Ambiente (-10%)",
+        indicators: {
+            economy: 4,
+            social: -6,
+            environment: -10,
+            stability: -2
+        },
+        matrix: {},
+        regions: {
+            south: "warning"
+        }
+    }
+},
+{
+    id: 53,
+    category: "<HVDC 800kV & AMAZÔNIA>",
+    icon: "fa-bolt",
+    title: "Linha de Transmissão HVDC 800 kV Pará-Sudeste",
+    desc: "Corrente contínua de ultra alta tensão reduz perdas de transmissão em distâncias superiores a 2.000 km.",
+    optionA: {
+        title: "Construir Linhão HVDC",
+        sub: "+Estabilidade (+16%), +Ambiente (+8%), -Economia (-10%)",
+        indicators: {
+            economy: -10,
+            social: 6,
+            environment: 8,
+            stability: 16
+        },
+        matrix: {
+            hydro: 2.0
+        },
+        regions: {
+            north: "active",
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Transmissão em Corrente Alternada",
+        sub: "+Economia (+8%), -Estabilidade (-8%)",
+        indicators: {
+            economy: 8,
+            social: -4,
+            environment: -4,
+            stability: -8
+        },
+        matrix: {},
+        regions: {
+            southeast: "warning"
+        }
+    }
+},
+{
+    id: 54,
+    category: "<PROTEÇÃO DE AVES & RIO GRANDE DO NORTE>",
+    icon: "fa-crow",
+    title: "Sinalizadores Noturnos e Radar Avifaúnico em Parques Eólicos",
+    desc: "Detecção por radar de bandos de aves migratórias desativa temporariamente turbinas para evitar colisões ambientais.",
+    optionA: {
+        title: "Instalar Radares de Proteção",
+        sub: "+Ambiente (+15%), +Sociedade (+8%), -Economia (-5%)",
+        indicators: {
+            economy: -5,
+            social: 8,
+            environment: 15,
+            stability: -2
+        },
+        matrix: {},
+        regions: {
+            northeast: "active"
+        }
+    },
+    optionB: {
+        title: "Operar Sem Paradas Preventivas",
+        sub: "+Economia (+5%), -Ambiente (-10%)",
+        indicators: {
+            economy: 5,
+            social: -6,
+            environment: -10,
+            stability: 2
+        },
+        matrix: {},
+        regions: {
+            northeast: "stable"
+        }
+    }
+},
+{
+    id: 55,
+    category: "<AGROVOLTAICO & GOIÁS>",
+    icon: "fa-wheat-awn",
+    title: "Sistemas Agrovoltaicos (Energia + Lavoura) em Goiás",
+    desc: "Elevação de painéis solares permite o plantio de hortaliças e pastagem sob as placas, otimizando o uso do solo e retenção de umidade.",
+    optionA: {
+        title: "Incentivar Agrovoltaico",
+        sub: "+Ambiente (+14%), +Sociedade (+12%), -Economia (-8%)",
+        indicators: {
+            economy: -8,
+            social: 12,
+            environment: 14,
+            stability: 6
+        },
+        matrix: {
+            solar: 4.0
+        },
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Uso Exclusivo para Painéis",
+        sub: "+Economia (+6%), -Sociedade (-6%)",
+        indicators: {
+            economy: 6,
+            social: -6,
+            environment: 2,
+            stability: 2
+        },
+        matrix: {
+            solar: 2.0
+        },
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 56,
+    category: "<AR COMPRIMIDO (CAES) & BAHIA>",
+    icon: "fa-wind",
+    title: "Estocagem de Energia por Ar Comprimido (CAES) em Cavernas de Sal",
+    desc: "Compressão de ar em cavidades subterrâneas durante horas de sobra renovável para expansão em turbinas nos horários de pico.",
+    optionA: {
+        title: "Construir Planta CAES",
+        sub: "+Estabilidade (+15%), +Ambiente (+10%), -Economia (-9%)",
+        indicators: {
+            economy: -9,
+            social: 6,
+            environment: 10,
+            stability: 15
+        },
+        matrix: {
+            wind: 3.0,
+            thermal: -3.0
+        },
+        regions: {
+            northeast: "active"
+        }
+    },
+    optionB: {
+        title: "Queimar Gás Natural nos Picos",
+        sub: "+Economia (+6%), -Ambiente (-8%)",
+        indicators: {
+            economy: 6,
+            social: -4,
+            environment: -8,
+            stability: 4
+        },
+        matrix: {
+            thermal: 2.0
+        },
+        regions: {
+            northeast: "stable"
+        }
+    }
+},
+{
+    id: 57,
+    category: "<SUBESTAÇÕES SF6 & DISTRITO FEDERAL>",
+    icon: "fa-bolt",
+    title: "Subestações Blindadas a Gás de Baixa Emissão em Brasília",
+    desc: "Subestações compactas isoladas a gás limpo (g3) reduzem em 99% o potencial de efeito estufa em relação ao gás SF6 antigo.",
+    optionA: {
+        title: "Instalar Subestações Ecológicas",
+        sub: "+Ambiente (+14%), +Estabilidade (+12%), -Economia (-8%)",
+        indicators: {
+            economy: -8,
+            social: 6,
+            environment: 14,
+            stability: 12
+        },
+        matrix: {},
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Equipamentos SF6 Antigos",
+        sub: "+Economia (+6%), -Ambiente (-8%)",
+        indicators: {
+            economy: 6,
+            social: -2,
+            environment: -8,
+            stability: 2
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 58,
+    category: "<FERROVIA ELÉTRICA & MARANHÃO>",
+    icon: "fa-train",
+    title: "Eletrificação da Ferrovia de Cargas Carajás-Itaqui",
+    desc: "Substituição de locomotivas a diesel por trens elétricos alimentados por subestações de alta tensão ao longo da via férrea.",
+    optionA: {
+        title: "Eletrificar Malha Ferroviária",
+        sub: "+Ambiente (+15%), +Economia (+8%), -Economia (-10%)",
+        indicators: {
+            economy: -10,
+            social: 8,
+            environment: 15,
+            stability: 4
+        },
+        matrix: {
+            hydro: 2.0,
+            thermal: -3.0
+        },
+        regions: {
+            north: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Locomotivas a Diesel",
+        sub: "+Economia (+6%), -Ambiente (-10%)",
+        indicators: {
+            economy: 6,
+            social: -4,
+            environment: -10,
+            stability: 2
+        },
+        matrix: {},
+        regions: {
+            north: "stable"
+        }
+    }
+},
+{
+    id: 59,
+    category: "<DESSALINIZAÇÃO SOLAR & MARAJÓ>",
+    icon: "fa-filter",
+    title: "Dessalinizadores Solares Térmicos na Ilha de Marajó",
+    desc: "Destiladores solares de evaporação direta fornecem água potável limpa para comunidades insulares sem consumo elétrico da rede.",
+    optionA: {
+        title: "Distribuir Destiladores Solares",
+        sub: "+Sociedade (+14%), +Ambiente (+12%), -Economia (-6%)",
+        indicators: {
+            economy: -6,
+            social: 14,
+            environment: 12,
+            stability: 4
+        },
+        matrix: {},
+        regions: {
+            north: "active"
+        }
+    },
+    optionB: {
+        title: "Transportar Água por Barcos Motorizados",
+        sub: "+Economia (+4%), -Sociedade (-8%), -Ambiente (-6%)",
+        indicators: {
+            economy: 4,
+            social: -8,
+            environment: -6,
+            stability: -2
+        },
+        matrix: {},
+        regions: {
+            north: "warning"
+        }
+    }
+},
+{
+    id: 60,
+    category: "<MOBILIDADE ELÉTRICA & RODOVIAS>",
+    icon: "fa-charging-station",
+    title: "Corredor Verde de Eletropostos Ultrarrápidos em Rodovias",
+    desc: "Estações de recarga solar de 350 kW ao longo das principais BRs incentivam viagens rodoviárias de emissão zero.",
+    optionA: {
+        title: "Construir Eletropostos Rodoviários",
+        sub: "+Ambiente (+12%), +Sociedade (+10%), -Economia (-8%)",
+        indicators: {
+            economy: -8,
+            social: 10,
+            environment: 12,
+            stability: 4
+        },
+        matrix: {
+            solar: 3.0
+        },
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Apenas Postos Fósseis",
+        sub: "+Economia (+6%), -Ambiente (-6%)",
+        indicators: {
+            economy: 6,
+            social: -4,
+            environment: -6,
+            stability: 0
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 61,
+    category: "<BIOENERGIA & CÍTRICOS (SP)>",
+    icon: "fa-lemon",
+    title: "Biogás da Digestão Anaeróbica do Bagaço de Laranja em SP",
+    desc: "Uso de resíduos da indústria de sucos em biodigestores para gerar eletricidade contínua e biofertilizante enriquecido.",
+    optionA: {
+        title: "Construir Usinas de Biocítricos",
+        sub: "+Ambiente (+12%), +Estabilidade (+8%), -Economia (-6%)",
+        indicators: {
+            economy: -6,
+            social: 6,
+            environment: 12,
+            stability: 8
+        },
+        matrix: {
+            biomass: 3.0
+        },
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Descarte de Resíduos no Solo",
+        sub: "+Economia (+4%), -Ambiente (-8%)",
+        indicators: {
+            economy: 4,
+            social: -4,
+            environment: -8,
+            stability: -2
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 62,
+    category: "<ÓLEO VEGETAL & TRANSFORMADORES>",
+    icon: "fa-droplet",
+    title: "Substituição de Óleo Mineral por Óleo Vegetal em Transformadores",
+    desc: "Fluidos dielétricos vegetais biodegradáveis aumentam o ponto de fulgor (prevenindo incêndios) e protegem o solo contra vazamentos.",
+    optionA: {
+        title: "Usar Óleo Vegetal Biodegradável",
+        sub: "+Ambiente (+14%), +Estabilidade (+10%), -Economia (-7%)",
+        indicators: {
+            economy: -7,
+            social: 6,
+            environment: 14,
+            stability: 10
+        },
+        matrix: {},
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Óleo Mineral Derivado de Petróleo",
+        sub: "+Economia (+6%), -Ambiente (-8%)",
+        indicators: {
+            economy: 6,
+            social: -2,
+            environment: -8,
+            stability: -2
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 63,
+    category: "<SOLAR MINERAÇÃO & CARAJÁS (PA)>",
+    icon: "fa-sun",
+    title: "Usinas Fotovoltaicas em Cavas Exauridas de Mineração em Carajás",
+    desc: "Reaproveitamento de áreas mineradas degradadas para instalação de grandes parques fotovoltaicos sem cortar vegetação nativa.",
+    optionA: {
+        title: "Instalar Painéis em Minas Antigas",
+        sub: "+Ambiente (+15%), +Estabilidade (+10%), -Economia (-8%)",
+        indicators: {
+            economy: -8,
+            social: 8,
+            environment: 15,
+            stability: 10
+        },
+        matrix: {
+            solar: 4.0,
+            thermal: -2.0
+        },
+        regions: {
+            north: "active"
+        }
+    },
+    optionB: {
+        title: "Desmatar Áreas Virgens para Usinas",
+        sub: "+Economia (+6%), -Ambiente (-12%)",
+        indicators: {
+            economy: 6,
+            social: -6,
+            environment: -12,
+            stability: 2
+        },
+        matrix: {
+            solar: 2.0
+        },
+        regions: {
+            north: "warning"
+        }
+    }
+},
+{
+    id: 64,
+    category: "<IA & PREVENÇÃO DE QUEIMADAS>",
+    icon: "fa-satellite",
+    title: "Monitoramento por Satélite e IA contra Queimadas sob Fiação",
+    desc: "Detecção precoce de focos de calor na faixa de servidão das linhas de transmissão aciona brigadas antes de curtos-circuitos por ionização.",
+    optionA: {
+        title: "Implantar Sistema de Satélite e IA",
+        sub: "+Estabilidade (+16%), +Ambiente (+10%), -Economia (-8%)",
+        indicators: {
+            economy: -8,
+            social: 8,
+            environment: 10,
+            stability: 16
+        },
+        matrix: {},
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Combatentes Locais Apenas Após Chamado",
+        sub: "+Economia (+6%), -Estabilidade (-10%), -Ambiente (-6%)",
+        indicators: {
+            economy: 6,
+            social: -4,
+            environment: -6,
+            stability: -10
+        },
+        matrix: {},
+        regions: {
+            southeast: "warning"
+        }
+    }
+},
+{
+    id: 65,
+    category: "<EÓLICA CHAPADA & BAHIA>",
+    icon: "fa-wind",
+    title: "Parques Eólicos nas Chapadas da Bahia",
+    desc: "Aproveitamento dos ventos de altitude das serras baianas para geração eólica limpa de alta eficiência durante todo o ano.",
+    optionA: {
+        title: "Aprovar Parques nas Chapadas",
+        sub: "+Ambiente (+14%), +Estabilidade (+12%), -Economia (-8%)",
+        indicators: {
+            economy: -8,
+            social: 6,
+            environment: 14,
+            stability: 12
+        },
+        matrix: {
+            wind: 5.0,
+            thermal: -3.0
+        },
+        regions: {
+            northeast: "active"
+        }
+    },
+    optionB: {
+        title: "Restringir Licenciamento Ambiental",
+        sub: "+Economia (+6%), -Estabilidade (-6%)",
+        indicators: {
+            economy: 6,
+            social: -2,
+            environment: 4,
+            stability: -6
+        },
+        matrix: {},
+        regions: {
+            northeast: "stable"
+        }
+    }
+},
+{
+    id: 66,
+    category: "<REPOWERING PCH & MINAS GERAIS>",
+    icon: "fa-rotate",
+    title: "Repowering de PCHs Centenárias no Sul de Minas",
+    desc: "Substituição de turbinas e geradores dos anos 1950 por equipamentos modernos sem necessidade de expandir a barragem.",
+    optionA: {
+        title: "Modernizar PCHs Antigas",
+        sub: "+Estabilidade (+14%), +Ambiente (+10%), -Economia (-7%)",
+        indicators: {
+            economy: -7,
+            social: 6,
+            environment: 10,
+            stability: 14
+        },
+        matrix: {
+            hydro: 3.0
+        },
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Funcionamento sem Reformas",
+        sub: "+Economia (+5%), -Estabilidade (-6%)",
+        indicators: {
+            economy: 5,
+            social: -2,
+            environment: -2,
+            stability: -6
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 67,
+    category: "<MICROREDES & AMAZÔNIA>",
+    icon: "fa-circle-nodes",
+    title: "Microredes Renováveis Isoladas na Floresta Amazônica",
+    desc: "Sistemas fotovoltaicos locais integrados a pequenas baterias garantem luz 24h para comunidades ribeirinhas sem queimada de diesel.",
+    optionA: {
+        title: "Instalar Microredes Híbridas",
+        sub: "+Ambiente (+16%), +Sociedade (+14%), -Economia (-8%)",
+        indicators: {
+            economy: -8,
+            social: 14,
+            environment: 16,
+            stability: 6
+        },
+        matrix: {
+            solar: 3.0,
+            thermal: -3.0
+        },
+        regions: {
+            north: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Geradores a Diesel Comunitários",
+        sub: "+Economia (+5%), -Ambiente (-10%), -Sociedade (-8%)",
+        indicators: {
+            economy: 5,
+            social: -8,
+            environment: -10,
+            stability: -4
+        },
+        matrix: {},
+        regions: {
+            north: "warning"
+        }
+    }
+},
+{
+    id: 68,
+    category: "<CINÉTICA FLUVIAL & AMAZONAS>",
+    icon: "fa-water",
+    title: "Turbinas Hidrocinéticas no Leito do Rio Amazonas",
+    desc: "Turbinas submersas que aproveitam a velocidade da correnteza sem necessidade de barragens ou alteração do fluxo dos rios.",
+    optionA: {
+        title: "Instalar Turbinas Hidrocinéticas",
+        sub: "+Ambiente (+14%), +Estabilidade (+10%), -Economia (-8%)",
+        indicators: {
+            economy: -8,
+            social: 8,
+            environment: 14,
+            stability: 10
+        },
+        matrix: {
+            hydro: 2.0
+        },
+        regions: {
+            north: "active"
+        }
+    },
+    optionB: {
+        title: "Aguardar Testes Internacionais",
+        sub: "+Economia (+6%), -Estabilidade (-4%)",
+        indicators: {
+            economy: 6,
+            social: -2,
+            environment: 0,
+            stability: -4
+        },
+        matrix: {},
+        regions: {
+            north: "stable"
+        }
+    }
+},
+{
+    id: 69,
+    category: "<LINHAS COMPACTAS & MATA ATLÂNTICA>",
+    icon: "fa-leaf",
+    title: "Linhas de Transmissão Compactas em Áreas de Preservação",
+    desc: "Torres de perfil reduzido e isoladores poliméricos que exigem faixas de desmatamento 70% menores na Mata Atlântica.",
+    optionA: {
+        title: "Construir Linhas Compactas",
+        sub: "+Ambiente (+15%), +Estabilidade (+10%), -Economia (-8%)",
+        indicators: {
+            economy: -8,
+            social: 8,
+            environment: 15,
+            stability: 10
+        },
+        matrix: {},
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Usar Torres Padrão Tradicionais",
+        sub: "+Economia (+6%), -Ambiente (-10%)",
+        indicators: {
+            economy: 6,
+            social: -4,
+            environment: -10,
+            stability: 2
+        },
+        matrix: {},
+        regions: {
+            southeast: "warning"
+        }
+    }
+},
+{
+    id: 70,
+    category: "<BOMBEAMENTO SOLAR & SÃO FRANCISCO>",
+    icon: "fa-water",
+    title: "Energia Solar para Motores da Transposição do São Francisco",
+    desc: "Usinas fotovoltaicas exclusivas para acionar as motobombas que elevam a água dos canais, reduzindo o custo operacional público.",
+    optionA: {
+        title: "Alimentar Bombas com Energia Solar",
+        sub: "+Economia (+10%), +Ambiente (+12%), +Sociedade (+10%)",
+        indicators: {
+            economy: 10,
+            social: 10,
+            environment: 12,
+            stability: 6
+        },
+        matrix: {
+            solar: 3.0
+        },
+        regions: {
+            northeast: "active"
+        }
+    },
+    optionB: {
+        title: "Pagar Energia da Rede Comercial",
+        sub: "-Economia (-8%), -Ambiente (-4%)",
+        indicators: {
+            economy: -8,
+            social: -2,
+            environment: -4,
+            stability: -2
+        },
+        matrix: {},
+        regions: {
+            northeast: "stable"
+        }
+    }
+},
+{
+    id: 73,
+    category: "<PESQUISA REATOR & SÃO PAULO>",
+    icon: "fa-atom",
+    title: "Reator Nuclear de Pesquisa Multialvo (RMB) em Iperó (SP)",
+    desc: "Desenvolvimento de radioisótopos medicinais para tratamento do câncer e pesquisa de combustíveis nucleares de alta densidade.",
+    optionA: {
+        title: "Financiar Reator de Pesquisa",
+        sub: "+Sociedade (+14%), +Estabilidade (+10%), -Economia (-9%)",
+        indicators: {
+            economy: -9,
+            social: 14,
+            environment: 6,
+            stability: 10
+        },
+        matrix: {
+            nuclear: 2.0
+        },
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Pausar Investimentos Científicos",
+        sub: "+Economia (+6%), -Sociedade (-8%)",
+        indicators: {
+            economy: 6,
+            social: -8,
+            environment: 0,
+            stability: -4
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 74,
+    category: "<FOGÕES DE INDUÇÃO & PROGRAMAS SOCIAIS>",
+    icon: "fa-fire-burner",
+    title: "Substituição de Gás de Botijão por Indução Elétrica para Famílias de Baixa Renda",
+    desc: "Programa social distribui fogões de indução magnética de altíssima eficiência energética (η > 90%), reduzindo acidentes domésticos.",
+    optionA: {
+        title: "Distribuir Fogões de Indução",
+        sub: "+Sociedade (+16%), +Ambiente (+8%), -Economia (-9%)",
+        indicators: {
+            economy: -9,
+            social: 16,
+            environment: 8,
+            stability: -4
+        },
+        matrix: {
+            solar: 1.0
+        },
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Subsídio ao Botijão GLP",
+        sub: "+Economia (+6%), -Sociedade (-6%), -Ambiente (-4%)",
+        indicators: {
+            economy: 6,
+            social: -6,
+            environment: -4,
+            stability: 0
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 75,
+    category: "<FLYSEELS & INÉRCIA DE REDE>",
+    icon: "fa-gear",
+    title: "Armazenamento por Volantes de Inércia (Flywheels) em Subestações",
+    desc: "Rotores em vácuo girando em levitação magnética fornecem resposta de inércia sintética em milissegundos para evitar quedas de frequência.",
+    optionA: {
+        title: "Instalar Volantes de Inércia",
+        sub: "+Estabilidade (+16%), +Ambiente (+6%), -Economia (-8%)",
+        indicators: {
+            economy: -8,
+            social: 6,
+            environment: 6,
+            stability: 16
+        },
+        matrix: {},
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Inércia Tradicional Hídrica",
+        sub: "+Economia (+6%), -Estabilidade (-6%)",
+        indicators: {
+            economy: 6,
+            social: -2,
+            environment: 0,
+            stability: -6
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 77,
+    category: "<TARIFA BRANCA & CONSUMO CONSCIENTE>",
+    icon: "fa-clock",
+    title: "Campanha Nacional da Tarifa Branca de Energia",
+    desc: "Descontos significativos na conta de luz para famílias e comércios que deslocam o consumo de energia fora do horário de pico (18h-21h).",
+    optionA: {
+        title: "Promover Tarifa Branca",
+        sub: "+Economia (+10%), +Sociedade (+10%), +Estabilidade (+12%)",
+        indicators: {
+            economy: 10,
+            social: 10,
+            environment: 6,
+            stability: 12
+        },
+        matrix: {},
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Manter Tarifa Única Convencional",
+        sub: "-Economia (-4%), -Estabilidade (-6%)",
+        indicators: {
+            economy: -4,
+            social: -4,
+            environment: 0,
+            stability: -6
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+},
+{
+    id: 78,
+    category: "<ETANOL 2G & SÃO PAULO>",
+    icon: "fa-flask-vial",
+    title: "Etanol de Segunda Geração (2G) Integrado à Geração Elétrica",
+    desc: "Conversão da palha e bagaço da cana em bioetanol e biogás de alta eficiência energética por fermentação enzimática.",
+    optionA: {
+        title: "Financiar Usinas de Etanol 2G",
+        sub: "+Ambiente (+15%), +Estabilidade (+10%), -Economia (-8%)",
+        indicators: {
+            economy: -8,
+            social: 8,
+            environment: 15,
+            stability: 10
+        },
+        matrix: {
+            biomass: 4.0,
+            thermal: -2.0
+        },
+        regions: {
+            southeast: "active"
+        }
+    },
+    optionB: {
+        title: "Focar Apenas em Etanol 1G",
+        sub: "+Economia (+6%), -Ambiente (-6%)",
+        indicators: {
+            economy: 6,
+            social: -2,
+            environment: -6,
+            stability: 0
+        },
+        matrix: {},
+        regions: {
+            southeast: "stable"
+        }
+    }
+}
 ];
 
-// QUESTÕES DE CORRUPÇÃO E CRISES RE-BALANÇADAS (MAX -10 DE PERDA E RECOMPENSAS POSITIVAS)
 const PERDE_PERDE_QUESTIONS = [
   {
     id: 71, category: "<CORRUPÇÃO & HIDRELÉTRICA>", icon: "fa-triangle-exclamation",
