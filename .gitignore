@@ -1,0 +1,17 @@
+# IDE & Editor Configurations
+.vscode/
+.idea/
+*.swp
+*.swo
+.agents/
+.gemini/
+*.log
+.live-server-ignore
+.env
+.env.local
+.env.*.local
+node_modules/
+.DS_Store
+Thumbs.db
+desktop.ini
+
